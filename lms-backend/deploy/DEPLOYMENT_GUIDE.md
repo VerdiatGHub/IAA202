@@ -1,226 +1,161 @@
 # LMS Self-Hosted Deployment Guide
 
-## VirtualBox Network Setup (REQUIRED FIRST!)
-
-Since your university WiFi blocks VM-to-VM communication, use this dual-adapter setup:
-
-### Step 0: Create Host-Only Network in VirtualBox
-
-1. Open **VirtualBox** → **File** → **Host Network Manager**
-2. Click **Create** to add a new host-only network
-3. Note the IP range (usually `192.168.56.1/24`)
-4. Click **Apply** and close
-
-### Configure BOTH VMs with 2 Network Adapters:
-
-| Adapter | Type | Purpose |
-|---------|------|---------|
-| **Adapter 1** | NAT | Internet access (apt, git clone) |
-| **Adapter 2** | Host-Only Adapter | VM-to-VM communication |
-
-**In VirtualBox for each VM:**
-1. Right-click VM → **Settings** → **Network**
-2. **Adapter 1**: Enable, Attached to: **NAT**
-3. **Adapter 2**: Enable, Attached to: **Host-only Adapter** → Select your host-only network
-
----
-
-## Architecture (Host-Only Network)
+## Architecture Overview
 
 ```
-Your Windows PC (Host)
-│
-├── VirtualBox Host-Only Network: 192.168.56.0/24
-│   │
-│   ├── VM 1: Web Server - 192.168.56.101
-│   │   ├── Adapter 1: NAT (internet)
-│   │   └── Adapter 2: Host-Only (192.168.56.101)
-│   │
-│   └── VM 2: Database Server - 192.168.56.102
-│       ├── Adapter 1: NAT (internet)
-│       └── Adapter 2: Host-Only (192.168.56.102)
+┌─────────────────────────┐     ┌─────────────────────────┐
+│   VM 1: Web Server      │     │   VM 2: Database Server │
+│   Ubuntu Server 22.04   │     │   Ubuntu Server 22.04   │
+│                         │     │                         │
+│  Nginx (port 80)        │     │  PostgreSQL (5432)      │
+│  Node.js API (5000)     │◄────┼──────────────────────►  │
+│  React Frontend         │     │                         │
+└─────────────────────────┘     └─────────────────────────┘
 ```
 
 ---
 
 ## STEP 1: Set Up Database Server (VM 2)
 
-### 1.1 Install Ubuntu Server 22.04 LTS
+### 1.1 Install Ubuntu Server 22.04 LTS on VM 2
 
-### 1.2 Configure Static IP on Host-Only Interface
+### 1.2 Run Setup Script
 ```bash
-# Find your network interfaces
-ip a
+# Transfer the setup script to VM 2
+scp deploy/setup-db-server.sh user@DB_SERVER_IP:~/
 
-# Edit netplan config
-sudo nano /etc/netplan/00-installer-config.yaml
-```
-
-Add this configuration:
-```yaml
-network:
-  version: 2
-  ethernets:
-    enp0s3:
-      dhcp4: true  # NAT - for internet
-    enp0s8:
-      dhcp4: false
-      addresses:
-        - 192.168.56.102/24  # Host-Only - static IP for DB server
-```
-
-Apply the config:
-```bash
-sudo netplan apply
-ip a  # Verify enp0s8 has 192.168.56.102
-```
-
-### 1.3 Run Database Setup Script
-```bash
-# Clone the repo (uses NAT adapter for internet)
-git clone https://github.com/VerdiatGHub/IAA202.git
-cd IAA202/lms-backend/deploy
-
-# Make executable and run
+# SSH into VM 2 and run
+ssh user@DB_SERVER_IP
 chmod +x setup-db-server.sh
 sudo ./setup-db-server.sh
-# When prompted for Web Server IP, enter: 192.168.56.101
 ```
 
-### 1.4 Import Database Schema
+### 1.3 Import Database Schema
 ```bash
-cd ~/IAA202/lms-backend
+# Transfer schema.sql to VM 2
+scp schema.sql user@DB_SERVER_IP:~/
+
+# SSH and import
+ssh user@DB_SERVER_IP
 psql -U lms_user -d lms_db -f schema.sql
 ```
+
+### 1.4 Note These Values
+- Database Server IP: `_______________`
+- Database Password: `_______________`
 
 ---
 
 ## STEP 2: Set Up Web Server (VM 1)
 
-### 2.1 Install Ubuntu Server 22.04 LTS
+### 2.1 Install Ubuntu Server 22.04 LTS on VM 1
 
-### 2.2 Configure Static IP on Host-Only Interface
+### 2.2 Run Setup Script
 ```bash
-sudo nano /etc/netplan/00-installer-config.yaml
-```
+# Transfer the setup script to VM 1
+scp deploy/setup-web-server.sh user@WEB_SERVER_IP:~/
 
-```yaml
-network:
-  version: 2
-  ethernets:
-    enp0s3:
-      dhcp4: true  # NAT - for internet
-    enp0s8:
-      dhcp4: false
-      addresses:
-        - 192.168.56.101/24  # Host-Only - static IP for Web server
-```
-
-```bash
-sudo netplan apply
-ip a  # Verify enp0s8 has 192.168.56.101
-```
-
-### 2.3 Test Connection to Database Server
-```bash
-ping 192.168.56.102  # Should succeed!
-```
-
-### 2.4 Run Web Server Setup Script
-```bash
-git clone https://github.com/VerdiatGHub/IAA202.git
-cd IAA202/lms-backend/deploy
-
+# SSH into VM 1 and run
+ssh user@WEB_SERVER_IP
 chmod +x setup-web-server.sh
 sudo ./setup-web-server.sh
-# When prompted for Database Server IP, enter: 192.168.56.102
+```
+
+### 2.3 Copy Project Files
+```bash
+# From your Windows machine, transfer the project:
+
+# Backend
+scp -r ../lms-backend/* user@WEB_SERVER_IP:/var/www/lms/backend/
+
+# Frontend
+scp -r ../lms-frontend/* user@WEB_SERVER_IP:/var/www/lms/frontend/
+```
+
+### 2.4 Configure and Build Frontend
+```bash
+ssh user@WEB_SERVER_IP
+cd /var/www/lms/frontend
+
+# Set the API URL to your web server IP
+echo "VITE_API_URL=http://YOUR_WEB_SERVER_IP/api" > .env
+
+npm install
+npm run build
 ```
 
 ### 2.5 Configure Backend
 ```bash
-cd ~/IAA202/lms-backend
+cd /var/www/lms/backend
 
-# Edit .env to connect to database server
-cat > .env << EOF
-DB_HOST=192.168.56.102
-DB_PORT=5432
-DB_NAME=lms_db
-DB_USER=lms_user
-DB_PASSWORD=your_password_here
-JWT_SECRET=$(openssl rand -base64 32)
-JWT_EXPIRES_IN=7d
-PORT=5000
-NODE_ENV=production
-FRONTEND_URL=http://192.168.56.101
-EOF
+# Edit .env with your database server details
+nano .env
+# Update: DB_HOST=YOUR_DATABASE_SERVER_IP
 
 npm install
 ```
 
-### 2.6 Build Frontend
+### 2.6 Start Backend with PM2
 ```bash
-cd ~/IAA202/lms-frontend
-
-# Set API URL to web server's host-only IP
-echo "VITE_API_URL=http://192.168.56.101/api" > .env
-
-npm install
-npm run build
-
-# Copy build to Nginx directory
-sudo mkdir -p /var/www/lms/frontend
-sudo cp -r dist/* /var/www/lms/frontend/
-```
-
-### 2.7 Start Backend with PM2
-```bash
-cd ~/IAA202/lms-backend
 pm2 start server.js --name lms-api
 pm2 save
-pm2 startup  # Follow instructions
+pm2 startup  # Follow the instructions it gives
 ```
 
 ---
 
-## STEP 3: Access the Application
+## STEP 3: Verify Deployment
 
-From your **Windows host machine**, open browser:
+### Test Database Connection
+```bash
+curl http://localhost:5000/api/health
+# Should return: {"status":"ok","database":"connected",...}
+```
 
-**http://192.168.56.101**
+### Test Frontend
+Open browser and navigate to: `http://YOUR_WEB_SERVER_IP`
 
-### Default Logins:
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@lms.local | admin123 |
-| Instructor | instructor@lms.local | admin123 |
-| Student | student@lms.local | admin123 |
+### Default Login Credentials
+- **Admin**: admin@lms.local / admin123
+- **Instructor**: instructor@lms.local / admin123
+- **Student**: student@lms.local / admin123
 
 ---
 
 ## Troubleshooting
 
-### VMs Can't Ping Each Other
-```bash
-# Check both VMs have host-only adapter enabled
-# Verify static IPs are set:
-ip addr show enp0s8
-```
-
 ### Database Connection Failed
 ```bash
-# On Web Server
-nc -zv 192.168.56.102 5432
+# On Web Server - test connection to DB server
+nc -zv DB_SERVER_IP 5432
 
-# On DB Server - check PostgreSQL allows the web server
-sudo cat /etc/postgresql/16/main/pg_hba.conf | grep 192.168.56.101
+# On DB Server - check PostgreSQL is listening
+sudo netstat -tlnp | grep 5432
+
+# Check pg_hba.conf allows your web server IP
+sudo cat /etc/postgresql/16/main/pg_hba.conf
 ```
 
-### Frontend Shows "Network Error"
+### Frontend Not Loading
 ```bash
-# Check backend is running
-curl http://localhost:5000/api/health
+# Check Nginx status
+sudo systemctl status nginx
 
-# Check PM2
+# Check Nginx config
+sudo nginx -t
+
+# Check if files exist
+ls -la /var/www/lms/frontend/dist/
+```
+
+### Backend API Not Responding
+```bash
+# Check PM2 status
 pm2 status
+
+# View logs
 pm2 logs lms-api
+
+# Restart
+pm2 restart lms-api
 ```
