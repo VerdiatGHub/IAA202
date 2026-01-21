@@ -1,0 +1,352 @@
+/* Import Google Fonts - Inter Tight for headings, Inter for body */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap');
+
+/* =====================================================
+   LMS - Professional Design System
+   Refined Slate & Indigo Palette, SaaS Aesthetics
+   ===================================================== */
+
+:root {
+  /* Primary Brand - Indigo (Tailored) */
+  --primary-50: #eef2ff;
+  --primary-100: #e0e7ff;
+  --primary-200: #c7d2fe;
+  --primary-300: #a5b4fc;
+  --primary-400: #818cf8;
+  --primary-500: #6366f1;
+  --primary-600: #4f46e5;
+  --primary-700: #4338ca;
+  --primary-800: #3730a3;
+  --primary-900: #312e81;
+  --primary-950: #1e1b4b;
+
+  /* Neutral Scale - Slate (Professional Cool Grays) */
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --gray-950: #020617;
+
+  /* Functional Colors */
+  --success-500: #10b981;
+  --success-600: #059669;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+
+  /* Backgrounds */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  /* Subtle off-white for sidebars/cards */
+  --bg-tertiary: #f1f5f9;
+  --bg-elevated: #ffffff;
+
+  /* Text */
+  --text-primary: #0f172a;
+  /* Slate 900 */
+  --text-secondary: #475569;
+  /* Slate 600 */
+  --text-tertiary: #94a3b8;
+  /* Slate 400 */
+  --text-inverse: #ffffff;
+
+  /* Borders */
+  --border-default: #e2e8f0;
+  /* Slate 200 */
+  --border-subtle: #f1f5f9;
+  /* Slate 100 */
+  --border-strong: #cbd5e1;
+  /* Slate 300 */
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-display: 'Inter Tight', 'Inter', sans-serif;
+
+  /* Font Sizes - Standardized */
+  --text-xs: 0.75rem;
+  /* 12px */
+  --text-sm: 0.875rem;
+  /* 14px */
+  --text-base: 1rem;
+  /* 16px */
+  --text-lg: 1.125rem;
+  /* 18px */
+  --text-xl: 1.25rem;
+  /* 20px */
+  --text-2xl: 1.5rem;
+  /* 24px */
+  --text-3xl: 1.875rem;
+  /* 30px */
+  --text-4xl: 2.25rem;
+  /* 36px */
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Border Radius - Modern SaaS Feel */
+  --radius-sm: 0.375rem;
+  /* 6px */
+  --radius-md: 0.5rem;
+  /* 8px */
+  --radius-lg: 0.75rem;
+  /* 12px */
+  --radius-xl: 1rem;
+  /* 16px */
+  --radius-full: 9999px;
+
+  /* Shadows - Layered & Smooth */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  /* For focus rings */
+
+  /* Layout */
+  --max-width: 1280px;
+  --header-height: 64px;
+  --sidebar-width: 260px;
+  --sidebar-collapsed: 72px;
+
+  /* Transitions */
+  --transition-all: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =====================================================
+   Dark Theme (Data Attribute)
+   ===================================================== */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary: #020617;
+  /* Slate 950 - Deepest */
+  --bg-secondary: #0f172a;
+  /* Slate 900 - Sidebar/Cards */
+  --bg-tertiary: #1e293b;
+  /* Slate 800 - Elevated */
+  --bg-elevated: #1e293b;
+
+  /* Text */
+  --text-primary: #f8fafc;
+  /* Slate 50 */
+  --text-secondary: #94a3b8;
+  /* Slate 400 */
+  --text-tertiary: #64748b;
+  /* Slate 500 */
+
+  /* Borders */
+  --border-default: #1e293b;
+  /* Slate 800 */
+  --border-subtle: #0f172a;
+  /* Slate 900 */
+  --border-strong: #334155;
+  /* Slate 700 */
+
+  /* Shadows - More ambient light for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* Base Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  font-size: var(--text-3xl);
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.025em;
+}
+
+h4 {
+  font-size: var(--text-xl);
+  letter-spacing: -0.015em;
+}
+
+p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+/* Focus States (Accessibility) */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--radius-sm);
+}
+
+/* =====================================================
+   Component Utility Classes
+   ===================================================== */
+
+/* Cards */
+.card {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-all);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  transition: Var(--transition-all);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-focus);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: var(--transition-all);
+}
+
+/* Utility Layouts */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: var(--space-4);
+}
+
+/* Animations used in pages */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s ease-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: var(--radius-full);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--gray-700);
+}

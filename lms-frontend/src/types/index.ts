@@ -1,0 +1,181 @@
+// User types
+export type UserRole = 'student' | 'instructor' | 'admin';
+
+export interface User {
+  id: string;
+  email: string;
+  fullName: string;
+  avatarUrl?: string;
+  role: UserRole;
+  createdAt: string;
+}
+
+// Course types
+export interface Course {
+  id: string;
+  title: string;
+  description: string;
+  thumbnailUrl?: string;
+  instructorId: string;
+  instructor?: User;
+  isPublished: boolean;
+  createdAt: string;
+  enrollmentCount?: number;
+  lessonCount?: number;
+  duration?: string;
+  category?: string;
+  level?: 'beginner' | 'intermediate' | 'advanced';
+}
+
+// Lesson types
+export interface Lesson {
+  id: string;
+  courseId: string;
+  title: string;
+  content?: string;
+  videoUrl?: string;
+  orderIndex: number;
+  duration?: number; // in minutes
+  createdAt: string;
+  isCompleted?: boolean;
+}
+
+// Enrollment types
+export interface Enrollment {
+  id: string;
+  studentId: string;
+  courseId: string;
+  course?: Course;
+  progress: number; // 0-100
+  enrolledAt: string;
+  completedAt?: string;
+}
+
+// Assignment types
+export interface Assignment {
+  id: string;
+  courseId: string;
+  title: string;
+  description?: string;
+  dueDate?: string;
+  maxScore: number;
+  createdAt: string;
+}
+
+// Submission types
+export interface Submission {
+  id: string;
+  assignmentId: string;
+  studentId: string;
+  student?: User;
+  fileUrl?: string;
+  content?: string;
+  score?: number;
+  feedback?: string;
+  submittedAt: string;
+  gradedAt?: string;
+}
+
+// Quiz types
+export interface Quiz {
+  id: string;
+  courseId: string;
+  title: string;
+  timeLimit?: number; // in minutes
+  questions?: Question[];
+  createdAt: string;
+}
+
+export interface Question {
+  id: string;
+  quizId: string;
+  questionText: string;
+  questionType: 'multiple_choice' | 'true_false' | 'short_answer';
+  options?: string[];
+  correctAnswer: string;
+  points: number;
+}
+
+export interface QuizAttempt {
+  id: string;
+  quizId: string;
+  studentId: string;
+  answers: Record<string, string>;
+  score?: number;
+  startedAt: string;
+  completedAt?: string;
+}
+
+// Notification types
+export interface Notification {
+  id: string;
+  userId: string;
+  title: string;
+  message: string;
+  type: 'info' | 'success' | 'warning' | 'error';
+  isRead: boolean;
+  createdAt: string;
+}
+
+// AI Chat types
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  courseContext?: string;
+}
+
+// Dashboard stats
+export interface StudentStats {
+  enrolledCourses: number;
+  completedCourses: number;
+  averageProgress: number;
+  upcomingDeadlines: number;
+  totalStudyHours: number;
+}
+
+export interface InstructorStats {
+  totalCourses: number;
+  totalStudents: number;
+  pendingSubmissions: number;
+  averageRating: number;
+}
+
+export interface AdminStats {
+  totalUsers: number;
+  totalCourses: number;
+  activeUsers: number;
+  newUsersThisMonth: number;
+}
+
+// API Response types
+export interface ApiResponse<T> {
+  data: T | null;
+  error: string | null;
+  loading: boolean;
+}
+
+// Form types
+export interface LoginFormData {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+export interface RegisterFormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  fullName: string;
+  role: UserRole;
+  agreeToTerms: boolean;
+}
+
+export interface CourseFormData {
+  title: string;
+  description: string;
+  category: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  thumbnail?: File;
+}

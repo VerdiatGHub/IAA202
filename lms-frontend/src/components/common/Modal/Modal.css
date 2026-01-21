@@ -1,0 +1,125 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    z-index: var(--z-modal);
+}
+
+.modal-container {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-height: calc(100vh - var(--space-8));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sizes */
+.modal-sm {
+    max-width: 400px;
+}
+
+.modal-md {
+    max-width: 560px;
+}
+
+.modal-lg {
+    max-width: 720px;
+}
+
+.modal-xl {
+    max-width: 960px;
+}
+
+.modal-full {
+    max-width: calc(100vw - var(--space-8));
+    max-height: calc(100vh - var(--space-8));
+}
+
+/* Header */
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+[data-theme="dark"] .modal-header {
+    border-color: var(--gray-700);
+}
+
+.modal-header-text {
+    flex: 1;
+}
+
+.modal-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-description {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin: var(--space-1) 0 0 0;
+}
+
+/* Close Button */
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--gray-100);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.modal-close:hover {
+    background: var(--gray-200);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-close {
+    background: var(--gray-700);
+}
+
+[data-theme="dark"] .modal-close:hover {
+    background: var(--gray-600);
+}
+
+/* Content */
+.modal-content {
+    padding: var(--space-6);
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .modal-container {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    }
+}

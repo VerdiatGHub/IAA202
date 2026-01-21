@@ -1,0 +1,60 @@
+.loading-spinner {
+    color: var(--primary-500);
+    animation: spin 1s linear infinite;
+}
+
+.loading-spinner-sm {
+    width: 16px;
+    height: 16px;
+}
+
+.loading-spinner-md {
+    width: 24px;
+    height: 24px;
+}
+
+.loading-spinner-lg {
+    width: 40px;
+    height: 40px;
+}
+
+/* Loading Page */
+.loading-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--bg-primary);
+}
+
+.loading-page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.loading-message {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Skeleton Card */
+.skeleton-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.skeleton-card-image {
+    border-radius: 0;
+}
+
+.skeleton-card-content {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
