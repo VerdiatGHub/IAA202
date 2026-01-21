@@ -98,8 +98,11 @@ sudo cp schema.sql /tmp/
 sudo -u postgres psql -d lms_db -f /tmp/schema.sql
 
 # ⚠️ CRITICAL: Grant Permissions to lms_user
+sudo -u postgres psql -d lms_db -c "GRANT USAGE ON SCHEMA public TO lms_user;"
+sudo -u postgres psql -d lms_db -c "GRANT CREATE ON SCHEMA public TO lms_user;"
 sudo -u postgres psql -d lms_db -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO lms_user;"
 sudo -u postgres psql -d lms_db -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO lms_user;"
+sudo -u postgres psql -d lms_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO lms_user;"
 ```
 
 ---
@@ -206,6 +209,31 @@ From your **Windows host machine**, open browser:
 
 ---
 
+## Daily Usage: How to Start Up
+
+Since we configured **systemd** (for Nginx/Postgres) and **PM2 startup** (for Node.js), your system is designed to start automatically!
+
+1. **Power On VM 2 (Database Server)**.
+   - Wait ~30 seconds for it to boot.
+2. **Power On VM 1 (Web Server)**.
+   - Wait ~30 seconds for it to boot.
+3. **Open Browser**: `http://192.168.56.101`.
+
+**It should just work!**
+
+### Verification (If it doesn't work)
+
+**On Web Server:**
+```bash
+# Check if backend is running
+pm2 status
+
+# Check if database is reachable
+nc -zv 192.168.56.102 5432
+```
+
+---
+
 ## Troubleshooting
 
 ### VMs Can't Ping Each Other
@@ -229,3 +257,18 @@ Run this on **Database Server**:
 ```bash
 sudo -u postgres psql -d lms_db -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO lms_user;"
 ```
+
+### Backend API Not Responding
+```bash
+# Check PM2 status
+pm2 status
+
+# View logs
+pm2 logs lms-api
+
+# Restart
+pm2 restart lms-api
+```
+
+---
+
