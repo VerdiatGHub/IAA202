@@ -85,7 +85,7 @@ This implementation plan breaks down the course content management system into i
     - Update cascading delete to include content_items
     - _Requirements: 2.1, 2.3, 2.4, 2.5_
 
-  - [~] 5.4 Write property test for cascading deletion
+  - [x] 5.4 Write property test for cascading deletion
     - **Property 3: Cascading Deletion**
     - **Validates: Requirements 2.3**
 
