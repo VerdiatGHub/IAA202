@@ -356,7 +356,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 13.5_
 
 - [ ] 19. Data Migration for Existing Courses
-  - [~] 19.1 Create migration script
+  - [x] 19.1 Create migration script
     - Create default "General" module for each course
     - Migrate existing lessons to default module
     - Preserve existing lesson order_index

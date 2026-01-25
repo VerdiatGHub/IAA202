@@ -58,3 +58,45 @@ Rollback script for the course content management migration.
   - Removes all related indexes
 
 - **WARNING:** This will delete all modules and content items data! Backup your database first.
+
+### 002_migrate_lessons_to_modules.js
+Data migration script that migrates existing lessons to default "General" modules.
+
+- **What it does:**
+  - Identifies all courses with lessons that don't have a module_id
+  - Creates a default "General" module for each course (or uses existing one)
+  - Migrates all orphaned lessons to their course's default module
+  - Preserves existing lesson order_index values
+  - Verifies that no lessons remain without module assignment
+
+- **Prerequisites:**
+  - Migration 001 must be applied first
+  - Node.js environment with database connection configured
+  - Database credentials in `.env` file
+
+- **When to run:** After deploying migration 001 and before using the new course content management features
+
+- **To apply:**
+  ```bash
+  cd lms-backend
+  node migrations/002_migrate_lessons_to_modules.js
+  ```
+
+- **To rollback:**
+  ```bash
+  cd lms-backend
+  node migrations/002_migrate_lessons_to_modules.js --rollback
+  ```
+
+- **Rollback behavior:**
+  - Finds all "General" modules created by this migration
+  - Sets module_id back to NULL for all lessons in those modules
+  - Deletes the default "General" modules
+  - **WARNING:** This will orphan lessons again!
+
+## Migration Order
+
+For the course content management feature, run migrations in this order:
+
+1. **001_add_course_content_management.sql** - Creates schema (modules, content_items tables)
+2. **002_migrate_lessons_to_modules.js** - Migrates existing lesson data to default modules
