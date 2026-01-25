@@ -52,22 +52,22 @@ This implementation plan breaks down the course content management system into i
     - Update all modules in a single transaction
     - _Requirements: 8.1, 8.4_
 
-  - [-] 3.2 Write property test for reordering
+  - [x] 3.2 Write property test for reordering
     - **Property 5: Reordering Updates All Affected Indices**
     - **Property 6: Reordering Preserves Relationships**
     - **Validates: Requirements 8.1, 8.3**
 
-  - [~] 3.3 Write unit tests for reordering edge cases
+  - [x] 3.3 Write unit tests for reordering edge cases
     - Test reordering with 2 modules
     - Test reordering with 10+ modules
     - Test invalid reorder requests
     - _Requirements: 8.1_
 
-- [~] 4. Checkpoint - Verify Module API
+- [x] 4. Checkpoint - Verify Module API
   - Ensure all module tests pass, ask the user if questions arise.
 
 - [ ] 5. Extend Lesson API for Modules
-  - [~] 5.1 Update lesson routes and controller
+  - [-] 5.1 Update lesson routes and controller
     - Modify POST endpoint to accept moduleId
     - Modify GET endpoint to filter by moduleId
     - Update lesson queries to include module_id and is_required
