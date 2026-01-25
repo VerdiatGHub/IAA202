@@ -254,7 +254,7 @@ INSERT INTO users (id, email, password_hash, full_name, role)
 VALUES (
     'a0000000-0000-0000-0000-000000000001',
     'admin@lms.local',
-    '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu',
+    '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG',
     'System Administrator',
     'admin'
 );
@@ -268,19 +268,19 @@ VALUES (
 -- Instructors (Password: password123)
 INSERT INTO users (id, email, password_hash, full_name, role, avatar_url)
 VALUES 
-    ('10000000-0000-0000-0000-000000000001', 'instructor@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'John Smith', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=john'),
-    ('10000000-0000-0000-0000-000000000002', 'sarah.wilson@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Sarah Wilson', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=sarah'),
-    ('10000000-0000-0000-0000-000000000003', 'michael.chen@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Michael Chen', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=michael');
+    ('10000000-0000-0000-0000-000000000001', 'instructor@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'John Smith', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=john'),
+    ('10000000-0000-0000-0000-000000000002', 'sarah.wilson@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'Sarah Wilson', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=sarah'),
+    ('10000000-0000-0000-0000-000000000003', 'michael.chen@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'Michael Chen', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=michael');
 
 -- Students (Password: password123)
 INSERT INTO users (id, email, password_hash, full_name, role, avatar_url)
 VALUES 
-    ('50000000-0000-0000-0000-000000000001', 'student@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Alice Johnson', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=alice'),
-    ('50000000-0000-0000-0000-000000000002', 'bob.brown@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Bob Brown', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=bob'),
-    ('50000000-0000-0000-0000-000000000003', 'carol.davis@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Carol Davis', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=carol'),
-    ('50000000-0000-0000-0000-000000000004', 'david.miller@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'David Miller', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=david'),
-    ('50000000-0000-0000-0000-000000000005', 'emma.taylor@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Emma Taylor', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=emma'),
-    ('50000000-0000-0000-0000-000000000006', 'frank.garcia@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Frank Garcia', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=frank');
+    ('50000000-0000-0000-0000-000000000001', 'student@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'Alice Johnson', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=alice'),
+    ('50000000-0000-0000-0000-000000000002', 'bob.brown@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'Bob Brown', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=bob'),
+    ('50000000-0000-0000-0000-000000000003', 'carol.davis@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'Carol Davis', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=carol'),
+    ('50000000-0000-0000-0000-000000000004', 'david.miller@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'David Miller', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=david'),
+    ('50000000-0000-0000-0000-000000000005', 'emma.taylor@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'Emma Taylor', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=emma'),
+    ('50000000-0000-0000-0000-000000000006', 'frank.garcia@lms.local', '$2a$10$ixbHZgaM4n4M3lOd5oslTeQoDFi5TJ8qsrVxjFnQo45E9tAWRS8EG', 'Frank Garcia', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=frank');
 
 -- ================== COURSES ==================
 
