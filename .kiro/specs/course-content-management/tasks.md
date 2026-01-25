@@ -376,7 +376,7 @@ This implementation plan breaks down the course content management system into i
     - Test student view
     - _Requirements: All requirements_
 
-  - [~] 20.2 Manual testing checklist
+  - [-] 20.2 Manual testing checklist
     - Test on different screen sizes
     - Test with large datasets (100+ modules)
     - Test concurrent editing scenarios
