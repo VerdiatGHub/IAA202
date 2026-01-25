@@ -248,7 +248,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 2.1, 2.2, 9.1, 9.2_
 
 - [ ] 13. Implement Content Item Components
-  - [~] 13.1 Create ContentItemList component
+  - [x] 13.1 Create ContentItemList component
     - Render content items within a lesson
     - Display in order_index order
     - Add "Add Content" button with type selector

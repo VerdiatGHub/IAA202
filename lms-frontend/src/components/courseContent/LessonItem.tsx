@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Edit2, Trash2, Plus, ChevronDown } from 'lucide-react';
-import { Button } from '../common/Button';
+import { Edit2, Trash2, ChevronDown } from 'lucide-react';
+import { ContentItemList } from './ContentItemList';
 import type { Lesson, ContentItem } from '../../types';
 import './LessonItem.css';
 
@@ -51,16 +51,6 @@ export const LessonItem: React.FC<LessonItemProps> = ({
 
   const handleToggleExpand = () => {
     setIsExpanded(!isExpanded);
-  };
-
-  const handleEditContent = (contentItem: ContentItem) => {
-    onEditContent?.(contentItem);
-  };
-
-  const handleDeleteContent = (contentId: string) => {
-    if (window.confirm('Are you sure you want to delete this content item?')) {
-      onDeleteContent?.(contentId);
-    }
   };
 
   // Calculate content item count
@@ -132,101 +122,17 @@ export const LessonItem: React.FC<LessonItemProps> = ({
 
       {isExpanded && (
         <div className="lesson-content">
-          {sortedContentItems.length === 0 ? (
-            <div className="content-empty">
-              <p className="empty-message">No content items in this lesson yet</p>
-              {onAddContent && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  icon={<Plus size={14} />}
-                  onClick={onAddContent}
-                >
-                  Add Content
-                </Button>
-              )}
-            </div>
-          ) : (
-            <>
-              <div className="content-items-list">
-                {sortedContentItems.map((contentItem) => (
-                  <div key={contentItem.id} className="content-item-row">
-                    <div className="content-item-info">
-                      <span className="content-type-icon">
-                        {getContentTypeIcon(contentItem.contentType)}
-                      </span>
-                      <span className="content-title">{contentItem.title}</span>
-                      {contentItem.duration && (
-                        <span className="content-duration">{contentItem.duration} min</span>
-                      )}
-                      <span className={`content-badge ${contentItem.isRequired ? 'required' : 'optional'}`}>
-                        {contentItem.isRequired ? 'Required' : 'Optional'}
-                      </span>
-                    </div>
-                    <div className="content-item-actions">
-                      {onEditContent && (
-                        <button
-                          className="icon-button"
-                          onClick={() => handleEditContent(contentItem)}
-                          title="Edit content"
-                          aria-label="Edit content"
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                      )}
-                      {onDeleteContent && (
-                        <button
-                          className="icon-button icon-button-danger"
-                          onClick={() => handleDeleteContent(contentItem.id)}
-                          title="Delete content"
-                          aria-label="Delete content"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {onAddContent && (
-                <div className="add-content-container">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    icon={<Plus size={14} />}
-                    onClick={onAddContent}
-                  >
-                    Add Content
-                  </Button>
-                </div>
-              )}
-            </>
-          )}
+          <ContentItemList
+            lessonId={lesson.id}
+            contentItems={sortedContentItems}
+            onAddContent={onAddContent}
+            onEditContent={onEditContent}
+            onDeleteContent={onDeleteContent}
+          />
         </div>
       )}
     </div>
   );
 };
-
-/**
- * Get icon for content type
- * Validates Requirement: 10.3, 15.5
- */
-function getContentTypeIcon(contentType: string): string {
-  switch (contentType) {
-    case 'video':
-      return '🎥';
-    case 'text':
-      return '📄';
-    case 'quiz':
-      return '📝';
-    case 'assignment':
-      return '📋';
-    case 'resource':
-      return '📎';
-    default:
-      return '📄';
-  }
-}
 
 export default LessonItem;
