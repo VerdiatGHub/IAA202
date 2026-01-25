@@ -294,7 +294,7 @@ This implementation plan breaks down the course content management system into i
     - Update UI optimistically
     - _Requirements: 8.2, 10.6_
 
-  - [~] 14.4 Implement content item drag-and-drop
+  - [x] 14.4 Implement content item drag-and-drop
     - Make ContentItemList draggable
     - Handle onDragEnd to reorder content items
     - Update UI optimistically

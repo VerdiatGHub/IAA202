@@ -29,6 +29,15 @@
   gap: 0.5rem;
 }
 
+/* Drag-and-Drop States */
+.content-items[data-dragging="true"] {
+  user-select: none;
+}
+
+.content-items[data-dragging="true"] * {
+  cursor: grabbing !important;
+}
+
 .add-content-container {
   margin-top: 1rem;
   padding-top: 1rem;
@@ -49,5 +58,12 @@
   
   .add-content-container button {
     width: 100%;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none;
   }
 }
