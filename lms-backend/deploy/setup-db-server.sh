@@ -79,25 +79,11 @@ systemctl restart postgresql
 echo "[5/5] Creating database and user..."
 echo ""
 
-sudo -u postgres psql --set ON_ERROR_STOP=1 << EOF
-DO \$\$
-BEGIN
-   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'lms_user') THEN
-      CREATE USER lms_user WITH PASSWORD '${DB_PASSWORD}';
-   END IF;
-END
-\$\$;
-DO \$\$
-BEGIN
-   IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'lms_db') THEN
-      CREATE DATABASE lms_db OWNER lms_user;
-   END IF;
-END
-\$\$;
-GRANT ALL PRIVILEGES ON DATABASE lms_db TO lms_user;
-\c lms_db
-GRANT ALL ON SCHEMA public TO lms_user;
-EOF
+sudo -u postgres psql -c "CREATE USER lms_user WITH PASSWORD '${DB_PASSWORD}';" || true
+sudo -u postgres psql -c "CREATE DATABASE lms_db OWNER lms_user;" || true
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE lms_db TO lms_user;"
+sudo -u postgres psql -d lms_db -c "GRANT ALL ON SCHEMA public TO lms_user;"
+
 
 # Install Git and Clone Repository
 echo "[5.5/6] Cloning Repository..."
