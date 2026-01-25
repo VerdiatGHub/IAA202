@@ -167,10 +167,20 @@
 .search-input {
     min-width: 200px;
     width: auto;
+    background: transparent;
+    box-shadow: none;
+}
+
+.search-input .input-wrapper,
+.search-input .input-container {
+    background: transparent;
+    box-shadow: none;
 }
 
 .search-input input {
     min-width: 180px;
+    background: var(--bg-secondary);
+    box-shadow: none;
 }
 
 .role-filter {
