@@ -32,11 +32,6 @@ export const AdminSettings: React.FC = () => {
     const [supportEmail, setSupportEmail] = useState('support@lms.local');
     const [maxFileSize, setMaxFileSize] = useState('50');
 
-    // Registration Settings
-    const [allowRegistration, setAllowRegistration] = useState(true);
-    const [requireEmailVerification, setRequireEmailVerification] = useState(false);
-    const [defaultRole, setDefaultRole] = useState('student');
-
     // Notification Settings
     const [emailNotifications, setEmailNotifications] = useState(true);
     const [enrollmentNotifications, setEnrollmentNotifications] = useState(true);
@@ -49,7 +44,6 @@ export const AdminSettings: React.FC = () => {
 
     const sections: SettingsSection[] = [
         { id: 'general', title: 'General', icon: <Globe size={20} /> },
-        { id: 'registration', title: 'Registration', icon: <Shield size={20} /> },
         { id: 'notifications', title: 'Notifications', icon: <Bell size={20} /> },
         { id: 'security', title: 'Security', icon: <Shield size={20} /> },
         { id: 'email', title: 'Email', icon: <Mail size={20} /> },
@@ -100,48 +94,6 @@ export const AdminSettings: React.FC = () => {
                     onChange={(e) => setMaxFileSize(e.target.value)}
                     placeholder="50"
                 />
-            </div>
-        </div>
-    );
-
-    const renderRegistrationSettings = () => (
-        <div className="settings-form">
-            <div className="form-group">
-                <label className="toggle-label">
-                    <span>Allow Public Registration</span>
-                    <input
-                        type="checkbox"
-                        checked={allowRegistration}
-                        onChange={(e) => setAllowRegistration(e.target.checked)}
-                        className="toggle-input"
-                    />
-                    <span className="toggle-switch"></span>
-                </label>
-                <p className="form-hint">Allow new users to register on the platform</p>
-            </div>
-            <div className="form-group">
-                <label className="toggle-label">
-                    <span>Require Email Verification</span>
-                    <input
-                        type="checkbox"
-                        checked={requireEmailVerification}
-                        onChange={(e) => setRequireEmailVerification(e.target.checked)}
-                        className="toggle-input"
-                    />
-                    <span className="toggle-switch"></span>
-                </label>
-                <p className="form-hint">Users must verify their email before accessing the platform</p>
-            </div>
-            <div className="form-group">
-                <label>Default Role for New Users</label>
-                <select
-                    value={defaultRole}
-                    onChange={(e) => setDefaultRole(e.target.value)}
-                    className="form-select"
-                >
-                    <option value="student">Student</option>
-                    <option value="instructor">Instructor</option>
-                </select>
             </div>
         </div>
     );
@@ -318,8 +270,6 @@ export const AdminSettings: React.FC = () => {
         switch (activeSection) {
             case 'general':
                 return renderGeneralSettings();
-            case 'registration':
-                return renderRegistrationSettings();
             case 'notifications':
                 return renderNotificationSettings();
             case 'security':
