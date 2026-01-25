@@ -71,7 +71,10 @@ echo "Configuring firewall..."
 ufw allow from ${WEB_SERVER_IP} to any port 5432
 
 # Show info
-DB_SERVER_IP=$(hostname -I | awk '{print $1}')
+DB_SERVER_IP=$(hostname -I | grep -oE '192\.168\.[0-9]+\.[0-9]+' | head -n 1)
+if [ -z "$DB_SERVER_IP" ]; then
+    DB_SERVER_IP=$(hostname -I | awk '{print $1}')
+fi
 echo ""
 echo "================================================"
 echo "  DATABASE SERVER SETUP COMPLETE!"

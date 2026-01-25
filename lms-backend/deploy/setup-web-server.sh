@@ -53,12 +53,15 @@ JWT_EXPIRES_IN=7d
 PORT=5000
 NODE_ENV=production
 
-# Frontend URL (for CORS) - Update with your actual frontend URL
-FRONTEND_URL=http://$(hostname -I | awk '{print $1}')
-EOF
+# Get the local IP (Prioritize 192.168.x.x for Host-Only, fallback to first IP)
+WEB_SERVER_IP=$(hostname -I | grep -oE '192\.168\.[0-9]+\.[0-9]+' | head -n 1)
+if [ -z "$WEB_SERVER_IP" ]; then
+    WEB_SERVER_IP=$(hostname -I | awk '{print $1}')
+fi
 
-# Get the local IP for frontend config
-WEB_SERVER_IP=$(hostname -I | awk '{print $1}')
+# Frontend URL (for CORS)
+FRONTEND_URL=http://${WEB_SERVER_IP}
+EOF
 
 # Configure Nginx
 echo "[7/7] Configuring Nginx..."
