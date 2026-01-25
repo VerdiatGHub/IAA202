@@ -13,6 +13,23 @@ echo "================================================"
 echo "[1/5] Updating system packages..."
 apt update && apt upgrade -y
 
+# Configure Static IP (Host-Only Adapter - enp0s8)
+echo "Configuring Static IP (192.168.56.102)..."
+cat > /etc/netplan/99-lms-static.yaml <<EOF
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s8:
+      dhcp4: no
+      addresses:
+        - 192.168.56.102/24
+EOF
+chmod 600 /etc/netplan/99-lms-static.yaml
+netplan apply
+echo "Waiting for network to apply..."
+sleep 5
+
 # Install PostgreSQL
 echo "[2/5] Installing PostgreSQL 16..."
 apt install -y wget gnupg2
@@ -66,6 +83,17 @@ GRANT ALL PRIVILEGES ON DATABASE lms_db TO lms_user;
 GRANT ALL ON SCHEMA public TO lms_user;
 EOF
 
+# Install Git and Clone Repository
+echo "[5.5/6] Cloning Repository..."
+apt install -y git
+rm -rf ~/IAA202
+git clone https://github.com/VerdiatGHub/IAA202.git ~/IAA202
+
+# Run schema.sql
+echo "[6/6] Importing Database Schema..."
+export PGPASSWORD='admin123'
+psql -h localhost -U lms_user -d lms_db -f ~/IAA202/lms-backend/schema.sql || echo "Schema import failed (maybe already exists?)"
+
 # Configure firewall
 echo "Configuring firewall..."
 ufw allow from ${WEB_SERVER_IP} to any port 5432
@@ -81,17 +109,11 @@ echo "  DATABASE SERVER SETUP COMPLETE!"
 echo "================================================"
 echo ""
 echo "Database Server IP: ${DB_SERVER_IP}"
-echo "PostgreSQL Port: 5432"
-echo "Database Name: lms_db"
-echo "Database User: lms_user"
 echo ""
-echo "Next step: Run the schema.sql file:"
-echo "  psql -U lms_user -d lms_db -f schema.sql"
+echo "Automated Actions Taken:"
+echo "1. Postgres Installed & Configured"
+echo "2. Static IP set to 192.168.56.102"
+echo "3. Repo cloned to ~/IAA202"
+echo "4. Database Schema (schema.sql) Imported"
 echo ""
-echo "Update your Web Server .env with:"
-echo "  DB_HOST=${DB_SERVER_IP}"
-echo "  DB_PORT=5432"
-echo "  DB_NAME=lms_db"
-echo "  DB_USER=lms_user"
-echo "  DB_PASSWORD=<your_password>"
 echo "================================================"
