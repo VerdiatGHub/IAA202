@@ -20,6 +20,7 @@ interface LessonListProps {
   onEditContent?: (contentItem: ContentItem) => void;
   onDeleteContent?: (contentId: string) => void;
   enableDragAndDrop?: boolean; // Optional: toggle drag-and-drop
+  isPreviewMode?: boolean; // Hide editing controls in preview mode
 }
 
 /**
@@ -27,11 +28,11 @@ interface LessonListProps {
  * 
  * Displays lessons within a module:
  * - Renders lessons in order_index order (Requirement 8.5)
- * - Provides "Add Lesson" button (Requirement 10.2)
+ * - Provides "Add Lesson" button (hidden in preview mode) (Requirement 10.2, 11.2)
  * - Shows lesson items with expand/collapse functionality
  * - Supports drag-and-drop reordering (Requirement 8.2, 10.6)
  * 
- * Validates Requirements: 10.2, 8.2, 8.5, 10.6
+ * Validates Requirements: 10.2, 8.2, 8.5, 10.6, 11.2
  */
 export const LessonList: React.FC<LessonListProps> = ({
   lessons,
@@ -43,6 +44,7 @@ export const LessonList: React.FC<LessonListProps> = ({
   onEditContent,
   onDeleteContent,
   enableDragAndDrop = true, // Default to enabled (Requirement 8.2, 10.6)
+  isPreviewMode = false,
 }) => {
   const { reorderLessons, loading } = useCourseContent();
   const [isDragging, setIsDragging] = useState(false);
@@ -75,14 +77,17 @@ export const LessonList: React.FC<LessonListProps> = ({
     return (
       <div className="lesson-list-empty">
         <p className="empty-message">No lessons in this module yet</p>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          icon={<Plus size={14} />}
-          onClick={onAddLesson}
-        >
-          Add Lesson
-        </Button>
+        {/* Hide Add Lesson button in preview mode (Requirement 11.2) */}
+        {!isPreviewMode && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            icon={<Plus size={14} />}
+            onClick={onAddLesson}
+          >
+            Add Lesson
+          </Button>
+        )}
       </div>
     );
   }
@@ -104,6 +109,7 @@ export const LessonList: React.FC<LessonListProps> = ({
             onAddContent={onAddContent ? () => onAddContent(lesson.id) : undefined}
             onEditContent={onEditContent}
             onDeleteContent={onDeleteContent}
+            isPreviewMode={isPreviewMode}
           />
         );
 
@@ -134,16 +140,19 @@ export const LessonList: React.FC<LessonListProps> = ({
         lessonsList
       )}
 
-      <div className="add-lesson-container">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          icon={<Plus size={14} />}
-          onClick={onAddLesson}
-        >
-          Add Lesson
-        </Button>
-      </div>
+      {/* Hide Add Lesson button in preview mode (Requirement 11.2) */}
+      {!isPreviewMode && (
+        <div className="add-lesson-container">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            icon={<Plus size={14} />}
+            onClick={onAddLesson}
+          >
+            Add Lesson
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

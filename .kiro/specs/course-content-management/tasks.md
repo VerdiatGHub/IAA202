@@ -225,7 +225,7 @@ This implementation plan breaks down the course content management system into i
     - Validation and error handling
     - _Requirements: 1.1, 1.2_
 
-- [ ] 12. Implement Lesson Components
+- [x] 12. Implement Lesson Components
   - [x] 12.1 Create LessonList component
     - Render lessons within a module
     - Display in order_index order
@@ -247,7 +247,7 @@ This implementation plan breaks down the course content management system into i
     - Duration input
     - _Requirements: 2.1, 2.2, 9.1, 9.2_
 
-- [ ] 13. Implement Content Item Components
+- [x] 13. Implement Content Item Components
   - [x] 13.1 Create ContentItemList component
     - Render content items within a lesson
     - Display in order_index order
@@ -276,7 +276,7 @@ This implementation plan breaks down the course content management system into i
     - ResourceContentForm (file upload or URL)
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1_
 
-- [ ] 14. Implement Drag-and-Drop Reordering
+- [x] 14. Implement Drag-and-Drop Reordering
   - [x] 14.1 Add drag-and-drop library
     - Install @dnd-kit/core and @dnd-kit/sortable
     - Configure drag-and-drop providers
@@ -300,21 +300,21 @@ This implementation plan breaks down the course content management system into i
     - Update UI optimistically
     - _Requirements: 14.2, 10.6_
 
-- [ ] 15. Integrate Course Content Editor into Course Management
+- [x] 15. Integrate Course Content Editor into Course Management
   - [x] 15.1 Add Lessons tab to course management page
     - Update course management page to include "Lessons" tab
     - Create LessonsTab component
     - Integrate CourseContentEditor into LessonsTab
     - _Requirements: 10.1_
 
-  - [~] 15.2 Wire up CourseContentEditor
+  - [x] 15.2 Wire up CourseContentEditor
     - Load course content on tab selection
     - Provide CourseContentContext to child components
     - Handle loading and error states
     - _Requirements: 10.2_
 
 - [ ] 16. Implement Preview Mode
-  - [~] 16.1 Add preview mode toggle
+  - [x] 16.1 Add preview mode toggle
     - Add "Preview" button to CourseContentEditor
     - Implement preview mode state
     - Toggle between edit and preview modes

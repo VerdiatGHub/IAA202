@@ -19,6 +19,7 @@ interface ContentItemListProps {
   onDeleteContent?: (contentId: string) => void;
   onReorderContent?: (contentItemIds: string[]) => void;
   enableDragAndDrop?: boolean; // Optional: toggle drag-and-drop
+  isPreviewMode?: boolean; // Hide editing controls in preview mode
 }
 
 /**
@@ -26,11 +27,11 @@ interface ContentItemListProps {
  * 
  * Renders content items within a lesson:
  * - Displays content items in order_index order (Requirement 14.3)
- * - Shows "Add Content" button with type selector (Requirement 10.2)
+ * - Shows "Add Content" button with type selector (hidden in preview mode) (Requirement 10.2, 11.2)
  * - Provides edit and delete actions for each content item
  * - Supports drag-and-drop reordering (Requirement 14.2, 10.6)
  * 
- * Validates Requirements: 10.2, 14.2, 14.3, 10.6
+ * Validates Requirements: 10.2, 14.2, 14.3, 10.6, 11.2
  */
 export const ContentItemList: React.FC<ContentItemListProps> = ({
   lessonId,
@@ -40,6 +41,7 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
   onDeleteContent,
   onReorderContent,
   enableDragAndDrop = true, // Default to enabled (Requirement 14.2, 10.6)
+  isPreviewMode = false,
 }) => {
   const { reorderContentItems, loading } = useCourseContent();
   const [isEditorOpen, setIsEditorOpen] = useState(false);
@@ -100,23 +102,28 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
       <div className="content-item-list">
         <div className="content-empty">
           <p className="empty-message">No content items in this lesson yet</p>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            icon={<Plus size={14} />}
-            onClick={handleAddContent}
-          >
-            Add Content
-          </Button>
+          {/* Hide Add Content button in preview mode (Requirement 11.2) */}
+          {!isPreviewMode && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              icon={<Plus size={14} />}
+              onClick={handleAddContent}
+            >
+              Add Content
+            </Button>
+          )}
         </div>
         
-        <ContentEditorModal
-          isOpen={isEditorOpen}
-          onClose={handleEditorClose}
-          lessonId={lessonId}
-          contentItem={editingContent}
-          onSuccess={handleEditorSuccess}
-        />
+        {!isPreviewMode && (
+          <ContentEditorModal
+            isOpen={isEditorOpen}
+            onClose={handleEditorClose}
+            lessonId={lessonId}
+            contentItem={editingContent}
+            onSuccess={handleEditorSuccess}
+          />
+        )}
       </div>
     );
   }
@@ -134,6 +141,7 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
             contentItem={contentItem}
             onEdit={() => handleEditContent(contentItem)}
             onDelete={() => handleDeleteContent(contentItem.id)}
+            isPreviewMode={isPreviewMode}
           />
         );
 
@@ -164,24 +172,29 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
         contentItemsList
       )}
       
-      <div className="add-content-container">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          icon={<Plus size={14} />}
-          onClick={handleAddContent}
-        >
-          Add Content
-        </Button>
-      </div>
+      {/* Hide Add Content button in preview mode (Requirement 11.2) */}
+      {!isPreviewMode && (
+        <div className="add-content-container">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            icon={<Plus size={14} />}
+            onClick={handleAddContent}
+          >
+            Add Content
+          </Button>
+        </div>
+      )}
 
-      <ContentEditorModal
-        isOpen={isEditorOpen}
-        onClose={handleEditorClose}
-        lessonId={lessonId}
-        contentItem={editingContent}
-        onSuccess={handleEditorSuccess}
-      />
+      {!isPreviewMode && (
+        <ContentEditorModal
+          isOpen={isEditorOpen}
+          onClose={handleEditorClose}
+          lessonId={lessonId}
+          contentItem={editingContent}
+          onSuccess={handleEditorSuccess}
+        />
+      )}
     </div>
   );
 };

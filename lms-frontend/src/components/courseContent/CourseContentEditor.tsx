@@ -8,17 +8,18 @@ import toast from 'react-hot-toast';
 import './CourseContentEditor.css';
 
 interface CourseContentEditorProps {
-  isPreviewMode?: boolean;
+  // No props needed - preview mode is managed internally
 }
 
-export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({
-  isPreviewMode = false,
-}) => {
+export const CourseContentEditor: React.FC<CourseContentEditorProps> = () => {
   const {
     refreshContent,
     deleteModule,
     deleteLesson,
   } = useCourseContent();
+
+  // Preview mode state
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // Modal states
   const [moduleModalOpen, setModuleModalOpen] = useState(false);
@@ -108,8 +109,34 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({
     return selectedModuleId || undefined;
   };
 
+  // Toggle preview mode
+  const handleTogglePreview = () => {
+    setIsPreviewMode(!isPreviewMode);
+  };
+
   return (
     <div className="course-content-editor">
+      {/* Preview Mode Toggle Button */}
+      <div className="editor-toolbar">
+        <button
+          className={`preview-toggle-btn ${isPreviewMode ? 'active' : ''}`}
+          onClick={handleTogglePreview}
+          type="button"
+        >
+          {isPreviewMode ? (
+            <>
+              <span className="icon">✏️</span>
+              <span>Edit Mode</span>
+            </>
+          ) : (
+            <>
+              <span className="icon">👁️</span>
+              <span>Preview Mode</span>
+            </>
+          )}
+        </button>
+      </div>
+
       <ModuleList
         onAddModule={handleAddModule}
         onEditModule={handleEditModule}

@@ -6,3 +6,54 @@
 .course-content-editor .module-list {
   width: 100%;
 }
+
+/* Editor Toolbar */
+.course-content-editor .editor-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+/* Preview Toggle Button */
+.course-content-editor .preview-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.course-content-editor .preview-toggle-btn:hover {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.course-content-editor .preview-toggle-btn.active {
+  background-color: #3b82f6;
+  border-color: #2563eb;
+  color: white;
+}
+
+.course-content-editor .preview-toggle-btn.active:hover {
+  background-color: #2563eb;
+  border-color: #1d4ed8;
+}
+
+.course-content-editor .preview-toggle-btn .icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.course-content-editor .preview-toggle-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

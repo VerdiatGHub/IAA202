@@ -14,6 +14,7 @@ interface ModuleItemProps {
   onAddLesson?: () => void;
   onEditLesson?: (lesson: Lesson) => void;
   onDeleteLesson?: (lessonId: string) => void;
+  isPreviewMode?: boolean; // Hide editing controls in preview mode
 }
 
 /**
@@ -22,10 +23,10 @@ interface ModuleItemProps {
  * Displays an individual module with:
  * - Module header with title and description
  * - Lesson count and total duration
- * - Edit and delete buttons
+ * - Edit and delete buttons (hidden in preview mode)
  * - Expand/collapse functionality for lessons
  * 
- * Validates Requirements: 10.2, 10.5
+ * Validates Requirements: 10.2, 10.5, 11.2
  */
 export const ModuleItem: React.FC<ModuleItemProps> = ({
   module,
@@ -37,6 +38,7 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
   onAddLesson,
   onEditLesson,
   onDeleteLesson,
+  isPreviewMode = false,
 }) => {
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -68,9 +70,12 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
   return (
     <div className="module-item">
       <div className="module-header" onClick={onToggleExpand}>
-        <div className="module-drag-handle" title="Drag to reorder">
-          <GripVertical size={20} />
-        </div>
+        {/* Hide drag handle in preview mode (Requirement 11.2) */}
+        {!isPreviewMode && (
+          <div className="module-drag-handle" title="Drag to reorder">
+            <GripVertical size={20} />
+          </div>
+        )}
         <div className="module-info">
           <span className="module-number">Module {index + 1}</span>
           <h3 className="module-title">{module.title}</h3>
@@ -93,7 +98,8 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
             )}
           </div>
           <div className="module-buttons">
-            {onEdit && (
+            {/* Hide edit/delete buttons in preview mode (Requirement 11.2) */}
+            {!isPreviewMode && onEdit && (
               <button
                 className="icon-button"
                 onClick={handleEdit}
@@ -103,7 +109,7 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
                 <Edit2 size={16} />
               </button>
             )}
-            {onDelete && (
+            {!isPreviewMode && onDelete && (
               <button
                 className="icon-button icon-button-danger"
                 onClick={handleDelete}
@@ -143,6 +149,7 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
             onAddLesson={() => onAddLesson?.()}
             onEditLesson={onEditLesson ? handleEditLesson : undefined}
             onDeleteLesson={onDeleteLesson ? handleDeleteLesson : undefined}
+            isPreviewMode={isPreviewMode}
           />
         </div>
       )}

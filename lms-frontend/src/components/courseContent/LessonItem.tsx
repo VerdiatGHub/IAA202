@@ -12,6 +12,7 @@ interface LessonItemProps {
   onAddContent?: () => void;
   onEditContent?: (contentItem: ContentItem) => void;
   onDeleteContent?: (contentId: string) => void;
+  isPreviewMode?: boolean; // Hide editing controls in preview mode
 }
 
 /**
@@ -20,11 +21,11 @@ interface LessonItemProps {
  * Displays an individual lesson with:
  * - Lesson header with title
  * - Content item count
- * - Edit and delete buttons
+ * - Edit and delete buttons (hidden in preview mode)
  * - Expand/collapse functionality for content items
  * - Required/optional badge
  * 
- * Validates Requirements: 10.2, 10.5, 9.1, 9.2
+ * Validates Requirements: 10.2, 10.5, 9.1, 9.2, 11.2
  */
 export const LessonItem: React.FC<LessonItemProps> = ({
   lesson,
@@ -34,6 +35,7 @@ export const LessonItem: React.FC<LessonItemProps> = ({
   onAddContent,
   onEditContent,
   onDeleteContent,
+  isPreviewMode = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -87,7 +89,8 @@ export const LessonItem: React.FC<LessonItemProps> = ({
           </div>
         </div>
         <div className="lesson-actions">
-          {onEdit && (
+          {/* Hide edit/delete buttons in preview mode (Requirement 11.2) */}
+          {!isPreviewMode && onEdit && (
             <button
               className="icon-button"
               onClick={handleEdit}
@@ -97,7 +100,7 @@ export const LessonItem: React.FC<LessonItemProps> = ({
               <Edit2 size={14} />
             </button>
           )}
-          {onDelete && (
+          {!isPreviewMode && onDelete && (
             <button
               className="icon-button icon-button-danger"
               onClick={handleDelete}
@@ -128,6 +131,7 @@ export const LessonItem: React.FC<LessonItemProps> = ({
             onAddContent={onAddContent}
             onEditContent={onEditContent}
             onDeleteContent={onDeleteContent}
+            isPreviewMode={isPreviewMode}
           />
         </div>
       )}

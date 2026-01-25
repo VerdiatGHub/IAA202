@@ -126,6 +126,7 @@ export const ModuleList: React.FC<ModuleListProps> = ({
             onAddLesson={onAddLesson ? () => onAddLesson(module.id) : undefined}
             onEditLesson={onEditLesson}
             onDeleteLesson={onDeleteLesson}
+            isPreviewMode={!enableDragAndDrop}
           />
         );
 
@@ -145,9 +146,12 @@ export const ModuleList: React.FC<ModuleListProps> = ({
     <div className="module-list">
       <div className="module-list-header">
         <h2>Course Content</h2>
-        <Button variant="primary" icon={<Plus size={16} />} onClick={onAddModule}>
-          Add Module
-        </Button>
+        {/* Hide Add Module button in preview mode (Requirement 11.2) */}
+        {enableDragAndDrop && (
+          <Button variant="primary" icon={<Plus size={16} />} onClick={onAddModule}>
+            Add Module
+          </Button>
+        )}
       </div>
 
       {enableDragAndDrop ? (

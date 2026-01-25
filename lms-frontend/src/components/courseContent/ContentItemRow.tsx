@@ -7,6 +7,7 @@ interface ContentItemRowProps {
   contentItem: ContentItem;
   onEdit?: () => void;
   onDelete?: () => void;
+  isPreviewMode?: boolean; // Hide editing controls in preview mode
 }
 
 /**
@@ -16,14 +17,15 @@ interface ContentItemRowProps {
  * - Content type icon (video, text, quiz, assignment, resource)
  * - Content title and duration (if applicable)
  * - Required/optional badge
- * - Edit and delete buttons
+ * - Edit and delete buttons (hidden in preview mode)
  * 
- * Validates Requirements: 10.3, 10.5, 15.5
+ * Validates Requirements: 10.3, 10.5, 15.5, 11.2
  */
 export const ContentItemRow: React.FC<ContentItemRowProps> = ({
   contentItem,
   onEdit,
   onDelete,
+  isPreviewMode = false,
 }) => {
   return (
     <div className="content-item-row">
@@ -42,7 +44,8 @@ export const ContentItemRow: React.FC<ContentItemRowProps> = ({
         </span>
       </div>
       <div className="content-item-actions">
-        {onEdit && (
+        {/* Hide edit/delete buttons in preview mode (Requirement 11.2) */}
+        {!isPreviewMode && onEdit && (
           <button
             className="icon-button"
             onClick={onEdit}
@@ -52,7 +55,7 @@ export const ContentItemRow: React.FC<ContentItemRowProps> = ({
             <Edit2 size={14} />
           </button>
         )}
-        {onDelete && (
+        {!isPreviewMode && onDelete && (
           <button
             className="icon-button icon-button-danger"
             onClick={onDelete}
