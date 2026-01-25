@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster, ToastBar } from 'react-hot-toast';
 
 // Contexts
 import { AuthProvider } from './contexts/AuthContext';
@@ -150,9 +150,27 @@ function App() {
               color: 'var(--text-primary)',
               borderRadius: 'var(--radius-lg)',
               boxShadow: 'var(--shadow-lg)',
+              cursor: 'pointer',
             },
           }}
-        />
+          containerStyle={{
+            top: 80,
+          }}
+        >
+          {(t) => (
+            <ToastBar toast={t}>
+              {({ icon, message }) => (
+                <div
+                  onClick={() => toast.dismiss(t.id)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}
+                >
+                  {icon}
+                  {message}
+                </div>
+              )}
+            </ToastBar>
+          )}
+        </Toaster>
       </AuthProvider>
     </BrowserRouter>
   );
