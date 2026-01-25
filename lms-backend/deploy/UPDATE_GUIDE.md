@@ -48,3 +48,11 @@ If you see this error when running `git pull`, it means the permissions on the f
 git config --global --add safe.directory /home/huynh/IAA202
 ```
 Then try `git pull origin main` again.
+
+**"error: cannot open .git/FETCH_HEAD: Permission denied"**
+If you see a permission error, it means some files are owned by `root` (probably because you used `sudo` with git before). Fix it by reclaiming ownership:
+
+```bash
+sudo chown -R $USER:$USER ~/IAA202
+```
+Then try `git pull origin main` again.
