@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
+import { EditCourseModal } from '../../components/admin/EditCourseModal';
 import { getCourses, deleteCourse } from '../../services/courseService';
 import type { Course } from '../../types';
 import { format } from 'date-fns';
@@ -27,6 +28,7 @@ export const AdminCourses: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLevel, setSelectedLevel] = useState('all');
     const [deletingCourseId, setDeletingCourseId] = useState<string | null>(null);
+    const [editingCourseId, setEditingCourseId] = useState<string | null>(null);
 
     const fetchCourses = useCallback(async () => {
         setLoading(true);
@@ -208,14 +210,13 @@ export const AdminCourses: React.FC = () => {
                             </div>
 
                             <div className="col-actions">
-                                <Link to={`/instructor/courses/${course.id}/edit`}>
-                                    <button
-                                        className="action-btn edit"
-                                        title="Edit Course"
-                                    >
-                                        <Edit size={16} />
-                                    </button>
-                                </Link>
+                                <button
+                                    className="action-btn edit"
+                                    title="Edit Course"
+                                    onClick={() => setEditingCourseId(course.id)}
+                                >
+                                    <Edit size={16} />
+                                </button>
                                 <button
                                     className="action-btn danger"
                                     title="Delete Course"
@@ -229,6 +230,15 @@ export const AdminCourses: React.FC = () => {
                     ))
                 )}
             </div>
+
+            {editingCourseId && (
+                <EditCourseModal
+                    isOpen={true}
+                    onClose={() => setEditingCourseId(null)}
+                    courseId={editingCourseId}
+                    onSuccess={fetchCourses}
+                />
+            )}
         </div>
     );
 };
