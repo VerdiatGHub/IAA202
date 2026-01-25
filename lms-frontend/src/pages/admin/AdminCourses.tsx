@@ -10,7 +10,6 @@ import {
     FileText,
     CheckCircle,
     XCircle,
-    ExternalLink,
     Edit
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
