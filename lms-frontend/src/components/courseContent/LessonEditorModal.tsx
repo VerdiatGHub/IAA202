@@ -116,18 +116,15 @@ export const LessonEditorModal: React.FC<LessonEditorModalProps> = ({
 
       if (isEditMode && lesson) {
         await updateLesson(lesson.id, lessonData);
-        toast.success('Lesson updated successfully');
       } else {
         await addLesson(moduleId, lessonData);
-        toast.success('Lesson created successfully');
       }
 
       onSuccess?.();
       handleClose();
     } catch (error: any) {
-      const message = error.response?.data?.error || error.message || 
-        `Failed to ${isEditMode ? 'update' : 'create'} lesson`;
-      toast.error(message);
+      // Error is already handled and toasted in the context
+      console.error('Error saving lesson:', error);
     } finally {
       setLoading(false);
     }

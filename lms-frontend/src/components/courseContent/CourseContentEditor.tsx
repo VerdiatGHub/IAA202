@@ -5,7 +5,7 @@ import { LessonEditorModal } from './LessonEditorModal';
 import { StudentContentView } from './StudentContentView';
 import { useCourseContent } from '../../contexts/useCourseContent';
 import type { Module, Lesson } from '../../types';
-import toast from 'react-hot-toast';
+import { AlertCircle } from 'lucide-react';
 import './CourseContentEditor.css';
 
 interface CourseContentEditorProps {
@@ -17,6 +17,9 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
     refreshContent,
     deleteModule,
     deleteLesson,
+    loading,
+    error,
+    clearError,
   } = useCourseContent();
 
   // Preview mode state
@@ -56,9 +59,9 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
 
     try {
       await deleteModule(moduleId);
-      toast.success('Module deleted successfully');
+      // Success toast is handled in the context
     } catch (error) {
-      toast.error('Failed to delete module');
+      // Error toast is handled in the context
       console.error(error);
     }
   };
@@ -88,9 +91,9 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
 
     try {
       await deleteLesson(lessonId);
-      toast.success('Lesson deleted successfully');
+      // Success toast is handled in the context
     } catch (error) {
-      toast.error('Failed to delete lesson');
+      // Error toast is handled in the context
       console.error(error);
     }
   };
@@ -117,6 +120,21 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
 
   return (
     <div className="course-content-editor">
+      {/* Error Display */}
+      {error && (
+        <div className="error-banner">
+          <AlertCircle size={20} />
+          <span>{error}</span>
+          <button 
+            onClick={clearError} 
+            className="error-dismiss"
+            aria-label="Dismiss error"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Preview Mode Toggle Button */}
       <div className="editor-toolbar">
         <button
@@ -137,6 +155,14 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
           )}
         </button>
       </div>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <div className="loading-indicator">
+          <div className="spinner"></div>
+          <span>Loading...</span>
+        </div>
+      )}
 
       {/* Show StudentContentView in preview mode, otherwise show ModuleList (Requirement 11.2) */}
       {isPreviewMode ? (

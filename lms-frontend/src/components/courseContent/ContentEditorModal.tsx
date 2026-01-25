@@ -221,18 +221,15 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
 
       if (isEditMode && contentItem) {
         await updateContentItem(contentItem.id, contentData);
-        toast.success('Content updated successfully');
       } else {
         await addContentItem(lessonId, contentData);
-        toast.success('Content created successfully');
       }
 
       onSuccess?.();
       handleClose();
     } catch (error: any) {
-      const message = error.response?.data?.error || error.message || 
-        `Failed to ${isEditMode ? 'update' : 'create'} content`;
-      toast.error(message);
+      // Error is already handled and toasted in the context
+      console.error('Error saving content:', error);
     } finally {
       setLoading(false);
     }

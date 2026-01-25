@@ -84,18 +84,15 @@ export const ModuleEditorModal: React.FC<ModuleEditorModalProps> = ({
 
       if (isEditMode && module) {
         await updateModule(module.id, moduleData);
-        toast.success('Module updated successfully');
       } else {
         await addModule(moduleData);
-        toast.success('Module created successfully');
       }
 
       onSuccess?.();
       handleClose();
     } catch (error: any) {
-      const message = error.response?.data?.error || error.message || 
-        `Failed to ${isEditMode ? 'update' : 'create'} module`;
-      toast.error(message);
+      // Error is already handled and toasted in the context
+      console.error('Error saving module:', error);
     } finally {
       setLoading(false);
     }

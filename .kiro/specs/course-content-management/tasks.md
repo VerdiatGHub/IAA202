@@ -329,7 +329,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 11.2, 11.3, 11.4, 15.1, 15.2, 15.3, 15.4, 15.5_
 
 - [ ] 17. Implement Student View for Course Content
-  - [-] 17.1 Create student course content page
+  - [x] 17.1 Create student course content page
     - Display modules and lessons for enrolled students
     - Show content items within lessons
     - Display required/optional indicators
@@ -338,7 +338,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5_
 
 - [ ] 18. Implement Error Handling and User Feedback
-  - [~] 18.1 Add error handling to all API calls
+  - [x] 18.1 Add error handling to all API calls
     - Display toast notifications for errors
     - Show inline error messages for validation
     - Implement retry logic for transient failures

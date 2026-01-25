@@ -4,6 +4,7 @@ import type { Module, CreateModuleDto, UpdateModuleDto, CreateLessonDto, UpdateL
 import { moduleService } from '../services/moduleService';
 import { lessonService } from '../services/lessonService';
 import { contentItemService } from '../services/contentItemService';
+import toast from 'react-hot-toast';
 
 interface CourseContentProviderProps {
   children: React.ReactNode;
@@ -18,7 +19,9 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
   // Refresh content - load all modules with nested lessons and content items
   const refreshContent = useCallback(async () => {
     if (!courseId) {
-      setError('Course ID is required');
+      const errorMsg = 'Course ID is required';
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
@@ -43,6 +46,7 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
                   return { ...lesson, contentItems };
                 } catch (err) {
                   console.error(`Error fetching content items for lesson ${lesson.id}:`, err);
+                  // Don't show toast for individual content item failures
                   return { ...lesson, contentItems: [] };
                 }
               })
@@ -51,6 +55,7 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
             return { ...module, lessons: lessonsWithContent };
           } catch (err) {
             console.error(`Error fetching lessons for module ${module.id}:`, err);
+            // Don't show toast for individual module failures
             return { ...module, lessons: [] };
           }
         })
@@ -60,6 +65,7 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load course content';
       setError(message);
+      toast.error(message);
       console.error('Error loading course content:', err);
     } finally {
       setLoading(false);
@@ -77,10 +83,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
       // Add the new module to state with empty lessons array
       setModules((prev) => [...prev, { ...newModule, lessons: [] }]);
       
+      toast.success('Module created successfully');
       return newModule;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to create module';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -101,10 +109,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
         )
       );
       
+      toast.success('Module updated successfully');
       return updatedModule;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to update module';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -120,9 +130,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
       
       // Remove the module from state
       setModules((prev) => prev.filter((module) => module.id !== id));
+      
+      toast.success('Module deleted successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to delete module';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -146,11 +159,14 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
 
       // Make API call
       await moduleService.reorderModules(courseId, moduleIds);
+      
+      toast.success('Modules reordered successfully');
     } catch (err) {
       // Rollback on error
       setModules(previousModules);
       const message = err instanceof Error ? err.message : 'Failed to reorder modules';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -176,9 +192,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
             : module
         )
       );
+      
+      toast.success('Lesson created successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to create lesson';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -201,9 +220,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
           ),
         }))
       );
+      
+      toast.success('Lesson updated successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to update lesson';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -224,9 +246,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
           lessons: (module.lessons || []).filter((lesson) => lesson.id !== id),
         }))
       );
+      
+      toast.success('Lesson deleted successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to delete lesson';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -256,11 +281,14 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
 
       // Make API call
       await lessonService.reorderLessons(courseId, moduleId, lessonIds);
+      
+      toast.success('Lessons reordered successfully');
     } catch (err) {
       // Rollback on error
       setModules(previousModules);
       const message = err instanceof Error ? err.message : 'Failed to reorder lessons';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -289,9 +317,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
           ),
         }))
       );
+      
+      toast.success('Content item created successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to create content item';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -317,9 +348,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
           })),
         }))
       );
+      
+      toast.success('Content item updated successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to update content item';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -343,9 +377,12 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
           })),
         }))
       );
+      
+      toast.success('Content item deleted successfully');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to delete content item';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
@@ -378,11 +415,14 @@ export const CourseContentProvider: React.FC<CourseContentProviderProps> = ({ ch
 
       // Make API call
       await contentItemService.reorderContentItems(lessonId, itemIds);
+      
+      toast.success('Content items reordered successfully');
     } catch (err) {
       // Rollback on error
       setModules(previousModules);
       const message = err instanceof Error ? err.message : 'Failed to reorder content items';
       setError(message);
+      toast.error(message);
       throw err;
     } finally {
       setLoading(false);
