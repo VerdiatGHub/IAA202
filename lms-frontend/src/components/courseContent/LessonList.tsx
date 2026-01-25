@@ -1,7 +1,8 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '../common/Button';
-import type { Lesson } from '../../types';
+import { LessonItem } from './LessonItem';
+import type { Lesson, ContentItem } from '../../types';
 import './LessonList.css';
 
 interface LessonListProps {
@@ -10,6 +11,9 @@ interface LessonListProps {
   onAddLesson: () => void;
   onEditLesson?: (lesson: Lesson) => void;
   onDeleteLesson?: (lessonId: string) => void;
+  onAddContent?: (lessonId: string) => void;
+  onEditContent?: (contentItem: ContentItem) => void;
+  onDeleteContent?: (contentId: string) => void;
 }
 
 /**
@@ -28,6 +32,9 @@ export const LessonList: React.FC<LessonListProps> = ({
   onAddLesson,
   onEditLesson,
   onDeleteLesson,
+  onAddContent,
+  onEditContent,
+  onDeleteContent,
 }) => {
   // Sort lessons by orderIndex (Requirement 8.5)
   const sortedLessons = [...lessons].sort((a, b) => a.orderIndex - b.orderIndex);
@@ -54,20 +61,16 @@ export const LessonList: React.FC<LessonListProps> = ({
     <div className="lesson-list">
       <div className="lessons-container">
         {sortedLessons.map((lesson, index) => (
-          <div key={lesson.id} className="lesson-item-placeholder">
-            <div className="lesson-info">
-              <span className="lesson-number">Lesson {index + 1}</span>
-              <span className="lesson-title">{lesson.title}</span>
-              {lesson.duration && (
-                <span className="lesson-duration">{lesson.duration} min</span>
-              )}
-              {lesson.isRequired !== undefined && (
-                <span className={`lesson-badge ${lesson.isRequired ? 'required' : 'optional'}`}>
-                  {lesson.isRequired ? 'Required' : 'Optional'}
-                </span>
-              )}
-            </div>
-          </div>
+          <LessonItem
+            key={lesson.id}
+            lesson={lesson}
+            index={index}
+            onEdit={onEditLesson ? () => onEditLesson(lesson) : undefined}
+            onDelete={onDeleteLesson ? () => onDeleteLesson(lesson.id) : undefined}
+            onAddContent={onAddContent ? () => onAddContent(lesson.id) : undefined}
+            onEditContent={onEditContent}
+            onDeleteContent={onDeleteContent}
+          />
         ))}
       </div>
 

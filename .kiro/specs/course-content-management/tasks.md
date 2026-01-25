@@ -232,7 +232,7 @@ This implementation plan breaks down the course content management system into i
     - Add "Add Lesson" button
     - _Requirements: 10.2, 8.5_
 
-  - [~] 12.2 Create LessonItem component
+  - [x] 12.2 Create LessonItem component
     - Display lesson header with title
     - Show content item count
     - Add edit and delete buttons

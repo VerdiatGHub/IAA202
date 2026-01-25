@@ -13,71 +13,6 @@
   gap: 0.5rem;
 }
 
-/* Lesson Item Placeholder (temporary until LessonItem is implemented) */
-.lesson-item-placeholder {
-  display: flex;
-  align-items: center;
-  padding: 0.875rem 1rem;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
-  transition: all 0.2s ease;
-}
-
-.lesson-item-placeholder:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
-}
-
-.lesson-info {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
-}
-
-.lesson-number {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #6366f1;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  min-width: 4rem;
-}
-
-.lesson-title {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: #111827;
-  flex: 1;
-}
-
-.lesson-duration {
-  font-size: 0.8125rem;
-  color: #6b7280;
-  white-space: nowrap;
-}
-
-/* Lesson Badge */
-.lesson-badge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.lesson-badge.required {
-  background-color: #dbeafe;
-  color: #1e40af;
-}
-
-.lesson-badge.optional {
-  background-color: #f3f4f6;
-  color: #6b7280;
-}
-
 /* Empty State */
 .lesson-list-empty {
   display: flex;
@@ -105,28 +40,14 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .lesson-item-placeholder {
-    padding: 0.75rem;
-  }
-
-  .lesson-info {
-    flex-wrap: wrap;
+  .lesson-list {
     gap: 0.5rem;
-  }
-
-  .lesson-number {
-    min-width: auto;
-  }
-
-  .lesson-title {
-    flex-basis: 100%;
-    order: -1;
   }
 }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .lesson-item-placeholder {
+  * {
     transition: none;
   }
 }
