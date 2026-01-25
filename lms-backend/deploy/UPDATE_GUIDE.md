@@ -36,7 +36,8 @@ npm install            # Only if you added new packages
 npm run build
 
 # Update live files
-sudo cp -r dist/* /var/www/lms/frontend/
+sudo mkdir -p /var/www/lms/frontend/dist
+sudo cp -r dist/* /var/www/lms/frontend/dist/
 ```
 
 ### 3. Troubleshooting
