@@ -20,7 +20,7 @@ import { StudentDashboard, CourseCatalog, CourseView } from './pages/student';
 import { InstructorDashboard } from './pages/instructor';
 
 // Admin Pages
-import { AdminDashboard } from './pages/admin';
+import { AdminDashboard, AdminSettings } from './pages/admin';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -106,7 +106,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/users" element={<div className="page-placeholder">User Management - Coming Soon</div>} />
         <Route path="/admin/courses" element={<div className="page-placeholder">Courses - Coming Soon</div>} />
         <Route path="/admin/reports" element={<div className="page-placeholder">Reports - Coming Soon</div>} />
-        <Route path="/admin/settings" element={<div className="page-placeholder">Settings - Coming Soon</div>} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
 
         {/* Common Routes */}
         <Route path="/profile" element={<div className="page-placeholder">Profile - Coming Soon</div>} />
