@@ -52,7 +52,7 @@ This implementation plan breaks down the course content management system into i
     - Update all modules in a single transaction
     - _Requirements: 8.1, 8.4_
 
-  - [~] 3.2 Write property test for reordering
+  - [-] 3.2 Write property test for reordering
     - **Property 5: Reordering Updates All Affected Indices**
     - **Property 6: Reordering Preserves Relationships**
     - **Validates: Requirements 8.1, 8.3**
