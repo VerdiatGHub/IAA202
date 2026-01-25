@@ -1,8 +1,21 @@
-# How to Update Your Code
+# How to Update Your LMS
 
 **Good news!** You do **NOT** need to setup the VMs again.
 
 When you make changes on your Windows computer (UI, features, etc.), follow this simple workflow:
+
+---
+
+## Quick Update (One-Liner)
+
+**On Web Server (192.168.56.101):**
+```bash
+cd ~/IAA202 && git pull && cp -r lms-backend/* /var/www/lms/backend/ && cp -r lms-frontend/* /var/www/lms/frontend/ && cd /var/www/lms/frontend && npm run build && pm2 restart lms-api
+```
+
+---
+
+## Step-by-Step Update
 
 ### 1. On Windows: Push Changes
 ```bash
@@ -11,16 +24,13 @@ git commit -m "Added new features"
 git push
 ```
 
-### 2. On Web Server VM: Pull & Update
-SSH into your Web Server (`ssh user@192.168.56.101`) and run:
+### 2. On Web Server (192.168.56.101): Pull & Update
 
 **For Backend Changes:**
 ```bash
-cd ~/IAA202/lms-backend
-git pull origin main
-
-# Update live folder
-sudo cp -r ./* /var/www/lms/backend/
+cd ~/IAA202
+git pull
+cp -r lms-backend/* /var/www/lms/backend/
 cd /var/www/lms/backend
 npm install            # Only if you added new packages
 pm2 restart lms-api    # Apply changes
@@ -28,23 +38,47 @@ pm2 restart lms-api    # Apply changes
 
 **For Frontend Changes:**
 ```bash
-cd ~/IAA202/lms-frontend
-git pull origin main
-
-# Rebuild
+cd ~/IAA202
+git pull
+cp -r lms-frontend/* /var/www/lms/frontend/
+cd /var/www/lms/frontend
 npm install            # Only if you added new packages
-
-# Configure API URL
-echo "VITE_API_URL=http://$(hostname -I | awk '{print $1}')/api" > .env
-
 npm run build
-
-# Update live files
-sudo mkdir -p /var/www/lms/frontend/dist
-sudo cp -r dist/* /var/www/lms/frontend/dist/
 ```
 
-### 3. Troubleshooting
+### 3. On Database Server (192.168.56.102): Update Schema
+**Only if you changed `schema.sql`:**
+```bash
+cd ~/IAA202
+git pull
+export PGPASSWORD='admin123'
+psql -h localhost -U lms_user -d lms_db -f lms-backend/schema.sql
+```
+
+⚠️ **Warning:** Running schema.sql will DROP all tables and recreate them, losing all data!
+
+---
+
+## What Happens When You Shut Down VMs?
+
+### ✅ Everything Auto-Starts on Boot:
+
+| Service | Server | Auto-Start? |
+|---------|--------|-------------|
+| PostgreSQL | Database (192.168.56.102) | ✅ Yes |
+| PM2 (Backend API) | Web (192.168.56.101) | ✅ Yes |
+| Nginx (Frontend) | Web (192.168.56.101) | ✅ Yes |
+
+**Your LMS will be available immediately after powering on both VMs.**
+
+### Boot Order:
+1. Start **Database Server** first (192.168.56.102)
+2. Then start **Web Server** (192.168.56.101)
+3. Access http://192.168.56.101 in your browser
+
+---
+
+## Troubleshooting
 
 **"fatal: detected dubious ownership in repository"**
 If you see this error when running `git pull`, it means the permissions on the folder don't match your user. Run this command to fix it:
