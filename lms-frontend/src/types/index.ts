@@ -28,17 +28,86 @@ export interface Course {
   level?: 'beginner' | 'intermediate' | 'advanced';
 }
 
+// Module types
+export interface Module {
+  id: string;
+  courseId: string;
+  title: string;
+  description?: string;
+  orderIndex: number;
+  lessonCount?: number;
+  lessons?: Lesson[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateModuleDto {
+  title: string;
+  description?: string;
+}
+
+export interface UpdateModuleDto {
+  title?: string;
+  description?: string;
+  orderIndex?: number;
+}
+
 // Lesson types
 export interface Lesson {
   id: string;
   courseId: string;
+  moduleId?: string;
   title: string;
   content?: string;
   videoUrl?: string;
   orderIndex: number;
   duration?: number; // in minutes
+  isRequired?: boolean;
   createdAt: string;
   isCompleted?: boolean;
+}
+
+export interface CreateLessonDto {
+  title: string;
+  content?: string;
+  videoUrl?: string;
+  duration?: number;
+  isRequired?: boolean;
+}
+
+export interface UpdateLessonDto {
+  title?: string;
+  content?: string;
+  videoUrl?: string;
+  duration?: number;
+  isRequired?: boolean;
+  orderIndex?: number;
+}
+
+// Content Item types
+export type ContentType = 'video' | 'text' | 'quiz' | 'assignment' | 'resource';
+
+export interface ContentItem {
+  id: string;
+  lessonId: string;
+  contentType: ContentType;
+  title: string;
+  description?: string;
+  orderIndex: number;
+  isRequired: boolean;
+  
+  // Type-specific fields
+  videoUrl?: string;
+  duration?: number;
+  textContent?: string;
+  quizId?: string;
+  assignmentId?: string;
+  resourceType?: 'file' | 'link';
+  resourceUrl?: string;
+  filePath?: string;
+  
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Enrollment types
