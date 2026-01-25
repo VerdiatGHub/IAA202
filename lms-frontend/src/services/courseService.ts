@@ -56,6 +56,7 @@ interface UpdateCourseData {
     level?: 'beginner' | 'intermediate' | 'advanced';
     duration?: string;
     isPublished?: boolean;
+    isPublic?: boolean;
 }
 
 // Get all courses

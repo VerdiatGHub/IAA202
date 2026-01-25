@@ -12,7 +12,7 @@ router.get('/', authenticateToken, async (req, res) => {
         let sql = `
             SELECT 
                 c.id, c.title, c.description, c.thumbnail_url, c.instructor_id,
-                c.is_published, c.category, c.level, c.duration, c.created_at, c.updated_at,
+                c.is_published, c.is_public, c.category, c.level, c.duration, c.created_at, c.updated_at,
                 u.full_name as instructor_name,
                 (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id) as enrollment_count,
                 (SELECT COUNT(*) FROM lessons l WHERE l.course_id = c.id) as lesson_count
@@ -75,6 +75,7 @@ router.get('/', authenticateToken, async (req, res) => {
                 instructorId: course.instructor_id,
                 instructorName: course.instructor_name,
                 isPublished: course.is_published,
+                isPublic: course.is_public,
                 category: course.category,
                 level: course.level,
                 duration: course.duration,
@@ -118,7 +119,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
         const result = await query(`
             SELECT 
                 c.id, c.title, c.description, c.thumbnail_url, c.instructor_id,
-                c.is_published, c.category, c.level, c.duration, c.created_at, c.updated_at,
+                c.is_published, c.is_public, c.category, c.level, c.duration, c.created_at, c.updated_at,
                 u.full_name as instructor_name, u.email as instructor_email,
                 (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id) as enrollment_count,
                 (SELECT COUNT(*) FROM lessons l WHERE l.course_id = c.id) as lesson_count
@@ -160,6 +161,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
                 email: course.instructor_email
             },
             isPublished: course.is_published,
+            isPublic: course.is_public,
             category: course.category,
             level: course.level,
             duration: course.duration,
@@ -221,7 +223,7 @@ router.post('/', authenticateToken, requireRole('instructor', 'admin'), async (r
 router.put('/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, thumbnailUrl, category, level, duration, isPublished } = req.body;
+        const { title, description, thumbnailUrl, category, level, duration, isPublished, isPublic } = req.body;
 
         // Check ownership
         const existing = await query('SELECT instructor_id FROM courses WHERE id = $1', [id]);
@@ -265,6 +267,10 @@ router.put('/:id', authenticateToken, async (req, res) => {
             updates.push(`is_published = $${paramIndex++}`);
             params.push(isPublished);
         }
+        if (isPublic !== undefined) {
+            updates.push(`is_public = $${paramIndex++}`);
+            params.push(isPublic);
+        }
 
         if (updates.length === 0) {
             return res.status(400).json({ error: 'No fields to update' });
@@ -274,7 +280,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
         const result = await query(`
             UPDATE courses SET ${updates.join(', ')}, updated_at = NOW()
             WHERE id = $${paramIndex}
-            RETURNING id, title, description, thumbnail_url, instructor_id, is_published, category, level, duration, created_at, updated_at
+            RETURNING id, title, description, thumbnail_url, instructor_id, is_published, is_public, category, level, duration, created_at, updated_at
         `, params);
 
         const course = result.rows[0];
@@ -285,6 +291,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
             thumbnailUrl: course.thumbnail_url,
             instructorId: course.instructor_id,
             isPublished: course.is_published,
+            isPublic: course.is_public,
             category: course.category,
             level: course.level,
             duration: course.duration,

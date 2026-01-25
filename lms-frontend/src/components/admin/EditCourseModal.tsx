@@ -26,9 +26,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
         description: '',
         category: '',
         level: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
-        duration: '',
-        thumbnailUrl: '',
-        isPublished: false
+        isPublished: false,
+        isPublic: true
     });
 
     useEffect(() => {
@@ -46,9 +45,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                 description: course.description || '',
                 category: course.category || '',
                 level: course.level || 'beginner',
-                duration: course.duration || '',
-                thumbnailUrl: course.thumbnailUrl || '',
-                isPublished: course.isPublished || false
+                isPublished: course.isPublished || false,
+                isPublic: course.isPublic !== undefined ? course.isPublic : true
             });
         } catch (error) {
             toast.error('Failed to load course details');
@@ -148,30 +146,6 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                         </div>
                     </div>
 
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="duration">Duration</label>
-                            <Input
-                                id="duration"
-                                name="duration"
-                                value={formData.duration}
-                                onChange={handleChange}
-                                placeholder="e.g., 8 hours"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="thumbnailUrl">Thumbnail URL</label>
-                            <Input
-                                id="thumbnailUrl"
-                                name="thumbnailUrl"
-                                value={formData.thumbnailUrl}
-                                onChange={handleChange}
-                                placeholder="https://..."
-                            />
-                        </div>
-                    </div>
-
                     <div className="form-group">
                         <label className="checkbox-label">
                             <input
@@ -183,6 +157,20 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                             />
                             <span>Published (visible to students)</span>
                         </label>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                name="isPublic"
+                                checked={formData.isPublic}
+                                onChange={handleChange}
+                                className="form-checkbox"
+                            />
+                            <span>Public (anyone can enroll)</span>
+                        </label>
+                        <p className="field-hint">If unchecked, only invited students can access this course</p>
                     </div>
 
                     <div className="modal-actions">

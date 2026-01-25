@@ -19,6 +19,7 @@ export interface Course {
   instructorId: string;
   instructor?: User;
   isPublished: boolean;
+  isPublic?: boolean;
   createdAt: string;
   enrollmentCount?: number;
   lessonCount?: number;

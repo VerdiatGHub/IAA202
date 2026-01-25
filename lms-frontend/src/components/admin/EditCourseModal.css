@@ -81,6 +81,13 @@
     cursor: pointer;
 }
 
+.field-hint {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    margin-top: var(--space-1);
+    margin-left: var(--space-6);
+}
+
 .form-actions {
     display: flex;
     justify-content: flex-end;
