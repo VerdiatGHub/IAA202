@@ -1,0 +1,154 @@
+.lesson-editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.lesson-editor-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lesson-editor-form .input-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary, #1f2937);
+  margin-bottom: 0.25rem;
+}
+
+.lesson-editor-form .form-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  transition: all 0.2s ease;
+  background-color: var(--bg-primary, #ffffff);
+  color: var(--text-primary, #1f2937);
+}
+
+.lesson-editor-form .form-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.lesson-editor-form .form-textarea::placeholder {
+  color: var(--text-tertiary, #9ca3af);
+}
+
+.lesson-editor-form .form-textarea.textarea-error {
+  border-color: var(--error-color, #ef4444);
+}
+
+.lesson-editor-form .form-textarea.textarea-error:focus {
+  border-color: var(--error-color, #ef4444);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.lesson-editor-form .input-error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--error-color, #ef4444);
+  margin-top: 0.25rem;
+}
+
+.lesson-editor-form .input-hint {
+  font-size: 0.75rem;
+  color: var(--text-tertiary, #9ca3af);
+  margin-top: 0.25rem;
+}
+
+.lesson-editor-form .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.lesson-editor-form .checkbox-label:hover {
+  background-color: var(--bg-secondary, #f9fafb);
+}
+
+.lesson-editor-form .checkbox-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: var(--primary-color, #3b82f6);
+}
+
+.lesson-editor-form .checkbox-text {
+  font-size: 0.875rem;
+  color: var(--text-primary, #1f2937);
+  user-select: none;
+}
+
+.lesson-editor-form .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .lesson-editor-form .input-label {
+    color: var(--text-primary-dark, #f9fafb);
+  }
+
+  .lesson-editor-form .form-textarea {
+    background-color: var(--bg-secondary-dark, #1f2937);
+    color: var(--text-primary-dark, #f9fafb);
+    border-color: var(--border-color-dark, #374151);
+  }
+
+  .lesson-editor-form .form-textarea:focus {
+    border-color: var(--primary-color, #3b82f6);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+
+  .lesson-editor-form .form-textarea::placeholder {
+    color: var(--text-tertiary-dark, #6b7280);
+  }
+
+  .lesson-editor-form .checkbox-label:hover {
+    background-color: var(--bg-tertiary-dark, #374151);
+  }
+
+  .lesson-editor-form .checkbox-text {
+    color: var(--text-primary-dark, #f9fafb);
+  }
+
+  .lesson-editor-form .modal-actions {
+    border-top-color: var(--border-color-dark, #374151);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .lesson-editor-form {
+    gap: 1rem;
+  }
+
+  .lesson-editor-form .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .lesson-editor-form .modal-actions button {
+    width: 100%;
+  }
+}

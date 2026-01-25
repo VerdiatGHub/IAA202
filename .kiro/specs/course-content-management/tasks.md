@@ -240,7 +240,7 @@ This implementation plan breaks down the course content management system into i
     - Display required/optional badge
     - _Requirements: 10.2, 10.5, 9.1, 9.2_
 
-  - [~] 12.3 Create LessonEditorModal component
+  - [x] 12.3 Create LessonEditorModal component
     - Form for creating/editing lessons
     - Title, content, video URL fields
     - Required/optional toggle
