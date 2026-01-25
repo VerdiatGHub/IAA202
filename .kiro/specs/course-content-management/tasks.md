@@ -204,7 +204,7 @@ This implementation plan breaks down the course content management system into i
     - Implement optimistic updates with rollback
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 4.1, 5.1, 6.1, 7.1_
 
-- [ ] 11. Implement Module Components
+- [x] 11. Implement Module Components
   - [x] 11.1 Create ModuleList component
     - Render list of modules in order
     - Implement expand/collapse functionality
@@ -226,7 +226,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 1.1, 1.2_
 
 - [ ] 12. Implement Lesson Components
-  - [~] 12.1 Create LessonList component
+  - [x] 12.1 Create LessonList component
     - Render lessons within a module
     - Display in order_index order
     - Add "Add Lesson" button

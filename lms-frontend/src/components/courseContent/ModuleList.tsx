@@ -4,7 +4,7 @@ import { Button } from '../common/Button';
 import { LoadingSpinner } from '../common/Loading';
 import { useCourseContent } from '../../contexts/useCourseContent';
 import { ModuleItem } from './ModuleItem';
-import type { Module } from '../../types';
+import type { Module, Lesson } from '../../types';
 import './ModuleList.css';
 
 interface ModuleListProps {
@@ -12,13 +12,17 @@ interface ModuleListProps {
   onEditModule?: (module: Module) => void;
   onDeleteModule?: (moduleId: string) => void;
   onAddLesson?: (moduleId: string) => void;
+  onEditLesson?: (lesson: Lesson) => void;
+  onDeleteLesson?: (lessonId: string) => void;
 }
 
 export const ModuleList: React.FC<ModuleListProps> = ({ 
   onAddModule, 
   onEditModule,
   onDeleteModule,
-  onAddLesson
+  onAddLesson,
+  onEditLesson,
+  onDeleteLesson
 }) => {
   const { modules, loading, error } = useCourseContent();
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
@@ -97,6 +101,8 @@ export const ModuleList: React.FC<ModuleListProps> = ({
             onEdit={onEditModule ? () => onEditModule(module) : undefined}
             onDelete={onDeleteModule ? () => onDeleteModule(module.id) : undefined}
             onAddLesson={onAddLesson ? () => onAddLesson(module.id) : undefined}
+            onEditLesson={onEditLesson}
+            onDeleteLesson={onDeleteLesson}
           />
         ))}
       </div>

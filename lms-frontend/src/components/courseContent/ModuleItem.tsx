@@ -1,7 +1,7 @@
 import React from 'react';
-import { Edit2, Trash2, GripVertical, Plus } from 'lucide-react';
-import { Button } from '../common/Button';
-import type { Module } from '../../types';
+import { Edit2, Trash2, GripVertical } from 'lucide-react';
+import { LessonList } from './LessonList';
+import type { Module, Lesson } from '../../types';
 import './ModuleItem.css';
 
 interface ModuleItemProps {
@@ -12,6 +12,8 @@ interface ModuleItemProps {
   onEdit?: () => void;
   onDelete?: () => void;
   onAddLesson?: () => void;
+  onEditLesson?: (lesson: Lesson) => void;
+  onDeleteLesson?: (lessonId: string) => void;
 }
 
 /**
@@ -33,6 +35,8 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
   onEdit,
   onDelete,
   onAddLesson,
+  onEditLesson,
+  onDeleteLesson,
 }) => {
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -46,9 +50,12 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
     }
   };
 
-  const handleAddLesson = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onAddLesson?.();
+  const handleEditLesson = (lesson: Lesson) => {
+    onEditLesson?.(lesson);
+  };
+
+  const handleDeleteLesson = (lessonId: string) => {
+    onDeleteLesson?.(lessonId);
   };
 
   // Calculate total duration from lessons
@@ -130,30 +137,13 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
 
       {isExpanded && (
         <div className="module-content">
-          {module.lessons && module.lessons.length > 0 ? (
-            <div className="lessons-placeholder">
-              <p>Lessons will be displayed here</p>
-              <p className="text-muted">
-                {lessonCount} {lessonCount === 1 ? 'lesson' : 'lessons'} in this module
-              </p>
-            </div>
-          ) : (
-            <div className="no-lessons">
-              <p>No lessons in this module yet</p>
-            </div>
-          )}
-          {onAddLesson && (
-            <div className="add-lesson-container">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                icon={<Plus size={14} />}
-                onClick={handleAddLesson}
-              >
-                Add Lesson
-              </Button>
-            </div>
-          )}
+          <LessonList
+            lessons={module.lessons || []}
+            moduleId={module.id}
+            onAddLesson={() => onAddLesson?.()}
+            onEditLesson={onEditLesson ? handleEditLesson : undefined}
+            onDeleteLesson={onDeleteLesson ? handleDeleteLesson : undefined}
+          />
         </div>
       )}
     </div>
