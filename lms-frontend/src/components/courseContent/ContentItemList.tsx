@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '../common/Button/Button';
 import { ContentItemRow } from './ContentItemRow';
+import { ContentEditorModal } from './ContentEditorModal';
 import type { ContentItem } from '../../types';
 import './ContentItemList.css';
 
@@ -32,11 +33,20 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
   onDeleteContent,
   onReorderContent,
 }) => {
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [editingContent, setEditingContent] = useState<ContentItem | undefined>(undefined);
+
   // Sort content items by orderIndex (Requirement 14.3)
   const sortedContentItems = [...contentItems].sort((a, b) => a.orderIndex - b.orderIndex);
 
+  const handleAddContent = () => {
+    setEditingContent(undefined);
+    setIsEditorOpen(true);
+  };
+
   const handleEditContent = (contentItem: ContentItem) => {
-    onEditContent?.(contentItem);
+    setEditingContent(contentItem);
+    setIsEditorOpen(true);
   };
 
   const handleDeleteContent = (contentId: string) => {
@@ -45,23 +55,38 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
     }
   };
 
+  const handleEditorClose = () => {
+    setIsEditorOpen(false);
+    setEditingContent(undefined);
+  };
+
+  const handleEditorSuccess = () => {
+    // Modal will close itself, parent component will refresh data
+  };
+
   // Empty state
   if (sortedContentItems.length === 0) {
     return (
       <div className="content-item-list">
         <div className="content-empty">
           <p className="empty-message">No content items in this lesson yet</p>
-          {onAddContent && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              icon={<Plus size={14} />}
-              onClick={onAddContent}
-            >
-              Add Content
-            </Button>
-          )}
+          <Button 
+            variant="outline" 
+            size="sm" 
+            icon={<Plus size={14} />}
+            onClick={handleAddContent}
+          >
+            Add Content
+          </Button>
         </div>
+        
+        <ContentEditorModal
+          isOpen={isEditorOpen}
+          onClose={handleEditorClose}
+          lessonId={lessonId}
+          contentItem={editingContent}
+          onSuccess={handleEditorSuccess}
+        />
       </div>
     );
   }
@@ -80,18 +105,24 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
         ))}
       </div>
       
-      {onAddContent && (
-        <div className="add-content-container">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            icon={<Plus size={14} />}
-            onClick={onAddContent}
-          >
-            Add Content
-          </Button>
-        </div>
-      )}
+      <div className="add-content-container">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          icon={<Plus size={14} />}
+          onClick={handleAddContent}
+        >
+          Add Content
+        </Button>
+      </div>
+
+      <ContentEditorModal
+        isOpen={isEditorOpen}
+        onClose={handleEditorClose}
+        lessonId={lessonId}
+        contentItem={editingContent}
+        onSuccess={handleEditorSuccess}
+      />
     </div>
   );
 };

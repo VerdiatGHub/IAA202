@@ -254,14 +254,14 @@ This implementation plan breaks down the course content management system into i
     - Add "Add Content" button with type selector
     - _Requirements: 10.2, 14.3_
 
-  - [~] 13.2 Create ContentItemRow component
+  - [x] 13.2 Create ContentItemRow component
     - Display content type icon (video, text, quiz, assignment, resource)
     - Show content title and duration (if applicable)
     - Display required/optional badge
     - Add edit and delete buttons
     - _Requirements: 10.3, 10.5, 15.5_
 
-  - [~] 13.3 Create ContentEditorModal component
+  - [x] 13.3 Create ContentEditorModal component
     - Content type selector (for create mode)
     - Render type-specific forms (VideoForm, TextForm, QuizForm, AssignmentForm, ResourceForm)
     - Validation for each content type
