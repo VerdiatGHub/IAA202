@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Bell,
@@ -11,7 +11,8 @@ import {
     ChevronDown,
     Menu,
 } from 'lucide-react';
-import type { User as UserType } from '../../../types';
+import type { User as UserType, Notification } from '../../../types';
+import { api } from '../../../lib/api';
 import './Header.css';
 
 interface HeaderProps {
@@ -19,6 +20,22 @@ interface HeaderProps {
     onLogout: () => void;
     onToggleMobileMenu?: () => void;
 }
+
+// Helper function to format time ago
+const formatTimeAgo = (dateString: string): string => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    return date.toLocaleDateString();
+};
 
 export const Header: React.FC<HeaderProps> = ({
     user,
@@ -31,6 +48,42 @@ export const Header: React.FC<HeaderProps> = ({
     );
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    // Fetch notifications on mount
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            const { data } = await api.get<Notification[]>('/notifications');
+            if (data) {
+                setNotifications(data);
+                setUnreadCount(data.filter(n => !n.isRead).length);
+            }
+        };
+        if (user) {
+            fetchNotifications();
+        }
+    }, [user]);
+
+    // Mark all notifications as read
+    const handleMarkAllAsRead = async () => {
+        const { error } = await api.put('/notifications/read-all', {});
+        if (!error) {
+            setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+            setUnreadCount(0);
+        }
+    };
+
+    // Mark single notification as read
+    const handleMarkAsRead = async (id: string) => {
+        const { error } = await api.put(`/notifications/${id}/read`, {});
+        if (!error) {
+            setNotifications(notifications.map(n => 
+                n.id === id ? { ...n, isRead: true } : n
+            ));
+            setUnreadCount(prev => Math.max(0, prev - 1));
+        }
+    };
 
     const toggleTheme = () => {
         const newTheme = isDarkMode ? 'light' : 'dark';
@@ -78,42 +131,51 @@ export const Header: React.FC<HeaderProps> = ({
                         onClick={() => setShowNotifications(!showNotifications)}
                     >
                         <Bell size={20} />
-                        <span className="notification-badge">3</span>
+                        {unreadCount > 0 && (
+                            <span className="notification-badge">{unreadCount}</span>
+                        )}
                     </button>
                     {showNotifications && (
                         <div className="dropdown-menu notifications-menu animate-slideDown">
                             <div className="dropdown-header">
                                 <h4>Notifications</h4>
-                                <button className="link-btn">Mark all as read</button>
+                                {unreadCount > 0 && (
+                                    <button className="link-btn" onClick={handleMarkAllAsRead}>
+                                        Mark all as read
+                                    </button>
+                                )}
                             </div>
                             <div className="notifications-list">
-                                <div className="notification-item unread">
-                                    <div className="notification-content">
-                                        <p className="notification-text">
-                                            <strong>New assignment</strong> posted in Web Development
-                                        </p>
-                                        <span className="notification-time">2 hours ago</span>
+                                {notifications.length === 0 ? (
+                                    <div className="notification-item">
+                                        <div className="notification-content">
+                                            <p className="notification-text">No notifications</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="notification-item unread">
-                                    <div className="notification-content">
-                                        <p className="notification-text">
-                                            Your quiz score is <strong>85%</strong>
-                                        </p>
-                                        <span className="notification-time">5 hours ago</span>
-                                    </div>
-                                </div>
-                                <div className="notification-item">
-                                    <div className="notification-content">
-                                        <p className="notification-text">
-                                            Course <strong>React Mastery</strong> has been updated
-                                        </p>
-                                        <span className="notification-time">1 day ago</span>
-                                    </div>
-                                </div>
+                                ) : (
+                                    notifications.map(notification => (
+                                        <div
+                                            key={notification.id}
+                                            className={`notification-item ${!notification.isRead ? 'unread' : ''}`}
+                                            onClick={() => !notification.isRead && handleMarkAsRead(notification.id)}
+                                            style={{ cursor: !notification.isRead ? 'pointer' : 'default' }}
+                                        >
+                                            <div className="notification-content">
+                                                <p className="notification-text">
+                                                    <strong>{notification.title}</strong> {notification.message}
+                                                </p>
+                                                <span className="notification-time">
+                                                    {formatTimeAgo(notification.createdAt)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                             <div className="dropdown-footer">
-                                <button className="link-btn">View all notifications</button>
+                                <button className="link-btn" onClick={() => navigate('/notifications')}>
+                                    View all notifications
+                                </button>
                             </div>
                         </div>
                     )}
