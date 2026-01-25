@@ -198,7 +198,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                         {activeTab === 'lessons' && (
                             <div className="lessons-tab">
                                 <CourseContentProvider courseId={courseId}>
-                                    <CourseContentEditor />
+                                    <CourseContentEditor courseId={courseId} />
                                 </CourseContentProvider>
                             </div>
                         )}

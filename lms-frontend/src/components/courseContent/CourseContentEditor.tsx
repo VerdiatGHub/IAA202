@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { ModuleList } from './ModuleList';
 import { ModuleEditorModal } from './ModuleEditorModal';
 import { LessonEditorModal } from './LessonEditorModal';
+import { StudentContentView } from './StudentContentView';
 import { useCourseContent } from '../../contexts/useCourseContent';
 import type { Module, Lesson } from '../../types';
 import toast from 'react-hot-toast';
 import './CourseContentEditor.css';
 
 interface CourseContentEditorProps {
-  // No props needed - preview mode is managed internally
+  courseId: string; // courseId is needed for StudentContentView
 }
 
-export const CourseContentEditor: React.FC<CourseContentEditorProps> = () => {
+export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ courseId }) => {
   const {
     refreshContent,
     deleteModule,
@@ -137,42 +138,49 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = () => {
         </button>
       </div>
 
-      <ModuleList
-        onAddModule={handleAddModule}
-        onEditModule={handleEditModule}
-        onDeleteModule={handleDeleteModule}
-        onAddLesson={handleAddLesson}
-        onEditLesson={handleEditLesson}
-        onDeleteLesson={handleDeleteLesson}
-        enableDragAndDrop={!isPreviewMode}
-      />
+      {/* Show StudentContentView in preview mode, otherwise show ModuleList (Requirement 11.2) */}
+      {isPreviewMode ? (
+        <StudentContentView courseId={courseId} />
+      ) : (
+        <>
+          <ModuleList
+            onAddModule={handleAddModule}
+            onEditModule={handleEditModule}
+            onDeleteModule={handleDeleteModule}
+            onAddLesson={handleAddLesson}
+            onEditLesson={handleEditLesson}
+            onDeleteLesson={handleDeleteLesson}
+            enableDragAndDrop={!isPreviewMode}
+          />
 
-      {/* Module Editor Modal */}
-      {moduleModalOpen && (
-        <ModuleEditorModal
-          isOpen={moduleModalOpen}
-          onClose={() => {
-            setModuleModalOpen(false);
-            setEditingModule(null);
-          }}
-          onSuccess={handleModuleSuccess}
-          module={editingModule || undefined}
-        />
-      )}
+          {/* Module Editor Modal */}
+          {moduleModalOpen && (
+            <ModuleEditorModal
+              isOpen={moduleModalOpen}
+              onClose={() => {
+                setModuleModalOpen(false);
+                setEditingModule(null);
+              }}
+              onSuccess={handleModuleSuccess}
+              module={editingModule || undefined}
+            />
+          )}
 
-      {/* Lesson Editor Modal */}
-      {lessonModalOpen && getModuleIdForLesson() && (
-        <LessonEditorModal
-          isOpen={lessonModalOpen}
-          onClose={() => {
-            setLessonModalOpen(false);
-            setEditingLesson(null);
-            setSelectedModuleId(null);
-          }}
-          onSuccess={handleLessonSuccess}
-          lesson={editingLesson || undefined}
-          moduleId={getModuleIdForLesson()!}
-        />
+          {/* Lesson Editor Modal */}
+          {lessonModalOpen && getModuleIdForLesson() && (
+            <LessonEditorModal
+              isOpen={lessonModalOpen}
+              onClose={() => {
+                setLessonModalOpen(false);
+                setEditingLesson(null);
+                setSelectedModuleId(null);
+              }}
+              onSuccess={handleLessonSuccess}
+              lesson={editingLesson || undefined}
+              moduleId={getModuleIdForLesson()!}
+            />
+          )}
+        </>
       )}
     </div>
   );

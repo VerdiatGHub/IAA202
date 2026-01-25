@@ -1,0 +1,458 @@
+/* StudentContentView Component Styles */
+
+.student-content-view {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Loading, Error, and Empty States */
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.loading-state p {
+  color: #6b7280;
+  font-size: 0.9375rem;
+}
+
+.error-state p {
+  color: #dc2626;
+  font-size: 0.9375rem;
+}
+
+.empty-state p {
+  color: #9ca3af;
+  font-size: 0.9375rem;
+}
+
+/* Modules Container */
+.modules-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Student Module Item */
+.student-module-item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.student-module-item:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Student Module Header */
+.student-module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  gap: 1rem;
+}
+
+.student-module-header:hover {
+  background-color: #f9fafb;
+}
+
+.student-module-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.student-module-number {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.student-module-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.student-module-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Student Module Meta */
+.student-module-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.student-lesson-count,
+.student-module-duration {
+  font-size: 0.875rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.meta-separator {
+  color: #d1d5db;
+  font-size: 0.875rem;
+}
+
+/* Student Expand Button */
+.student-expand-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.student-expand-button:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.student-expand-button svg {
+  transition: transform 0.2s ease;
+}
+
+.student-expand-button.expanded svg {
+  transform: rotate(180deg);
+}
+
+/* Student Module Content */
+.student-module-content {
+  padding: 1.25rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Student Lessons List */
+.student-lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Student Lesson Item */
+.student-lesson-item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.student-lesson-item:hover {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* Student Lesson Header */
+.student-lesson-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  gap: 0.75rem;
+}
+
+.student-lesson-header:hover {
+  background-color: #f9fafb;
+}
+
+.student-lesson-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.student-lesson-number {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.student-lesson-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.student-lesson-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.student-content-count,
+.student-lesson-duration {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+/* Student Lesson Badge */
+.student-lesson-badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.1875rem 0.4375rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.student-lesson-badge.required {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.student-lesson-badge.optional {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Student Lesson Content */
+.student-lesson-content {
+  padding: 0.875rem 1rem;
+  background-color: #fafafa;
+  border-top: 1px solid #e5e7eb;
+  animation: slideDown 0.2s ease;
+}
+
+/* Student Content Items List */
+.student-content-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Student Content Item Row */
+.student-content-item-row {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.student-content-item-row:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.student-content-item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.student-content-type-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+}
+
+.student-content-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.student-content-duration {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 0.25rem 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+}
+
+/* Student Content Badge */
+.student-content-badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.1875rem 0.4375rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  flex-shrink: 0;
+}
+
+.student-content-badge.required {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.student-content-badge.optional {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Student Empty State */
+.student-empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.student-empty-state p {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .student-content-view {
+    padding: 1rem;
+  }
+
+  .student-module-header {
+    padding: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .student-module-title {
+    font-size: 1rem;
+  }
+
+  .student-module-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .student-module-content {
+    padding: 1rem;
+  }
+
+  .student-lesson-header {
+    padding: 0.75rem;
+  }
+
+  .student-lesson-title {
+    font-size: 0.875rem;
+  }
+
+  .student-lesson-content {
+    padding: 0.75rem;
+  }
+
+  .student-content-item-row {
+    padding: 0.625rem 0.75rem;
+  }
+
+  .student-content-item-info {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .student-content-title {
+    flex-basis: 100%;
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .student-module-item,
+  .student-module-header,
+  .student-lesson-item,
+  .student-lesson-header,
+  .student-expand-button,
+  .student-expand-button svg,
+  .student-content-item-row {
+    transition: none;
+  }
+
+  .student-module-content,
+  .student-lesson-content {
+    animation: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .student-expand-button {
+    display: none;
+  }
+
+  .student-module-content,
+  .student-lesson-content {
+    display: block !important;
+  }
+
+  .student-module-item,
+  .student-lesson-item,
+  .student-content-item-row {
+    break-inside: avoid;
+  }
+}
