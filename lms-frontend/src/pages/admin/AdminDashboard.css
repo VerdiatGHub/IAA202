@@ -137,7 +137,7 @@
 /* Dashboard Grid */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: 1fr;
     gap: var(--space-6);
 }
 
@@ -164,7 +164,9 @@
     align-items: center;
 }
 
-.search-input, .search-input .input-wrapper, .search-input .input-container {
+.search-input,
+.search-input .input-wrapper,
+.search-input .input-container {
     display: flex;
     align-items: center;
     background: transparent;

@@ -14,7 +14,7 @@ import {
     Save,
     X,
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/common/Card';
+import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { CreateUserModal } from '../../components/admin';
@@ -47,7 +47,6 @@ interface Stats {
 export const AdminDashboard: React.FC = () => {
     const [users, setUsers] = useState<UserData[]>([]);
     const [stats, setStats] = useState<Stats | null>(null);
-    const [recentUsers, setRecentUsers] = useState<UserData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -70,7 +69,6 @@ export const AdminDashboard: React.FC = () => {
             ]);
 
             setUsers(usersData);
-            setRecentUsers(userStats.recentUsers.slice(0, 4));
             setStats({
                 totalUsers: userStats.totalUsers,
                 totalStudents: userStats.totalStudents,
@@ -159,18 +157,7 @@ export const AdminDashboard: React.FC = () => {
         }
     };
 
-    const formatTimeAgo = (dateString: string) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffMins = Math.floor(diffMs / 60000);
-        const diffHours = Math.floor(diffMs / 3600000);
-        const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 60) return `${diffMins} min ago`;
-        if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-        return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-    };
 
     const statsCards = stats ? [
         { label: 'Total Users', value: stats.totalUsers.toLocaleString(), icon: <Users size={24} />, color: 'primary' },
@@ -395,82 +382,7 @@ export const AdminDashboard: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Sidebar */}
-                <aside className="dashboard-sidebar">
-                    {/* Recent Signups */}
-                    <Card className="signups-card animate-slideUp">
-                        <CardHeader>
-                            <CardTitle>
-                                <UserPlus size={20} />
-                                Recent Users
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {loading ? (
-                                <div className="loading-list">
-                                    {Array.from({ length: 4 }).map((_, i) => (
-                                        <div key={i} className="signup-item-skeleton animate-pulse"></div>
-                                    ))}
-                                </div>
-                            ) : recentUsers.length === 0 ? (
-                                <p className="empty-text">No recent users</p>
-                            ) : (
-                                <ul className="signups-list">
-                                    {recentUsers.map((user) => (
-                                        <li key={user.id} className="signup-item">
-                                            <div className="signup-avatar">
-                                                {user.fullName.charAt(0).toUpperCase()}
-                                            </div>
-                                            <div className="signup-info">
-                                                <span className="signup-name">{user.fullName}</span>
-                                                <span className="signup-role">{user.role}</span>
-                                            </div>
-                                            <span className="signup-time">{formatTimeAgo(user.createdAt)}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </CardContent>
-                    </Card>
 
-                    {/* Quick Stats */}
-                    <Card className="quick-stats-card animate-slideUp" style={{ animationDelay: '0.1s' }}>
-                        <CardHeader>
-                            <CardTitle>
-                                <TrendingUp size={20} />
-                                Platform Stats
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {loading ? (
-                                <div className="loading-stats">
-                                    {Array.from({ length: 4 }).map((_, i) => (
-                                        <div key={i} className="stat-row-skeleton animate-pulse"></div>
-                                    ))}
-                                </div>
-                            ) : stats && (
-                                <>
-                                    <div className="stat-row">
-                                        <span className="stat-label">Students</span>
-                                        <span className="stat-value">{stats.totalStudents.toLocaleString()}</span>
-                                    </div>
-                                    <div className="stat-row">
-                                        <span className="stat-label">Instructors</span>
-                                        <span className="stat-value">{stats.totalInstructors.toLocaleString()}</span>
-                                    </div>
-                                    <div className="stat-row">
-                                        <span className="stat-label">Published Courses</span>
-                                        <span className="stat-value">{stats.publishedCourses.toLocaleString()}</span>
-                                    </div>
-                                    <div className="stat-row">
-                                        <span className="stat-label">Total Enrollments</span>
-                                        <span className="stat-value">{stats.totalEnrollments.toLocaleString()}</span>
-                                    </div>
-                                </>
-                            )}
-                        </CardContent>
-                    </Card>
-                </aside>
             </div>
 
             {/* Create User Modal */}
