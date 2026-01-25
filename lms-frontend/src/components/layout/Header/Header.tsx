@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
     const handleMarkAsRead = async (id: string) => {
         const { error } = await api.put(`/notifications/${id}/read`, {});
         if (!error) {
-            setNotifications(notifications.map(n => 
+            setNotifications(notifications.map(n =>
                 n.id === id ? { ...n, isRead: true } : n
             ));
             setUnreadCount(prev => Math.max(0, prev - 1));
@@ -109,11 +109,11 @@ export const Header: React.FC<HeaderProps> = ({
                     <Menu size={24} />
                 </button>
                 <div className="header-search">
-                    <Search size={18} className="search-icon" />
+                    <Search size={18} className="header-search-icon" />
                     <input
                         type="text"
                         placeholder="Search courses, lessons..."
-                        className="search-input"
+                        className="header-search-input"
                     />
                 </div>
             </div>

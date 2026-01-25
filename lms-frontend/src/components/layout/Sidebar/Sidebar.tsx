@@ -74,7 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <nav className="sidebar-nav">
                 <ul className="nav-list">
                     {filteredNavItems.map((item) => (
-                        <li key={item.href} className="nav-item">
+                        <li key={item.href} className="sidebar-nav-item">
                             <NavLink
                                 to={item.href}
                                 className={({ isActive }) =>
