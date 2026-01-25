@@ -45,19 +45,19 @@ This implementation plan breaks down the course content management system into i
     - Test 404 for non-existent modules
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
 
-- [~] 3. Implement Module Reordering
+- [ ] 3. Implement Module Reordering
   - [x] 3.1 Create reorder endpoint and logic
     - Implement PUT /api/courses/:courseId/modules/reorder endpoint
     - Calculate new order_index values for all affected modules
     - Update all modules in a single transaction
     - _Requirements: 8.1, 8.4_
 
-  - [x] 3.2 Write property test for reordering
+  - [~] 3.2 Write property test for reordering
     - **Property 5: Reordering Updates All Affected Indices**
     - **Property 6: Reordering Preserves Relationships**
     - **Validates: Requirements 8.1, 8.3**
 
-  - [x] 3.3 Write unit tests for reordering edge cases
+  - [~] 3.3 Write unit tests for reordering edge cases
     - Test reordering with 2 modules
     - Test reordering with 10+ modules
     - Test invalid reorder requests
@@ -66,7 +66,7 @@ This implementation plan breaks down the course content management system into i
 - [x] 4. Checkpoint - Verify Module API
   - Ensure all module tests pass, ask the user if questions arise.
 
-- [~] 5. Extend Lesson API for Modules
+- [ ] 5. Extend Lesson API for Modules
   - [x] 5.1 Update lesson routes and controller
     - Modify POST endpoint to accept moduleId
     - Modify GET endpoint to filter by moduleId
@@ -95,7 +95,7 @@ This implementation plan breaks down the course content management system into i
     - Test required/optional status
     - _Requirements: 2.1, 2.4, 9.3_
 
-- [~] 6. Implement Content Item API
+- [ ] 6. Implement Content Item API
   - [x] 6.1 Create content item routes and controller
     - Implement GET /api/lessons/:lessonId/content endpoint
     - Implement POST /api/lessons/:lessonId/content endpoint
@@ -105,12 +105,12 @@ This implementation plan breaks down the course content management system into i
     - Add content type validation
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1, 14.1_
 
-  - [-] 6.2 Write property test for content item CRUD
+  - [x] 6.2 Write property test for content item CRUD
     - **Property 1: CRUD Operations Preserve Data Integrity**
     - **Property 2: Updates Persist Correctly**
     - **Validates: Requirements 3.1, 3.3, 4.1, 4.2, 5.1, 6.1, 7.1**
 
-  - [~] 6.3 Create content item service layer
+  - [x] 6.3 Create content item service layer
     - Implement content type-specific validation
     - Implement URL validation for video and resource types
     - Implement order_index calculation
@@ -129,7 +129,7 @@ This implementation plan breaks down the course content management system into i
     - Test resource content with file and link types
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1_
 
-- [~] 7. Implement Content Item Reordering
+- [ ] 7. Implement Content Item Reordering
   - [~] 7.1 Create content reorder endpoint
     - Implement PUT /api/lessons/:lessonId/content/reorder endpoint
     - Update order_index for all content items in lesson
@@ -318,7 +318,7 @@ This implementation plan breaks down the course content management system into i
     - Test content item reordering
     - _Requirements: 8.1, 8.2, 14.2_
 
-- [ ] 16. Checkpoint - Verify Core UI
+- [~] 16. Checkpoint - Verify Core UI
   - Ensure all component tests pass, ask the user if questions arise.
 
 - [ ] 17. Implement Lessons Tab in Course Management
@@ -467,7 +467,7 @@ This implementation plan breaks down the course content management system into i
     - Test browser compatibility
     - _Requirements: All requirements_
 
-- [ ] 24. Final Checkpoint - Complete System Verification
+- [~] 24. Final Checkpoint - Complete System Verification
   - Ensure all tests pass, verify all requirements are met, ask the user if questions arise.
 
 ## Notes
