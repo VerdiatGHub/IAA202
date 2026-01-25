@@ -157,6 +157,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                             />
                             <span>Published (visible to students)</span>
                         </label>
+                        <p className="field-hint">If unchecked, course will be in draft mode</p>
                     </div>
 
                     <div className="form-group">
