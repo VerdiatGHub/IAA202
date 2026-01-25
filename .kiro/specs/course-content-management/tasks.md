@@ -89,7 +89,7 @@ This implementation plan breaks down the course content management system into i
     - **Property 3: Cascading Deletion**
     - **Validates: Requirements 2.3**
 
-  - [~] 5.5 Write unit tests for lesson operations
+  - [-] 5.5 Write unit tests for lesson operations
     - Test lesson creation within module
     - Test lesson ordering within module
     - Test required/optional status
