@@ -74,12 +74,12 @@ This implementation plan breaks down the course content management system into i
     - Add lesson reordering endpoint within modules
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 9.1, 9.2, 9.3_
 
-  - [-] 5.2 Write property test for lesson CRUD
+  - [x] 5.2 Write property test for lesson CRUD
     - **Property 1: CRUD Operations Preserve Data Integrity**
     - **Property 4: Order Assignment**
     - **Validates: Requirements 2.1, 2.2, 2.4**
 
-  - [~] 5.3 Update lesson service layer
+  - [x] 5.3 Update lesson service layer
     - Modify create to assign module_id
     - Implement order_index calculation within module scope
     - Update cascading delete to include content_items

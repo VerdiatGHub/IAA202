@@ -1,6 +1,7 @@
 const express = require('express');
 const { query, getClient } = require('../config/db');
 const { authenticateToken, requireRole } = require('../middleware/auth');
+const lessonService = require('../services/lessonService');
 
 const router = express.Router();
 
@@ -38,31 +39,10 @@ router.get('/courses/:courseId/modules/:moduleId/lessons', authenticateToken, as
             return res.status(404).json({ error: 'Module not found' });
         }
 
-        // Get lessons for this module
-        const lessonsResult = await query(`
-            SELECT 
-                id, course_id, module_id, title, content, video_url, 
-                order_index, duration, is_required, created_at, updated_at
-            FROM lessons
-            WHERE module_id = $1
-            ORDER BY order_index ASC
-        `, [moduleId]);
+        // Get lessons using service layer
+        const lessons = await lessonService.findByModuleId(moduleId);
 
-        res.json({
-            lessons: lessonsResult.rows.map(lesson => ({
-                id: lesson.id,
-                courseId: lesson.course_id,
-                moduleId: lesson.module_id,
-                title: lesson.title,
-                content: lesson.content,
-                videoUrl: lesson.video_url,
-                orderIndex: lesson.order_index,
-                duration: lesson.duration,
-                isRequired: lesson.is_required,
-                createdAt: lesson.created_at,
-                updatedAt: lesson.updated_at
-            }))
-        });
+        res.json({ lessons });
     } catch (error) {
         console.error('Get lessons error:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -107,43 +87,16 @@ router.post('/courses/:courseId/modules/:moduleId/lessons', authenticateToken, r
             return res.status(404).json({ error: 'Module not found' });
         }
 
-        // Get the next order_index (max + 1) within this module
-        const orderResult = await query(
-            'SELECT COALESCE(MAX(order_index), -1) + 1 as next_order FROM lessons WHERE module_id = $1',
-            [moduleId]
-        );
-        const nextOrder = orderResult.rows[0].next_order;
-
-        // Insert the new lesson
-        const result = await query(`
-            INSERT INTO lessons (course_id, module_id, title, content, video_url, duration, is_required, order_index)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-            RETURNING id, course_id, module_id, title, content, video_url, duration, is_required, order_index, created_at, updated_at
-        `, [
-            courseId, 
-            moduleId, 
-            title.trim(), 
-            content || null, 
-            videoUrl || null, 
-            duration || null, 
-            isRequired !== undefined ? isRequired : true, 
-            nextOrder
-        ]);
-
-        const lesson = result.rows[0];
-        res.status(201).json({
-            id: lesson.id,
-            courseId: lesson.course_id,
-            moduleId: lesson.module_id,
-            title: lesson.title,
-            content: lesson.content,
-            videoUrl: lesson.video_url,
-            duration: lesson.duration,
-            isRequired: lesson.is_required,
-            orderIndex: lesson.order_index,
-            createdAt: lesson.created_at,
-            updatedAt: lesson.updated_at
+        // Create lesson using service layer
+        const lesson = await lessonService.create(courseId, moduleId, {
+            title,
+            content,
+            videoUrl,
+            duration,
+            isRequired
         });
+
+        res.status(201).json(lesson);
     } catch (error) {
         console.error('Create lesson error:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -155,43 +108,24 @@ router.get('/lessons/:lessonId', authenticateToken, async (req, res) => {
     try {
         const { lessonId } = req.params;
 
-        // Get lesson with course info
-        const lessonResult = await query(`
-            SELECT 
-                l.id, l.course_id, l.module_id, l.title, l.content, l.video_url,
-                l.order_index, l.duration, l.is_required, l.created_at, l.updated_at,
-                c.instructor_id, c.is_published
-            FROM lessons l
-            JOIN courses c ON l.course_id = c.id
-            WHERE l.id = $1
-        `, [lessonId]);
+        // Get lesson using service layer
+        const lesson = await lessonService.findById(lessonId);
 
-        if (lessonResult.rows.length === 0) {
+        if (!lesson) {
             return res.status(404).json({ error: 'Lesson not found' });
         }
 
-        const lesson = lessonResult.rows[0];
-
         // Check access
-        if (!lesson.is_published && 
+        if (!lesson.isPublished && 
             req.user.role !== 'admin' && 
-            lesson.instructor_id !== req.user.id) {
+            lesson.instructorId !== req.user.id) {
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        res.json({
-            id: lesson.id,
-            courseId: lesson.course_id,
-            moduleId: lesson.module_id,
-            title: lesson.title,
-            content: lesson.content,
-            videoUrl: lesson.video_url,
-            orderIndex: lesson.order_index,
-            duration: lesson.duration,
-            isRequired: lesson.is_required,
-            createdAt: lesson.created_at,
-            updatedAt: lesson.updated_at
-        });
+        // Remove internal fields before sending response
+        const { instructorId, isPublished, ...lessonData } = lesson;
+
+        res.json(lessonData);
     } catch (error) {
         console.error('Get lesson error:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -223,71 +157,22 @@ router.put('/lessons/:lessonId', authenticateToken, requireRole('instructor', 'a
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        // Build update query dynamically
-        const updates = [];
-        const params = [];
-        let paramIndex = 1;
-
-        if (title !== undefined && title.trim() !== '') {
-            updates.push(`title = $${paramIndex++}`);
-            params.push(title.trim());
-        }
-
-        if (content !== undefined) {
-            updates.push(`content = $${paramIndex++}`);
-            params.push(content || null);
-        }
-
-        if (videoUrl !== undefined) {
-            updates.push(`video_url = $${paramIndex++}`);
-            params.push(videoUrl || null);
-        }
-
-        if (duration !== undefined) {
-            updates.push(`duration = $${paramIndex++}`);
-            params.push(duration || null);
-        }
-
-        if (isRequired !== undefined) {
-            updates.push(`is_required = $${paramIndex++}`);
-            params.push(isRequired);
-        }
-
-        if (orderIndex !== undefined) {
-            updates.push(`order_index = $${paramIndex++}`);
-            params.push(orderIndex);
-        }
-
-        if (updates.length === 0) {
-            return res.status(400).json({ error: 'No fields to update' });
-        }
-
-        updates.push(`updated_at = NOW()`);
-        params.push(lessonId);
-
-        const result = await query(`
-            UPDATE lessons 
-            SET ${updates.join(', ')}
-            WHERE id = $${paramIndex}
-            RETURNING id, course_id, module_id, title, content, video_url, duration, is_required, order_index, created_at, updated_at
-        `, params);
-
-        const updatedLesson = result.rows[0];
-        res.json({
-            id: updatedLesson.id,
-            courseId: updatedLesson.course_id,
-            moduleId: updatedLesson.module_id,
-            title: updatedLesson.title,
-            content: updatedLesson.content,
-            videoUrl: updatedLesson.video_url,
-            duration: updatedLesson.duration,
-            isRequired: updatedLesson.is_required,
-            orderIndex: updatedLesson.order_index,
-            createdAt: updatedLesson.created_at,
-            updatedAt: updatedLesson.updated_at
+        // Update lesson using service layer
+        const updatedLesson = await lessonService.update(lessonId, {
+            title,
+            content,
+            videoUrl,
+            duration,
+            isRequired,
+            orderIndex
         });
+
+        res.json(updatedLesson);
     } catch (error) {
         console.error('Update lesson error:', error);
+        if (error.message === 'No fields to update') {
+            return res.status(400).json({ error: error.message });
+        }
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -316,8 +201,8 @@ router.delete('/lessons/:lessonId', authenticateToken, requireRole('instructor',
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        // Delete lesson (cascades to content_items due to ON DELETE CASCADE)
-        await query('DELETE FROM lessons WHERE id = $1', [lessonId]);
+        // Delete lesson using service layer (cascades to content_items)
+        await lessonService.deleteLesson(lessonId);
 
         res.json({ message: 'Lesson deleted successfully' });
     } catch (error) {
@@ -328,8 +213,6 @@ router.delete('/lessons/:lessonId', authenticateToken, requireRole('instructor',
 
 // PUT /api/courses/:courseId/modules/:moduleId/lessons/reorder - Reorder lessons within a module
 router.put('/courses/:courseId/modules/:moduleId/lessons/reorder', authenticateToken, requireRole('instructor', 'admin'), async (req, res) => {
-    const client = await getClient();
-    
     try {
         const { courseId, moduleId } = req.params;
         const { lessonIds } = req.body;
@@ -340,7 +223,7 @@ router.put('/courses/:courseId/modules/:moduleId/lessons/reorder', authenticateT
         }
 
         // Check if course exists and user has permission
-        const courseResult = await client.query(
+        const courseResult = await query(
             'SELECT id, instructor_id FROM courses WHERE id = $1',
             [courseId]
         );
@@ -357,7 +240,7 @@ router.put('/courses/:courseId/modules/:moduleId/lessons/reorder', authenticateT
         }
 
         // Check if module exists and belongs to this course
-        const moduleResult = await client.query(
+        const moduleResult = await query(
             'SELECT id FROM modules WHERE id = $1 AND course_id = $2',
             [moduleId, courseId]
         );
@@ -367,7 +250,7 @@ router.put('/courses/:courseId/modules/:moduleId/lessons/reorder', authenticateT
         }
 
         // Verify all lessons belong to this module
-        const lessonCheckResult = await client.query(
+        const lessonCheckResult = await query(
             'SELECT id FROM lessons WHERE id = ANY($1) AND module_id = $2',
             [lessonIds, moduleId]
         );
@@ -376,52 +259,17 @@ router.put('/courses/:courseId/modules/:moduleId/lessons/reorder', authenticateT
             return res.status(400).json({ error: 'One or more lessons do not belong to this module' });
         }
 
-        // Begin transaction
-        await client.query('BEGIN');
-
-        // Update order_index for each lesson
-        for (let i = 0; i < lessonIds.length; i++) {
-            await client.query(
-                'UPDATE lessons SET order_index = $1, updated_at = NOW() WHERE id = $2',
-                [i, lessonIds[i]]
-            );
-        }
-
-        // Commit transaction
-        await client.query('COMMIT');
+        // Reorder lessons using service layer
+        const orderMap = lessonIds.map((id, index) => ({ id, orderIndex: index }));
+        await lessonService.reorder(moduleId, orderMap);
 
         // Fetch updated lessons
-        const updatedLessonsResult = await client.query(`
-            SELECT 
-                id, course_id, module_id, title, content, video_url, 
-                order_index, duration, is_required, created_at, updated_at
-            FROM lessons
-            WHERE module_id = $1
-            ORDER BY order_index ASC
-        `, [moduleId]);
+        const lessons = await lessonService.findByModuleId(moduleId);
 
-        res.json({
-            lessons: updatedLessonsResult.rows.map(lesson => ({
-                id: lesson.id,
-                courseId: lesson.course_id,
-                moduleId: lesson.module_id,
-                title: lesson.title,
-                content: lesson.content,
-                videoUrl: lesson.video_url,
-                orderIndex: lesson.order_index,
-                duration: lesson.duration,
-                isRequired: lesson.is_required,
-                createdAt: lesson.created_at,
-                updatedAt: lesson.updated_at
-            }))
-        });
+        res.json({ lessons });
     } catch (error) {
-        // Rollback transaction on error
-        await client.query('ROLLBACK');
         console.error('Reorder lessons error:', error);
         res.status(500).json({ error: 'Internal server error' });
-    } finally {
-        client.release();
     }
 });
 
