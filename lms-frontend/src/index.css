@@ -127,9 +127,9 @@
   --transition-all: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Z-Index Layers */
-  --z-sticky: 100;
-  --z-dropdown: 200;
-  --z-modal: 1000;
+  --z-sticky: 1000;
+  --z-dropdown: 1100;
+  --z-modal: 2000;
 }
 
 /* =====================================================
