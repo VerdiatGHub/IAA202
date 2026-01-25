@@ -10,7 +10,8 @@ import {
     FileText,
     CheckCircle,
     XCircle,
-    ExternalLink
+    ExternalLink,
+    Edit
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
@@ -210,10 +211,10 @@ export const AdminCourses: React.FC = () => {
                             <div className="col-actions">
                                 <Link to={`/instructor/courses/${course.id}/edit`}>
                                     <button
-                                        className="action-btn"
+                                        className="action-btn edit"
                                         title="Edit Course"
                                     >
-                                        <ExternalLink size={16} />
+                                        <Edit size={16} />
                                     </button>
                                 </Link>
                                 <button

@@ -277,6 +277,11 @@
     color: var(--text-primary);
 }
 
+.action-btn.edit:hover {
+    background: var(--primary-50);
+    color: var(--primary-600);
+}
+
 .action-btn.danger:hover {
     background: var(--error-50);
     color: var(--error-500);
@@ -284,6 +289,11 @@
 
 [data-theme="dark"] .action-btn:hover {
     background: var(--gray-700);
+}
+
+[data-theme="dark"] .action-btn.edit:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-400);
 }
 
 [data-theme="dark"] .action-btn.danger:hover {
