@@ -329,7 +329,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 11.2, 11.3, 11.4, 15.1, 15.2, 15.3, 15.4, 15.5_
 
 - [ ] 17. Implement Student View for Course Content
-  - [~] 17.1 Create student course content page
+  - [-] 17.1 Create student course content page
     - Display modules and lessons for enrolled students
     - Show content items within lessons
     - Display required/optional indicators

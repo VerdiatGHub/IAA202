@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
     ArrowLeft,
@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Card } from '../../components/common/Card';
+import { CourseContentProvider } from '../../contexts/CourseContentContext';
+import { StudentContentView } from '../../components/courseContent/StudentContentView';
 import './CourseView.css';
 
 // Type definitions
@@ -167,10 +169,21 @@ export const CourseView: React.FC = () => {
     const { courseId } = useParams<{ courseId: string }>();
     const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'reviews'>('curriculum');
     const [expandedModules, setExpandedModules] = useState<string[]>(['m1', 'm2', 'm3']);
+    const [useRealContent, setUseRealContent] = useState<boolean>(true);
 
     // In real app, fetch course by courseId
     const course = mockCourseDetail;
-    console.log('Viewing course:', courseId);
+    
+    // Check if courseId is valid for real content
+    useEffect(() => {
+        // If courseId is available and not a mock ID, use real content
+        if (courseId && courseId !== '1') {
+            setUseRealContent(true);
+        } else {
+            // For demo/mock course, use mock data
+            setUseRealContent(false);
+        }
+    }, [courseId]);
 
     const toggleModule = (moduleId: string) => {
         setExpandedModules((prev) =>
@@ -362,72 +375,82 @@ export const CourseView: React.FC = () => {
 
                 {activeTab === 'curriculum' && (
                     <div className="curriculum-content animate-fadeIn">
-                        <div className="curriculum-header">
-                            <span>{course.modules.length} modules</span>
-                            <span>•</span>
-                            <span>{getTotalLessons()} lessons</span>
-                            <span>•</span>
-                            <span>{course.duration} total</span>
-                        </div>
+                        {useRealContent && courseId ? (
+                            // Use real course content from backend (Requirement 15.1, 15.2, 15.3, 15.4, 15.5)
+                            <CourseContentProvider courseId={courseId}>
+                                <StudentContentView courseId={courseId} />
+                            </CourseContentProvider>
+                        ) : (
+                            // Fallback to mock data for demo purposes
+                            <>
+                                <div className="curriculum-header">
+                                    <span>{course.modules.length} modules</span>
+                                    <span>•</span>
+                                    <span>{getTotalLessons()} lessons</span>
+                                    <span>•</span>
+                                    <span>{course.duration} total</span>
+                                </div>
 
-                        <div className="modules-list">
-                            {course.modules.map((module, moduleIndex) => (
-                                <div key={module.id} className="module">
-                                    <button
-                                        className="module-header"
-                                        onClick={() => toggleModule(module.id)}
-                                    >
-                                        <div className="module-info">
-                                            <span className="module-number">{moduleIndex + 1}</span>
-                                            <div>
-                                                <h3 className="module-title">{module.title}</h3>
-                                                <span className="module-meta">
-                                                    {module.lessons.length} lessons • {module.duration}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <span className={`expand-icon ${expandedModules.includes(module.id) ? 'expanded' : ''}`}>
-                                            ▼
-                                        </span>
-                                    </button>
-
-                                    {expandedModules.includes(module.id) && (
-                                        <div className="lessons-list">
-                                            {module.lessons.map((lesson) => (
-                                                <div
-                                                    key={lesson.id}
-                                                    className={`lesson ${lesson.completed ? 'completed' : ''} ${lesson.current ? 'current' : ''} ${lesson.locked ? 'locked' : ''}`}
-                                                >
-                                                    <div className="lesson-status">
-                                                        {lesson.completed ? (
-                                                            <CheckCircle size={18} className="completed-icon" />
-                                                        ) : lesson.locked ? (
-                                                            <Lock size={18} />
-                                                        ) : (
-                                                            getLessonIcon(lesson.type)
-                                                        )}
-                                                    </div>
-                                                    <div className="lesson-info">
-                                                        <span className="lesson-title">{lesson.title}</span>
-                                                        <span className="lesson-meta">
-                                                            {lesson.type} • {lesson.duration}
+                                <div className="modules-list">
+                                    {course.modules.map((module, moduleIndex) => (
+                                        <div key={module.id} className="module">
+                                            <button
+                                                className="module-header"
+                                                onClick={() => toggleModule(module.id)}
+                                            >
+                                                <div className="module-info">
+                                                    <span className="module-number">{moduleIndex + 1}</span>
+                                                    <div>
+                                                        <h3 className="module-title">{module.title}</h3>
+                                                        <span className="module-meta">
+                                                            {module.lessons.length} lessons • {module.duration}
                                                         </span>
                                                     </div>
-                                                    {!lesson.locked && (
-                                                        <Button
-                                                            variant={lesson.current ? 'primary' : 'ghost'}
-                                                            size="sm"
-                                                        >
-                                                            {lesson.completed ? 'Review' : lesson.current ? 'Continue' : 'Start'}
-                                                        </Button>
-                                                    )}
                                                 </div>
-                                            ))}
+                                                <span className={`expand-icon ${expandedModules.includes(module.id) ? 'expanded' : ''}`}>
+                                                    ▼
+                                                </span>
+                                            </button>
+
+                                            {expandedModules.includes(module.id) && (
+                                                <div className="lessons-list">
+                                                    {module.lessons.map((lesson) => (
+                                                        <div
+                                                            key={lesson.id}
+                                                            className={`lesson ${lesson.completed ? 'completed' : ''} ${lesson.current ? 'current' : ''} ${lesson.locked ? 'locked' : ''}`}
+                                                        >
+                                                            <div className="lesson-status">
+                                                                {lesson.completed ? (
+                                                                    <CheckCircle size={18} className="completed-icon" />
+                                                                ) : lesson.locked ? (
+                                                                    <Lock size={18} />
+                                                                ) : (
+                                                                    getLessonIcon(lesson.type)
+                                                                )}
+                                                            </div>
+                                                            <div className="lesson-info">
+                                                                <span className="lesson-title">{lesson.title}</span>
+                                                                <span className="lesson-meta">
+                                                                    {lesson.type} • {lesson.duration}
+                                                                </span>
+                                                            </div>
+                                                            {!lesson.locked && (
+                                                                <Button
+                                                                    variant={lesson.current ? 'primary' : 'ghost'}
+                                                                    size="sm"
+                                                                >
+                                                                    {lesson.completed ? 'Review' : lesson.current ? 'Continue' : 'Start'}
+                                                                </Button>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
+                            </>
+                        )}
                     </div>
                 )}
 

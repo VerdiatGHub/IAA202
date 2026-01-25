@@ -22,12 +22,17 @@ interface StudentContentViewProps {
  * 
  * Validates Requirements: 11.2, 11.3, 11.4, 15.1, 15.2, 15.3, 15.4, 15.5
  */
-export const StudentContentView: React.FC<StudentContentViewProps> = ({ courseId }) => {
+export const StudentContentView: React.FC<StudentContentViewProps> = ({ courseId: _courseId }) => {
   // courseId is passed for potential future use (e.g., analytics, direct API calls)
   // Currently, course data is accessed through CourseContentContext
-  const { modules, loading, error } = useCourseContent();
+  const { modules, loading, error, refreshContent } = useCourseContent();
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
   const [expandedLessons, setExpandedLessons] = useState<Set<string>>(new Set());
+
+  // Load course content on mount (Requirement 15.1, 15.2, 15.3)
+  React.useEffect(() => {
+    refreshContent();
+  }, [refreshContent]);
 
   // Toggle module expansion
   const toggleModule = (moduleId: string) => {
