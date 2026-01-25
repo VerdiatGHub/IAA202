@@ -81,6 +81,73 @@ async function createTestModule(courseId, moduleData = {}) {
 }
 
 /**
+ * Create a test lesson
+ * @param {string} moduleId - Module UUID
+ * @param {Object} lessonData - Lesson data {title, content, videoUrl, duration, isRequired, orderIndex}
+ * @returns {Promise<Object>} Created lesson
+ */
+async function createTestLesson(moduleId, lessonData = {}) {
+    const {
+        title = `Test Lesson ${uuidv4().substring(0, 8)}`,
+        content = 'Test lesson content',
+        videoUrl = null,
+        duration = null,
+        isRequired = true,
+        orderIndex = 0
+    } = lessonData;
+
+    const result = await query(`
+        INSERT INTO lessons (module_id, title, content, video_url, duration, is_required, order_index)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING id, module_id, title, content, video_url, duration, is_required, order_index, created_at, updated_at
+    `, [moduleId, title, content, videoUrl, duration, isRequired, orderIndex]);
+
+    return result.rows[0];
+}
+
+/**
+ * Create a test content item
+ * @param {string} lessonId - Lesson UUID
+ * @param {Object} contentData - Content item data
+ * @returns {Promise<Object>} Created content item
+ */
+async function createTestContentItem(lessonId, contentData = {}) {
+    const {
+        contentType = 'text',
+        title = `Test Content ${uuidv4().substring(0, 8)}`,
+        description = 'Test content description',
+        orderIndex = 0,
+        isRequired = true,
+        videoUrl = null,
+        duration = null,
+        textContent = null,
+        quizId = null,
+        assignmentId = null,
+        resourceType = null,
+        resourceUrl = null,
+        filePath = null
+    } = contentData;
+
+    const result = await query(`
+        INSERT INTO content_items (
+            lesson_id, content_type, title, description, order_index, is_required,
+            video_url, duration, text_content, quiz_id, assignment_id,
+            resource_type, resource_url, file_path
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        RETURNING id, lesson_id, content_type, title, description, order_index, is_required,
+                  video_url, duration, text_content, quiz_id, assignment_id,
+                  resource_type, resource_url, file_path, created_at, updated_at
+    `, [
+        lessonId, contentType, title, description, orderIndex, isRequired,
+        videoUrl, duration, textContent, quizId, assignmentId,
+        resourceType, resourceUrl, filePath
+    ]);
+
+    return result.rows[0];
+}
+
+/**
  * Clean up test data
  * Deletes all test users, courses, modules, etc.
  */
@@ -102,6 +169,8 @@ module.exports = {
     createTestUser,
     createTestCourse,
     createTestModule,
+    createTestLesson,
+    createTestContentItem,
     cleanupTestData,
     closePool
 };

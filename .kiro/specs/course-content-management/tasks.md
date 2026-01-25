@@ -369,7 +369,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 1.1, 2.1_
 
 - [ ] 20. Final Integration Testing
-  - [~] 20.1 Write end-to-end integration tests
+  - [x] 20.1 Write end-to-end integration tests
     - Test complete flow: create module → add lesson → add content
     - Test reordering across all levels
     - Test preview mode
