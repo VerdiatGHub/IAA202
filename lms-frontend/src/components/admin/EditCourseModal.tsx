@@ -26,8 +26,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
         description: '',
         category: '',
         level: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
-        isPublished: false,
-        isPublic: true
+        isPublished: false
     });
 
     useEffect(() => {
@@ -45,8 +44,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                 description: course.description || '',
                 category: course.category || '',
                 level: course.level || 'beginner',
-                isPublished: course.isPublished || false,
-                isPublic: course.isPublic !== undefined ? course.isPublic : true
+                isPublished: course.isPublished || false
             });
         } catch (error) {
             toast.error('Failed to load course details');
@@ -165,27 +163,6 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                             </button>
                         </div>
                         <p className="field-hint">Published courses are visible to students</p>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="isPublic">Course Visibility</label>
-                        <div className="toggle-group">
-                            <button
-                                type="button"
-                                className={`toggle-option ${formData.isPublic ? 'active' : ''}`}
-                                onClick={() => setFormData(prev => ({ ...prev, isPublic: true }))}
-                            >
-                                Public
-                            </button>
-                            <button
-                                type="button"
-                                className={`toggle-option ${!formData.isPublic ? 'active' : ''}`}
-                                onClick={() => setFormData(prev => ({ ...prev, isPublic: false }))}
-                            >
-                                Private
-                            </button>
-                        </div>
-                        <p className="field-hint">Public courses allow anyone to enroll, private courses require invitation</p>
                     </div>
 
                     <div className="modal-actions">
