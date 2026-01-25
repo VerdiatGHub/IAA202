@@ -8,7 +8,6 @@ import {
     MessageSquare,
     BarChart3,
     Users,
-    Settings,
     GraduationCap,
     PlusCircle,
     BookCheck,
@@ -53,8 +52,6 @@ const navItems: NavItem[] = [
     { icon: <Home size={20} />, label: 'Dashboard', href: '/admin', roles: ['admin'] },
     { icon: <Users size={20} />, label: 'Users', href: '/admin/users', roles: ['admin'] },
     { icon: <BookOpen size={20} />, label: 'Courses', href: '/admin/courses', roles: ['admin'] },
-    { icon: <BarChart3 size={20} />, label: 'Reports', href: '/admin/reports', roles: ['admin'] },
-    { icon: <Settings size={20} />, label: 'Settings', href: '/admin/settings', roles: ['admin'] },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({
