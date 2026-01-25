@@ -171,13 +171,13 @@ This implementation plan breaks down the course content management system into i
   - All backend endpoints, services, and tests implemented
 
 - [-] 9. Create Frontend API Services
-  - [-] 9.1 Implement module service
+  - [x] 9.1 Implement module service
     - Create getModules, createModule, updateModule, deleteModule functions
     - Implement reorderModules function
     - Add error handling and type safety
     - _Requirements: 1.1, 1.2, 1.3, 8.1_
 
-  - [~] 9.2 Implement lesson service
+  - [x] 9.2 Implement lesson service
     - Create getLessons, createLesson, updateLesson, deleteLesson functions
     - Implement reorderLessons function
     - Add module-aware lesson functions
