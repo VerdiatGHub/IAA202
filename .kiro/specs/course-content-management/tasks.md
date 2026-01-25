@@ -189,7 +189,7 @@ This implementation plan breaks down the course content management system into i
     - Add content type-specific validation
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1, 14.2_
 
-- [ ] 10. Create Course Content Context
+- [x] 10. Create Course Content Context
   - [x] 10.1 Implement CourseContentContext
     - Create context with state for modules, lessons, content items
     - Implement loading and error states
@@ -212,7 +212,7 @@ This implementation plan breaks down the course content management system into i
     - Display loading and empty states
     - _Requirements: 10.2, 8.5_
 
-  - [~] 11.2 Create ModuleItem component
+  - [-] 11.2 Create ModuleItem component
     - Display module header with title and description
     - Show lesson count and total duration
     - Add edit and delete buttons
