@@ -3,36 +3,15 @@ import {
     Users,
     BookOpen,
     TrendingUp,
-    Search,
-    Edit,
-    Trash2,
-    UserPlus,
     Shield,
-    Calendar,
     RefreshCw,
     AlertCircle,
-    Save,
-    X,
 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
-import { Input } from '../../components/common/Input';
-import { CreateUserModal } from '../../components/admin';
-import { getUsers, getUserStats, updateUser, deleteUser } from '../../services/userService';
+import { getUserStats } from '../../services/userService';
 import { getCourseStats } from '../../services/courseService';
-import type { UserRole } from '../../types';
-import { format } from 'date-fns';
-import toast from 'react-hot-toast';
 import './AdminDashboard.css';
-
-interface UserData {
-    id: string;
-    email: string;
-    fullName: string;
-    role: UserRole;
-    createdAt: string;
-    avatarUrl?: string;
-}
 
 interface Stats {
     totalUsers: number;
@@ -45,30 +24,20 @@ interface Stats {
 }
 
 export const AdminDashboard: React.FC = () => {
-    const [users, setUsers] = useState<UserData[]>([]);
     const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedRole, setSelectedRole] = useState('all');
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [editingUser, setEditingUser] = useState<UserData | null>(null);
-    const [editForm, setEditForm] = useState({ fullName: '', role: 'student' as UserRole });
-    const [savingEdit, setSavingEdit] = useState(false);
-    const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
         setError(null);
 
         try {
-            const [usersData, userStats, courseStats] = await Promise.all([
-                getUsers(),
+            const [userStats, courseStats] = await Promise.all([
                 getUserStats(),
                 getCourseStats(),
             ]);
 
-            setUsers(usersData);
             setStats({
                 totalUsers: userStats.totalUsers,
                 totalStudents: userStats.totalStudents,
@@ -91,74 +60,6 @@ export const AdminDashboard: React.FC = () => {
         fetchData();
     }, [fetchData]);
 
-    const filteredUsers = users.filter((user) => {
-        const matchesSearch = user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesRole = selectedRole === 'all' || user.role === selectedRole;
-        return matchesSearch && matchesRole;
-    });
-
-    const handleEditUser = (user: UserData) => {
-        setEditingUser(user);
-        setEditForm({ fullName: user.fullName, role: user.role });
-    };
-
-    const handleSaveEdit = async () => {
-        if (!editingUser) return;
-
-        setSavingEdit(true);
-        try {
-            await updateUser(editingUser.id, {
-                fullName: editForm.fullName,
-                role: editForm.role,
-            });
-            toast.success('User updated successfully');
-            setEditingUser(null);
-            fetchData();
-        } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to update user';
-            toast.error(message);
-        } finally {
-            setSavingEdit(false);
-        }
-    };
-
-    const handleDeleteUser = async (userId: string) => {
-        if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-            return;
-        }
-
-        setDeletingUserId(userId);
-        try {
-            await deleteUser(userId);
-            toast.success('User deleted successfully');
-            fetchData();
-        } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to delete user';
-            toast.error(message);
-        } finally {
-            setDeletingUserId(null);
-        }
-    };
-
-    const getRoleIcon = (role: string) => {
-        switch (role) {
-            case 'admin': return <Shield size={14} />;
-            case 'instructor': return <BookOpen size={14} />;
-            default: return <Users size={14} />;
-        }
-    };
-
-    const formatDate = (dateString: string) => {
-        try {
-            return format(new Date(dateString), 'MMM d, yyyy');
-        } catch {
-            return dateString;
-        }
-    };
-
-
-
     const statsCards = stats ? [
         { label: 'Total Users', value: stats.totalUsers.toLocaleString(), icon: <Users size={24} />, color: 'primary' },
         { label: 'Total Courses', value: stats.totalCourses.toLocaleString(), icon: <BookOpen size={24} />, color: 'success' },
@@ -166,7 +67,7 @@ export const AdminDashboard: React.FC = () => {
         { label: 'Instructors', value: stats.totalInstructors.toLocaleString(), icon: <Shield size={24} />, color: 'warning' },
     ] : [];
 
-    if (error && users.length === 0) {
+    if (error && !stats) {
         return (
             <div className="admin-dashboard">
                 <div className="error-container">
@@ -198,13 +99,6 @@ export const AdminDashboard: React.FC = () => {
                     >
                         Refresh
                     </Button>
-                    <Button
-                        variant="primary"
-                        icon={<UserPlus size={18} />}
-                        onClick={() => setIsCreateModalOpen(true)}
-                    >
-                        Add User
-                    </Button>
                 </div>
             </section>
 
@@ -234,166 +128,6 @@ export const AdminDashboard: React.FC = () => {
                     )}
                 </div>
             </section>
-
-            {/* Main Content */}
-            <div className="dashboard-grid">
-                {/* Users Table */}
-                <section className="users-section">
-                    <div className="section-header">
-                        <h2 className="section-title">User Management</h2>
-                        <div className="section-actions">
-                            <Input
-                                placeholder="Search users..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                icon={<Search size={16} />}
-                                className="search-input"
-                            />
-                            <select
-                                value={selectedRole}
-                                onChange={(e) => setSelectedRole(e.target.value)}
-                                className="role-filter"
-                            >
-                                <option value="all">All Roles</option>
-                                <option value="student">Students</option>
-                                <option value="instructor">Instructors</option>
-                                <option value="admin">Admins</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="users-table">
-                        <div className="table-header">
-                            <span className="col-user">User</span>
-                            <span className="col-role">Role</span>
-                            <span className="col-joined">Joined</span>
-                            <span className="col-actions">Actions</span>
-                        </div>
-
-                        {loading ? (
-                            Array.from({ length: 5 }).map((_, index) => (
-                                <div key={index} className="table-row table-row-loading animate-pulse">
-                                    <div className="col-user">
-                                        <div className="skeleton-avatar"></div>
-                                        <div className="skeleton-text"></div>
-                                    </div>
-                                    <div className="col-role"><div className="skeleton-badge"></div></div>
-                                    <div className="col-joined"><div className="skeleton-text-sm"></div></div>
-                                    <div className="col-actions"><div className="skeleton-actions"></div></div>
-                                </div>
-                            ))
-                        ) : filteredUsers.length === 0 ? (
-                            <div className="empty-state">
-                                <Users size={48} />
-                                <p>No users found</p>
-                            </div>
-                        ) : (
-                            filteredUsers.map((user, index) => (
-                                <div
-                                    key={user.id}
-                                    className={`table-row animate-slideUp ${editingUser?.id === user.id ? 'editing' : ''}`}
-                                    style={{ animationDelay: `${index * 0.05}s` }}
-                                >
-                                    <div className="col-user">
-                                        <div className="user-avatar">
-                                            {user.fullName.charAt(0).toUpperCase()}
-                                        </div>
-                                        {editingUser?.id === user.id ? (
-                                            <div className="user-info">
-                                                <input
-                                                    type="text"
-                                                    className="edit-input"
-                                                    value={editForm.fullName}
-                                                    onChange={(e) => setEditForm({ ...editForm, fullName: e.target.value })}
-                                                />
-                                                <span className="user-email">{user.email}</span>
-                                            </div>
-                                        ) : (
-                                            <div className="user-info">
-                                                <span className="user-name">{user.fullName}</span>
-                                                <span className="user-email">{user.email}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="col-role">
-                                        {editingUser?.id === user.id ? (
-                                            <select
-                                                className="edit-select"
-                                                value={editForm.role}
-                                                onChange={(e) => setEditForm({ ...editForm, role: e.target.value as UserRole })}
-                                            >
-                                                <option value="student">Student</option>
-                                                <option value="instructor">Instructor</option>
-                                                <option value="admin">Admin</option>
-                                            </select>
-                                        ) : (
-                                            <span className={`role-badge ${user.role}`}>
-                                                {getRoleIcon(user.role)}
-                                                {user.role}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <div className="col-joined">
-                                        <Calendar size={14} />
-                                        {formatDate(user.createdAt)}
-                                    </div>
-                                    <div className="col-actions">
-                                        {editingUser?.id === user.id ? (
-                                            <>
-                                                <button
-                                                    className="action-btn success"
-                                                    title="Save"
-                                                    onClick={handleSaveEdit}
-                                                    disabled={savingEdit}
-                                                >
-                                                    <Save size={16} />
-                                                </button>
-                                                <button
-                                                    className="action-btn"
-                                                    title="Cancel"
-                                                    onClick={() => setEditingUser(null)}
-                                                >
-                                                    <X size={16} />
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <button
-                                                    className="action-btn"
-                                                    title="Edit"
-                                                    onClick={() => handleEditUser(user)}
-                                                >
-                                                    <Edit size={16} />
-                                                </button>
-                                                <button
-                                                    className="action-btn danger"
-                                                    title="Delete"
-                                                    onClick={() => handleDeleteUser(user.id)}
-                                                    disabled={deletingUserId === user.id}
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </section>
-
-
-            </div>
-
-            {/* Create User Modal */}
-            <CreateUserModal
-                isOpen={isCreateModalOpen}
-                onClose={() => setIsCreateModalOpen(false)}
-                onSuccess={() => {
-                    toast.success('User created successfully');
-                    fetchData();
-                }}
-            />
         </div>
     );
 };
