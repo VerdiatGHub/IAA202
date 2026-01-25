@@ -344,13 +344,13 @@ This implementation plan breaks down the course content management system into i
     - Implement retry logic for transient failures
     - _Requirements: 13.2, 13.5_
 
-  - [-] 18.2 Add confirmation dialogs
+  - [x] 18.2 Add confirmation dialogs
     - Confirm before deleting modules
     - Confirm before deleting lessons
     - Confirm before deleting content items
     - _Requirements: 1.3, 2.3_
 
-  - [~] 18.3 Add success feedback
+  - [x] 18.3 Add success feedback
     - Show toast on successful create/update/delete
     - Show loading spinners during operations
     - _Requirements: 13.5_
