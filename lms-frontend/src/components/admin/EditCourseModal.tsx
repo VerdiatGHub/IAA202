@@ -147,31 +147,45 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                     </div>
 
                     <div className="form-group">
-                        <label className="checkbox-label">
-                            <input
-                                type="checkbox"
-                                name="isPublished"
-                                checked={formData.isPublished}
-                                onChange={handleChange}
-                                className="form-checkbox"
-                            />
-                            <span>Published (visible to students)</span>
-                        </label>
-                        <p className="field-hint">If unchecked, course will be in draft mode</p>
+                        <label htmlFor="isPublished">Course Status</label>
+                        <div className="toggle-group">
+                            <button
+                                type="button"
+                                className={`toggle-option ${formData.isPublished ? 'active' : ''}`}
+                                onClick={() => setFormData(prev => ({ ...prev, isPublished: true }))}
+                            >
+                                Published
+                            </button>
+                            <button
+                                type="button"
+                                className={`toggle-option ${!formData.isPublished ? 'active' : ''}`}
+                                onClick={() => setFormData(prev => ({ ...prev, isPublished: false }))}
+                            >
+                                Draft
+                            </button>
+                        </div>
+                        <p className="field-hint">Published courses are visible to students</p>
                     </div>
 
                     <div className="form-group">
-                        <label className="checkbox-label">
-                            <input
-                                type="checkbox"
-                                name="isPublic"
-                                checked={formData.isPublic}
-                                onChange={handleChange}
-                                className="form-checkbox"
-                            />
-                            <span>Public (anyone can enroll)</span>
-                        </label>
-                        <p className="field-hint">If unchecked, only invited students can access this course</p>
+                        <label htmlFor="isPublic">Course Visibility</label>
+                        <div className="toggle-group">
+                            <button
+                                type="button"
+                                className={`toggle-option ${formData.isPublic ? 'active' : ''}`}
+                                onClick={() => setFormData(prev => ({ ...prev, isPublic: true }))}
+                            >
+                                Public
+                            </button>
+                            <button
+                                type="button"
+                                className={`toggle-option ${!formData.isPublic ? 'active' : ''}`}
+                                onClick={() => setFormData(prev => ({ ...prev, isPublic: false }))}
+                            >
+                                Private
+                            </button>
+                        </div>
+                        <p className="field-hint">Public courses allow anyone to enroll, private courses require invitation</p>
                     </div>
 
                     <div className="modal-actions">
