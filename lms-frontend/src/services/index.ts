@@ -3,3 +3,5 @@ export * from './userService';
 export * from './courseService';
 export * from './enrollmentService';
 export * from './moduleService';
+export * from './lessonService';
+export * from './contentItemService';

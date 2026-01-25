@@ -110,6 +110,56 @@ export interface ContentItem {
   updatedAt: string;
 }
 
+export interface CreateContentItemDto {
+  contentType: ContentType;
+  title: string;
+  description?: string;
+  isRequired?: boolean;
+  
+  // Video fields
+  videoUrl?: string;
+  duration?: number;
+  
+  // Text fields
+  textContent?: string;
+  
+  // Quiz fields
+  quizId?: string;
+  
+  // Assignment fields
+  assignmentId?: string;
+  
+  // Resource fields
+  resourceType?: 'file' | 'link';
+  resourceUrl?: string;
+  filePath?: string;
+}
+
+export interface UpdateContentItemDto {
+  title?: string;
+  description?: string;
+  isRequired?: boolean;
+  orderIndex?: number;
+  
+  // Video fields
+  videoUrl?: string;
+  duration?: number;
+  
+  // Text fields
+  textContent?: string;
+  
+  // Quiz fields
+  quizId?: string;
+  
+  // Assignment fields
+  assignmentId?: string;
+  
+  // Resource fields
+  resourceType?: 'file' | 'link';
+  resourceUrl?: string;
+  filePath?: string;
+}
+
 // Enrollment types
 export interface Enrollment {
   id: string;

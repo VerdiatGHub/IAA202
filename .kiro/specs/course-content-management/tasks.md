@@ -183,7 +183,7 @@ This implementation plan breaks down the course content management system into i
     - Add module-aware lesson functions
     - _Requirements: 2.1, 2.2, 2.3, 8.2_
 
-  - [~] 9.3 Implement content item service
+  - [x] 9.3 Implement content item service
     - Create getContentItems, createContentItem, updateContentItem, deleteContentItem functions
     - Implement reorderContentItems function
     - Add content type-specific validation
