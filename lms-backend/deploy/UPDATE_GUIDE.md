@@ -10,7 +10,7 @@ When you make changes on your Windows computer (UI, features, etc.), follow this
 
 **On Web Server (192.168.56.101):**
 ```bash
-cd ~/IAA202 && git pull && cp -r lms-backend/* /var/www/lms/backend/ && cp -r lms-frontend/* /var/www/lms/frontend/ && cd /var/www/lms/frontend && npm run build && pm2 restart lms-api
+cd ~/IAA202 && git pull && cp -r lms-backend/* /var/www/lms/backend/ && cd /var/www/lms/backend && npm install && cp -r ~/IAA202/lms-frontend/* /var/www/lms/frontend/ && cd /var/www/lms/frontend && npm install && npm run build && pm2 restart lms-api
 ```
 
 ---
