@@ -196,7 +196,7 @@ This implementation plan breaks down the course content management system into i
     - Create provider component
     - _Requirements: All requirements (state management)_
 
-  - [~] 10.2 Implement context actions
+  - [x] 10.2 Implement context actions
     - Add module CRUD actions
     - Add lesson CRUD actions
     - Add content item CRUD actions
