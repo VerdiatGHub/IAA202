@@ -165,7 +165,12 @@
 }
 
 .search-input {
-    width: 250px;
+    min-width: 200px;
+    width: auto;
+}
+
+.search-input input {
+    min-width: 180px;
 }
 
 .role-filter {
