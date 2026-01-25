@@ -268,7 +268,7 @@ This implementation plan breaks down the course content management system into i
     - Required/optional toggle
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1_
 
-  - [~] 13.4 Create content type-specific form components
+  - [x] 13.4 Create content type-specific form components
     - VideoContentForm (URL, duration)
     - TextContentForm (rich text editor)
     - QuizContentForm (link to existing quiz or create new)
@@ -277,7 +277,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1_
 
 - [ ] 14. Implement Drag-and-Drop Reordering
-  - [~] 14.1 Add drag-and-drop library
+  - [x] 14.1 Add drag-and-drop library
     - Install @dnd-kit/core and @dnd-kit/sortable
     - Configure drag-and-drop providers
     - _Requirements: 8.1, 8.2, 14.2_
