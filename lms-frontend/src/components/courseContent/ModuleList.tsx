@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Edit2, Trash2, GripVertical } from 'lucide-react';
 import { Button } from '../common/Button';
 import { LoadingSpinner } from '../common/Loading';
 import { useCourseContent } from '../../contexts/useCourseContent';
@@ -8,9 +8,17 @@ import './ModuleList.css';
 
 interface ModuleListProps {
   onAddModule: () => void;
+  onEditModule?: (module: Module) => void;
+  onDeleteModule?: (moduleId: string) => void;
+  onAddLesson?: (moduleId: string) => void;
 }
 
-export const ModuleList: React.FC<ModuleListProps> = ({ onAddModule }) => {
+export const ModuleList: React.FC<ModuleListProps> = ({ 
+  onAddModule, 
+  onEditModule,
+  onDeleteModule,
+  onAddLesson
+}) => {
   const { modules, loading, error } = useCourseContent();
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
 
@@ -26,8 +34,28 @@ export const ModuleList: React.FC<ModuleListProps> = ({ onAddModule }) => {
     });
   };
 
+  const handleEditModule = (e: React.MouseEvent, module: Module) => {
+    e.stopPropagation();
+    onEditModule?.(module);
+  };
+
+  const handleDeleteModule = (e: React.MouseEvent, moduleId: string) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this module? All lessons within it will also be deleted.')) {
+      onDeleteModule?.(moduleId);
+    }
+  };
+
+  const handleAddLesson = (e: React.MouseEvent, moduleId: string) => {
+    e.stopPropagation();
+    onAddLesson?.(moduleId);
+  };
+
+  // Sort modules by orderIndex (Requirement 8.5)
+  const sortedModules = [...modules].sort((a, b) => a.orderIndex - b.orderIndex);
+
   // Loading state
-  if (loading && modules.length === 0) {
+  if (loading && sortedModules.length === 0) {
     return (
       <div className="module-list-loading">
         <LoadingSpinner size="lg" />
@@ -37,7 +65,7 @@ export const ModuleList: React.FC<ModuleListProps> = ({ onAddModule }) => {
   }
 
   // Error state
-  if (error && modules.length === 0) {
+  if (error && sortedModules.length === 0) {
     return (
       <div className="module-list-error">
         <p className="error-message">{error}</p>
@@ -49,7 +77,7 @@ export const ModuleList: React.FC<ModuleListProps> = ({ onAddModule }) => {
   }
 
   // Empty state
-  if (modules.length === 0) {
+  if (sortedModules.length === 0) {
     return (
       <div className="module-list-empty">
         <div className="empty-state">
@@ -75,9 +103,12 @@ export const ModuleList: React.FC<ModuleListProps> = ({ onAddModule }) => {
       </div>
 
       <div className="modules-container">
-        {modules.map((module, index) => (
+        {sortedModules.map((module, index) => (
           <div key={module.id} className="module-item">
             <div className="module-header" onClick={() => toggleModule(module.id)}>
+              <div className="module-drag-handle" title="Drag to reorder">
+                <GripVertical size={20} />
+              </div>
               <div className="module-info">
                 <span className="module-number">Module {index + 1}</span>
                 <h3 className="module-title">{module.title}</h3>
@@ -85,24 +116,52 @@ export const ModuleList: React.FC<ModuleListProps> = ({ onAddModule }) => {
                   <p className="module-description">{module.description}</p>
                 )}
               </div>
-              <div className="module-meta">
-                <span className="lesson-count">
-                  {module.lessons?.length || 0} {module.lessons?.length === 1 ? 'lesson' : 'lessons'}
-                </span>
-                <button
-                  className={`expand-button ${expandedModules.has(module.id) ? 'expanded' : ''}`}
-                  aria-label={expandedModules.has(module.id) ? 'Collapse module' : 'Expand module'}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M4 6L8 10L12 6"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
+              <div className="module-actions">
+                <div className="module-meta">
+                  <span className="lesson-count">
+                    {module.lessons?.length || 0} {module.lessons?.length === 1 ? 'lesson' : 'lessons'}
+                  </span>
+                </div>
+                <div className="module-buttons">
+                  {onEditModule && (
+                    <button
+                      className="icon-button"
+                      onClick={(e) => handleEditModule(e, module)}
+                      title="Edit module"
+                      aria-label="Edit module"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                  )}
+                  {onDeleteModule && (
+                    <button
+                      className="icon-button icon-button-danger"
+                      onClick={(e) => handleDeleteModule(e, module.id)}
+                      title="Delete module"
+                      aria-label="Delete module"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                  <button
+                    className={`expand-button ${expandedModules.has(module.id) ? 'expanded' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleModule(module.id);
+                    }}
+                    aria-label={expandedModules.has(module.id) ? 'Collapse module' : 'Expand module'}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M4 6L8 10L12 6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -120,13 +179,25 @@ export const ModuleList: React.FC<ModuleListProps> = ({ onAddModule }) => {
                     <p>No lessons in this module yet</p>
                   </div>
                 )}
+                {onAddLesson && (
+                  <div className="add-lesson-container">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      icon={<Plus size={14} />}
+                      onClick={(e) => handleAddLesson(e, module.id)}
+                    >
+                      Add Lesson
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {loading && modules.length > 0 && (
+      {loading && sortedModules.length > 0 && (
         <div className="module-list-updating">
           <LoadingSpinner size="sm" />
           <span>Updating...</span>

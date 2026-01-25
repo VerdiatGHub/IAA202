@@ -205,7 +205,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 4.1, 5.1, 6.1, 7.1_
 
 - [ ] 11. Implement Module Components
-  - [~] 11.1 Create ModuleList component
+  - [-] 11.1 Create ModuleList component
     - Render list of modules in order
     - Implement expand/collapse functionality
     - Add "Add Module" button
