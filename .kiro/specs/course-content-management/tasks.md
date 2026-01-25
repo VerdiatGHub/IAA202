@@ -282,13 +282,13 @@ This implementation plan breaks down the course content management system into i
     - Configure drag-and-drop providers
     - _Requirements: 8.1, 8.2, 14.2_
 
-  - [-] 14.2 Implement module drag-and-drop
+  - [x] 14.2 Implement module drag-and-drop
     - Make ModuleList draggable
     - Handle onDragEnd to reorder modules
     - Update UI optimistically
     - _Requirements: 8.1, 10.6_
 
-  - [~] 14.3 Implement lesson drag-and-drop
+  - [x] 14.3 Implement lesson drag-and-drop
     - Make LessonList draggable within modules
     - Handle onDragEnd to reorder lessons
     - Update UI optimistically
