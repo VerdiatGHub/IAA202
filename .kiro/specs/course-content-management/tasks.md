@@ -362,7 +362,7 @@ This implementation plan breaks down the course content management system into i
     - Preserve existing lesson order_index
     - _Requirements: 1.1, 2.1_
 
-  - [~] 19.2 Test migration script
+  - [-] 19.2 Test migration script
     - Test with sample data
     - Verify data integrity after migration
     - Test rollback capability
