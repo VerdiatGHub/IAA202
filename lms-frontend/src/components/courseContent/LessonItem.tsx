@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Edit2, Trash2, ChevronDown } from 'lucide-react';
 import { ContentItemList } from './ContentItemList';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import type { Lesson, ContentItem } from '../../types';
 import './LessonItem.css';
 
@@ -38,17 +39,33 @@ export const LessonItem: React.FC<LessonItemProps> = ({
   isPreviewMode = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     onEdit?.();
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this lesson? All content items within it will also be deleted.')) {
-      onDelete?.();
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete?.();
+      setShowDeleteConfirm(false);
+    } catch (error) {
+      console.error('Failed to delete lesson:', error);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleToggleExpand = () => {
@@ -103,7 +120,7 @@ export const LessonItem: React.FC<LessonItemProps> = ({
           {!isPreviewMode && onDelete && (
             <button
               className="icon-button icon-button-danger"
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
               title="Delete lesson"
               aria-label="Delete lesson"
             >
@@ -135,6 +152,19 @@ export const LessonItem: React.FC<LessonItemProps> = ({
           />
         </div>
       )}
+
+      {/* Confirmation dialog for lesson deletion (Requirement 2.3) */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Lesson"
+        message={`Are you sure you want to delete "${lesson.title}"? All content items within this lesson will also be permanently deleted. This action cannot be undone.`}
+        confirmText="Delete Lesson"
+        cancelText="Cancel"
+        variant="danger"
+        loading={isDeleting}
+      />
     </div>
   );
 };

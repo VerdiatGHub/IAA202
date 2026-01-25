@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Edit2, Trash2, GripVertical } from 'lucide-react';
 import { LessonList } from './LessonList';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import type { Module, Lesson } from '../../types';
 import './ModuleItem.css';
 
@@ -40,16 +41,33 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
   onDeleteLesson,
   isPreviewMode = false,
 }) => {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     onEdit?.();
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this module? All lessons within it will also be deleted.')) {
-      onDelete?.();
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete?.();
+      setShowDeleteConfirm(false);
+    } catch (error) {
+      console.error('Failed to delete module:', error);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleEditLesson = (lesson: Lesson) => {
@@ -112,7 +130,7 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
             {!isPreviewMode && onDelete && (
               <button
                 className="icon-button icon-button-danger"
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 title="Delete module"
                 aria-label="Delete module"
               >
@@ -153,6 +171,19 @@ export const ModuleItem: React.FC<ModuleItemProps> = ({
           />
         </div>
       )}
+
+      {/* Confirmation dialog for module deletion (Requirement 1.3) */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Module"
+        message={`Are you sure you want to delete "${module.title}"? All lessons and content within this module will also be permanently deleted. This action cannot be undone.`}
+        confirmText="Delete Module"
+        cancelText="Cancel"
+        variant="danger"
+        loading={isDeleting}
+      />
     </div>
   );
 };

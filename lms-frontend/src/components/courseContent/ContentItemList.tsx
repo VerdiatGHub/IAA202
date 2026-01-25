@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { Button } from '../common/Button/Button';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 import { ContentItemRow } from './ContentItemRow';
 import { ContentEditorModal } from './ContentEditorModal';
 import { DndProvider } from './DndProvider';
@@ -47,6 +48,9 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingContent, setEditingContent] = useState<ContentItem | undefined>(undefined);
   const [isDragging, setIsDragging] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletingContentId, setDeletingContentId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Sort content items by orderIndex (Requirement 14.3)
   const sortedContentItems = [...contentItems].sort((a, b) => a.orderIndex - b.orderIndex);
@@ -81,10 +85,29 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
     setIsEditorOpen(true);
   };
 
-  const handleDeleteContent = (contentId: string) => {
-    if (window.confirm('Are you sure you want to delete this content item?')) {
-      onDeleteContent?.(contentId);
+  const handleDeleteClick = (contentId: string) => {
+    setDeletingContentId(contentId);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deletingContentId) return;
+    
+    setIsDeleting(true);
+    try {
+      await onDeleteContent?.(deletingContentId);
+      setShowDeleteConfirm(false);
+      setDeletingContentId(null);
+    } catch (error) {
+      console.error('Failed to delete content item:', error);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+    setDeletingContentId(null);
   };
 
   const handleEditorClose = () => {
@@ -140,7 +163,7 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
             key={contentItem.id}
             contentItem={contentItem}
             onEdit={() => handleEditContent(contentItem)}
-            onDelete={() => handleDeleteContent(contentItem.id)}
+            onDelete={() => handleDeleteClick(contentItem.id)}
             isPreviewMode={isPreviewMode}
           />
         );
@@ -195,6 +218,19 @@ export const ContentItemList: React.FC<ContentItemListProps> = ({
           onSuccess={handleEditorSuccess}
         />
       )}
+
+      {/* Confirmation dialog for content item deletion */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Content Item"
+        message={`Are you sure you want to delete this content item? This action cannot be undone.`}
+        confirmText="Delete Content"
+        cancelText="Cancel"
+        variant="danger"
+        loading={isDeleting}
+      />
     </div>
   );
 };
