@@ -511,7 +511,6 @@ describe('Module Endpoints Unit Tests', () => {
             expect(response.status).toBe(401);
         });
     });
-});
 
     describe('PUT /api/courses/:courseId/modules/reorder - Reorder Modules', () => {
         let reorderCourse;
@@ -802,4 +801,111 @@ describe('Module Endpoints Unit Tests', () => {
             // Should return 400 or 500 depending on validation
             expect([400, 500]).toContain(response.status);
         });
+
+        test('should return 400 when moduleIds contains duplicate IDs', async () => {
+            const reorderData = {
+                moduleIds: [reorderModule1.id, reorderModule2.id, reorderModule1.id]
+            };
+
+            const response = await request(app)
+                .put(`/api/courses/${reorderCourse.id}/modules/reorder`)
+                .set('Authorization', `Bearer ${instructorToken}`)
+                .send(reorderData);
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('should return 400 when moduleIds count does not match course module count', async () => {
+            // Only provide 2 module IDs when course has 3 modules
+            const reorderData = {
+                moduleIds: [reorderModule1.id, reorderModule2.id]
+            };
+
+            const response = await request(app)
+                .put(`/api/courses/${reorderCourse.id}/modules/reorder`)
+                .set('Authorization', `Bearer ${instructorToken}`)
+                .send(reorderData);
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+            expect(response.body.error).toMatch(/count|mismatch|all modules/i);
+        });
+
+        test('should return 400 when moduleIds contains non-existent module ID', async () => {
+            const fakeModuleId = '00000000-0000-0000-0000-000000000000';
+            const reorderData = {
+                moduleIds: [reorderModule1.id, fakeModuleId, reorderModule2.id]
+            };
+
+            const response = await request(app)
+                .put(`/api/courses/${reorderCourse.id}/modules/reorder`)
+                .set('Authorization', `Bearer ${instructorToken}`)
+                .send(reorderData);
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('should return 400 when moduleIds contains null or undefined values', async () => {
+            const reorderData = {
+                moduleIds: [reorderModule1.id, null, reorderModule2.id]
+            };
+
+            const response = await request(app)
+                .put(`/api/courses/${reorderCourse.id}/modules/reorder`)
+                .set('Authorization', `Bearer ${instructorToken}`)
+                .send(reorderData);
+
+            expect(response.status).toBe(400);
+            expect(response.body).toHaveProperty('error');
+        });
+
+        test('should handle reordering when modules have non-sequential initial order indices', async () => {
+            // Create a course with modules that have gaps in order_index
+            const gapCourse = await createTestCourse(instructorUser.id, { title: 'Gap Course' });
+            const gapMod1 = await createTestModule(gapCourse.id, { title: 'Gap Mod 1', orderIndex: 0 });
+            const gapMod2 = await createTestModule(gapCourse.id, { title: 'Gap Mod 2', orderIndex: 5 });
+            const gapMod3 = await createTestModule(gapCourse.id, { title: 'Gap Mod 3', orderIndex: 10 });
+
+            const reorderData = {
+                moduleIds: [gapMod3.id, gapMod1.id, gapMod2.id]
+            };
+
+            const response = await request(app)
+                .put(`/api/courses/${gapCourse.id}/modules/reorder`)
+                .set('Authorization', `Bearer ${instructorToken}`)
+                .send(reorderData);
+
+            expect(response.status).toBe(200);
+            
+            // After reordering, indices should be sequential starting from 0
+            const modules = response.body.modules;
+            expect(modules[0].id).toBe(gapMod3.id);
+            expect(modules[0].orderIndex).toBe(0);
+            expect(modules[1].id).toBe(gapMod1.id);
+            expect(modules[1].orderIndex).toBe(1);
+            expect(modules[2].id).toBe(gapMod2.id);
+            expect(modules[2].orderIndex).toBe(2);
+        });
+
+        test('should handle reordering single module (edge case)', async () => {
+            const singleCourse = await createTestCourse(instructorUser.id, { title: 'Single Module Course' });
+            const singleMod = await createTestModule(singleCourse.id, { title: 'Only Module', orderIndex: 0 });
+
+            const reorderData = {
+                moduleIds: [singleMod.id]
+            };
+
+            const response = await request(app)
+                .put(`/api/courses/${singleCourse.id}/modules/reorder`)
+                .set('Authorization', `Bearer ${instructorToken}`)
+                .send(reorderData);
+
+            expect(response.status).toBe(200);
+            expect(response.body.modules.length).toBe(1);
+            expect(response.body.modules[0].id).toBe(singleMod.id);
+            expect(response.body.modules[0].orderIndex).toBe(0);
+        });
     });
+});
