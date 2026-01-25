@@ -95,6 +95,15 @@
   gap: 1rem;
 }
 
+/* Drag-and-Drop States */
+.modules-container[data-dragging="true"] {
+  user-select: none;
+}
+
+.modules-container[data-dragging="true"] * {
+  cursor: grabbing !important;
+}
+
 /* Updating Indicator */
 .module-list-updating {
   display: flex;
