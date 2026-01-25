@@ -8,7 +8,10 @@
       ],
       "env": {},
       "disabled": false,
-      "autoApprove": []
+      "autoApprove": [
+        "sequentialthinking",
+        "sequentialthinking"
+      ]
     },
     "playwright": {
       "command": "uvx",
