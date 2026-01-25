@@ -212,14 +212,14 @@ This implementation plan breaks down the course content management system into i
     - Display loading and empty states
     - _Requirements: 10.2, 8.5_
 
-  - [-] 11.2 Create ModuleItem component
+  - [x] 11.2 Create ModuleItem component
     - Display module header with title and description
     - Show lesson count and total duration
     - Add edit and delete buttons
     - Implement expand/collapse for lessons
     - _Requirements: 10.2, 10.5_
 
-  - [~] 11.3 Create ModuleEditorModal component
+  - [x] 11.3 Create ModuleEditorModal component
     - Form for creating/editing modules
     - Title and description fields
     - Validation and error handling
