@@ -37,10 +37,10 @@ interface ContentItemListProps {
 export const ContentItemList: React.FC<ContentItemListProps> = ({
   lessonId,
   contentItems,
-  onAddContent,
-  onEditContent,
+  onAddContent: _onAddContent,
+  onEditContent: _onEditContent,
   onDeleteContent,
-  onReorderContent,
+  onReorderContent: _onReorderContent,
   enableDragAndDrop = true, // Default to enabled (Requirement 14.2, 10.6)
   isPreviewMode = false,
 }) => {

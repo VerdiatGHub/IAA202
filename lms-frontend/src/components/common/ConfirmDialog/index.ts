@@ -1,2 +1,2 @@
 export { ConfirmDialog } from './ConfirmDialog';
-export default ConfirmDialog;
+export { ConfirmDialog as default } from './ConfirmDialog';

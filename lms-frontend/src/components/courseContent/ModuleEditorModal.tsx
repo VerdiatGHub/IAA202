@@ -5,7 +5,7 @@ import { Button } from '../common/Button';
 import { BookOpen, FileText } from 'lucide-react';
 import { useCourseContent } from '../../contexts/useCourseContent';
 import type { Module } from '../../types';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast'; // TODO: Add toast notifications
 import './ModuleEditorModal.css';
 
 interface ModuleEditorModalProps {
