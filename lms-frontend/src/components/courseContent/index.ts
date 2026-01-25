@@ -1,3 +1,4 @@
+export { CourseContentEditor } from './CourseContentEditor';
 export { ModuleList } from './ModuleList';
 export { ModuleItem } from './ModuleItem';
 export { ModuleEditorModal } from './ModuleEditorModal';
@@ -6,5 +7,6 @@ export { LessonItem } from './LessonItem';
 export { LessonEditorModal } from './LessonEditorModal';
 export { ContentItemList } from './ContentItemList';
 export { ContentItemRow } from './ContentItemRow';
+export { ContentEditorModal } from './ContentEditorModal';
 export { DndProvider } from './DndProvider';
 export { SortableItem } from './SortableItem';

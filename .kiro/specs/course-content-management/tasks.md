@@ -301,7 +301,7 @@ This implementation plan breaks down the course content management system into i
     - _Requirements: 14.2, 10.6_
 
 - [ ] 15. Integrate Course Content Editor into Course Management
-  - [~] 15.1 Add Lessons tab to course management page
+  - [x] 15.1 Add Lessons tab to course management page
     - Update course management page to include "Lessons" tab
     - Create LessonsTab component
     - Integrate CourseContentEditor into LessonsTab
