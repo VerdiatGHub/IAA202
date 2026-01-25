@@ -38,3 +38,13 @@ npm run build
 # Update live files
 sudo cp -r dist/* /var/www/lms/frontend/
 ```
+
+### 3. Troubleshooting
+
+**"fatal: detected dubious ownership in repository"**
+If you see this error when running `git pull`, it means the permissions on the folder don't match your user. Run this command to fix it:
+
+```bash
+git config --global --add safe.directory /home/huynh/IAA202
+```
+Then try `git pull origin main` again.
