@@ -169,6 +169,8 @@
     width: auto;
     background: transparent;
     box-shadow: none;
+    display: flex;
+    align-items: center;
 }
 
 .search-input .input-wrapper {
@@ -177,11 +179,15 @@
     margin: 0;
     padding: 0;
     gap: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .search-input .input-container {
     background: transparent;
     box-shadow: none;
+    height: 38px;
 }
 
 .search-input .input-field {
@@ -189,6 +195,7 @@
     background: var(--bg-secondary);
     box-shadow: none;
     height: 38px;
+    font-size: var(--text-sm);
 }
 
 .role-filter {
@@ -200,6 +207,8 @@
     color: var(--text-primary);
     font-size: var(--text-sm);
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 [data-theme="dark"] .role-filter {
