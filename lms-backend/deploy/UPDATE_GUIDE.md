@@ -13,6 +13,16 @@ When you make changes on your Windows computer (UI, features, etc.), follow this
 cd ~/IAA202 && git pull && cp -r lms-backend/* /var/www/lms/backend/ && cd /var/www/lms/backend && npm install && cp -r ~/IAA202/lms-frontend/* /var/www/lms/frontend/ && cd /var/www/lms/frontend && npm install && npm run build && pm2 restart lms-api
 ```
 
+**On Database Server (192.168.56.102) - Only when you need to run SQL scripts:**
+```bash
+cd ~/IAA202 && git pull
+```
+
+**To run a specific SQL script (like removing courses):**
+```bash
+cd ~/IAA202 && git pull && sudo -u postgres psql -d lms_db -f lms-backend/remove-extra-courses.sql
+```
+
 ---
 
 ## Step-by-Step Update
