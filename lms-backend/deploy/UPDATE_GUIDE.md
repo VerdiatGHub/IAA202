@@ -33,6 +33,10 @@ git pull origin main
 
 # Rebuild
 npm install            # Only if you added new packages
+
+# Configure API URL
+echo "VITE_API_URL=http://$(hostname -I | awk '{print $1}')/api" > .env
+
 npm run build
 
 # Update live files
