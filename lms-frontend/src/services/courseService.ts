@@ -18,6 +18,7 @@ interface CourseWithLessonsData {
     thumbnailUrl?: string;
     instructorId: string;
     isPublished: boolean;
+    isPublic?: boolean;
     category?: string;
     level?: 'beginner' | 'intermediate' | 'advanced';
     duration?: string;
