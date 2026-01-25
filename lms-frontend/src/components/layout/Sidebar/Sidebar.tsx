@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
     Home,
     BookOpen,
@@ -59,7 +59,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     isCollapsed,
     onToggleCollapse,
 }) => {
-    const location = useLocation();
     const filteredNavItems = navItems.filter((item) => item.roles.includes(userRole));
 
     return (
@@ -78,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <NavLink
                                 to={item.href}
                                 className={({ isActive }) =>
-                                    `nav-link ${isActive || location.pathname.startsWith(item.href + '/') ? 'nav-link-active' : ''}`
+                                    `nav-link ${isActive ? 'nav-link-active' : ''}`
                                 }
                                 end={item.href === `/${userRole}`}
                                 title={isCollapsed ? item.label : undefined}
