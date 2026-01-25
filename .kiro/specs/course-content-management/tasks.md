@@ -105,7 +105,7 @@ This implementation plan breaks down the course content management system into i
     - Add content type validation
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1, 14.1_
 
-  - [~] 6.2 Write property test for content item CRUD
+  - [-] 6.2 Write property test for content item CRUD
     - **Property 1: CRUD Operations Preserve Data Integrity**
     - **Property 2: Updates Persist Correctly**
     - **Validates: Requirements 3.1, 3.3, 4.1, 4.2, 5.1, 6.1, 7.1**
