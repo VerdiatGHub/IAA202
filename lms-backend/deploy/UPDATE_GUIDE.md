@@ -61,3 +61,27 @@ If you see a permission error, it means some files are owned by `root` (probably
 sudo chown -R $USER:$USER ~/IAA202
 ```
 Then try `git pull origin main` again.
+
+### 4. Backend Verification (If Login Fails)
+
+If you see "Failed to fetch" or infinite loading, check your backend logs:
+
+1.  **Check Status:**
+    ```bash
+    ssh user@<web_server_ip>
+    pm2 status
+    ```
+    Ensure `lms-api` is "online".
+
+2.  **View Logs:**
+    ```bash
+    pm2 logs lms-api --lines 50
+    ```
+    Look for "CORS error" or "Database connection error".
+
+3.  **Check Backend Config:**
+    ```bash
+    cat /var/www/lms/backend/.env
+    ```
+    Make sure `FRONTEND_URL` matches your actual browser URL (e.g., `http://192.168.56.101`).
+
