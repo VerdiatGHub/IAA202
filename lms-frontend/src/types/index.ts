@@ -63,6 +63,7 @@ export interface Lesson {
   orderIndex: number;
   duration?: number; // in minutes
   isRequired?: boolean;
+  contentItems?: ContentItem[];
   createdAt: string;
   isCompleted?: boolean;
 }
