@@ -29,8 +29,8 @@ systemctl enable postgresql
 # Configure PostgreSQL for remote connections
 echo "[4/5] Configuring PostgreSQL for remote access..."
 
-# Get the web server IP (you'll need to set this)
-read -p "Enter the Web Server VM IP address (e.g., 192.168.1.100): " WEB_SERVER_IP
+# Web Server IP (Hardcoded)
+WEB_SERVER_IP="192.168.56.101"
 
 # Backup original configs
 cp /etc/postgresql/16/main/postgresql.conf /etc/postgresql/16/main/postgresql.conf.backup
@@ -48,7 +48,7 @@ systemctl restart postgresql
 
 # Create database and user
 echo "[5/5] Creating database and user..."
-read -sp "Enter password for lms_user (database user): " DB_PASSWORD
+DB_PASSWORD="admin123"
 echo ""
 
 sudo -u postgres psql << EOF

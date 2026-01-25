@@ -32,8 +32,10 @@ mkdir -p /var/www/lms
 chown -R $USER:$USER /var/www/lms
 
 # Get database server IP
-read -p "Enter the Database Server VM IP address: " DB_SERVER_IP
-read -p "Enter the database password: " DB_PASSWORD
+DB_SERVER_IP="192.168.56.102"
+DB_PASSWORD="admin123"
+# read -p "Enter the Database Server VM IP address: " DB_SERVER_IP
+# read -p "Enter the database password: " DB_PASSWORD
 
 # Create backend .env file
 echo "[6/7] Creating backend configuration..."
