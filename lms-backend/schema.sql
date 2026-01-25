@@ -268,199 +268,199 @@ VALUES (
 -- Instructors (Password: password123)
 INSERT INTO users (id, email, password_hash, full_name, role, avatar_url)
 VALUES 
-    ('i0000000-0000-0000-0000-000000000001', 'instructor@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'John Smith', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=john'),
-    ('i0000000-0000-0000-0000-000000000002', 'sarah.wilson@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Sarah Wilson', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=sarah'),
-    ('i0000000-0000-0000-0000-000000000003', 'michael.chen@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Michael Chen', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=michael');
+    ('10000000-0000-0000-0000-000000000001', 'instructor@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'John Smith', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=john'),
+    ('10000000-0000-0000-0000-000000000002', 'sarah.wilson@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Sarah Wilson', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=sarah'),
+    ('10000000-0000-0000-0000-000000000003', 'michael.chen@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Michael Chen', 'instructor', 'https://api.dicebear.com/7.x/avataaars/svg?seed=michael');
 
 -- Students (Password: password123)
 INSERT INTO users (id, email, password_hash, full_name, role, avatar_url)
 VALUES 
-    ('s0000000-0000-0000-0000-000000000001', 'student@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Alice Johnson', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=alice'),
-    ('s0000000-0000-0000-0000-000000000002', 'bob.brown@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Bob Brown', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=bob'),
-    ('s0000000-0000-0000-0000-000000000003', 'carol.davis@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Carol Davis', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=carol'),
-    ('s0000000-0000-0000-0000-000000000004', 'david.miller@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'David Miller', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=david'),
-    ('s0000000-0000-0000-0000-000000000005', 'emma.taylor@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Emma Taylor', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=emma'),
-    ('s0000000-0000-0000-0000-000000000006', 'frank.garcia@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Frank Garcia', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=frank');
+    ('50000000-0000-0000-0000-000000000001', 'student@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Alice Johnson', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=alice'),
+    ('50000000-0000-0000-0000-000000000002', 'bob.brown@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Bob Brown', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=bob'),
+    ('50000000-0000-0000-0000-000000000003', 'carol.davis@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Carol Davis', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=carol'),
+    ('50000000-0000-0000-0000-000000000004', 'david.miller@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'David Miller', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=david'),
+    ('50000000-0000-0000-0000-000000000005', 'emma.taylor@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Emma Taylor', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=emma'),
+    ('50000000-0000-0000-0000-000000000006', 'frank.garcia@lms.local', '$2a$10$rQEY1f8HVvqKjVJHKFxKxuHGwEGZTRqzjJGDLMBPh6Y5Xz8wXg5Zu', 'Frank Garcia', 'student', 'https://api.dicebear.com/7.x/avataaars/svg?seed=frank');
 
 -- ================== COURSES ==================
 
 INSERT INTO courses (id, title, description, thumbnail_url, instructor_id, is_published, category, level, duration)
 VALUES 
-    ('c0000000-0000-0000-0000-000000000001', 'Introduction to Web Development', 'Learn the fundamentals of HTML, CSS, and JavaScript. Build responsive websites from scratch and understand the core concepts of web development.', 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800', 'i0000000-0000-0000-0000-000000000001', true, 'Programming', 'beginner', '8 hours'),
-    ('c0000000-0000-0000-0000-000000000002', 'Advanced JavaScript Patterns', 'Master advanced JavaScript concepts including closures, prototypes, async/await, and design patterns used in modern web applications.', 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=800', 'i0000000-0000-0000-0000-000000000001', true, 'Programming', 'advanced', '12 hours'),
-    ('c0000000-0000-0000-0000-000000000003', 'Data Science with Python', 'Comprehensive course covering Python for data analysis, visualization with matplotlib and seaborn, machine learning basics with scikit-learn.', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800', 'i0000000-0000-0000-0000-000000000002', true, 'Data Science', 'intermediate', '15 hours'),
-    ('c0000000-0000-0000-0000-000000000004', 'UI/UX Design Fundamentals', 'Learn user interface and user experience design principles. Create wireframes, prototypes, and understand user research methodologies.', 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800', 'i0000000-0000-0000-0000-000000000002', true, 'Design', 'beginner', '10 hours'),
-    ('c0000000-0000-0000-0000-000000000005', 'Database Management Systems', 'Deep dive into relational databases, SQL, PostgreSQL administration, query optimization, and database design best practices.', 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800', 'i0000000-0000-0000-0000-000000000003', true, 'Database', 'intermediate', '14 hours'),
-    ('c0000000-0000-0000-0000-000000000006', 'Cloud Computing with AWS', 'Learn Amazon Web Services from basics to advanced. Deploy applications, manage infrastructure, and understand cloud architecture.', 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800', 'i0000000-0000-0000-0000-000000000003', false, 'Cloud', 'advanced', '20 hours');
+    ('c0000000-0000-0000-0000-000000000001', 'Introduction to Web Development', 'Learn the fundamentals of HTML, CSS, and JavaScript. Build responsive websites from scratch and understand the core concepts of web development.', 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800', '10000000-0000-0000-0000-000000000001', true, 'Programming', 'beginner', '8 hours'),
+    ('c0000000-0000-0000-0000-000000000002', 'Advanced JavaScript Patterns', 'Master advanced JavaScript concepts including closures, prototypes, async/await, and design patterns used in modern web applications.', 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=800', '10000000-0000-0000-0000-000000000001', true, 'Programming', 'advanced', '12 hours'),
+    ('c0000000-0000-0000-0000-000000000003', 'Data Science with Python', 'Comprehensive course covering Python for data analysis, visualization with matplotlib and seaborn, machine learning basics with scikit-learn.', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800', '10000000-0000-0000-0000-000000000002', true, 'Data Science', 'intermediate', '15 hours'),
+    ('c0000000-0000-0000-0000-000000000004', 'UI/UX Design Fundamentals', 'Learn user interface and user experience design principles. Create wireframes, prototypes, and understand user research methodologies.', 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800', '10000000-0000-0000-0000-000000000002', true, 'Design', 'beginner', '10 hours'),
+    ('c0000000-0000-0000-0000-000000000005', 'Database Management Systems', 'Deep dive into relational databases, SQL, PostgreSQL administration, query optimization, and database design best practices.', 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800', '10000000-0000-0000-0000-000000000003', true, 'Database', 'intermediate', '14 hours'),
+    ('c0000000-0000-0000-0000-000000000006', 'Cloud Computing with AWS', 'Learn Amazon Web Services from basics to advanced. Deploy applications, manage infrastructure, and understand cloud architecture.', 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800', '10000000-0000-0000-0000-000000000003', false, 'Cloud', 'advanced', '20 hours');
 
 -- ================== LESSONS ==================
 
 -- Web Development Course Lessons
 INSERT INTO lessons (id, course_id, title, content, video_url, order_index, duration)
 VALUES 
-    ('l0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'Introduction to HTML', 'Learn the basics of HTML including tags, elements, and document structure. Understand semantic HTML and accessibility best practices.', 'https://www.youtube.com/watch?v=example1', 1, 45),
-    ('l0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 'CSS Fundamentals', 'Master CSS selectors, properties, and the box model. Learn about flexbox, grid, and responsive design techniques.', 'https://www.youtube.com/watch?v=example2', 2, 60),
-    ('l0000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000001', 'JavaScript Basics', 'Introduction to JavaScript programming: variables, data types, functions, and DOM manipulation.', 'https://www.youtube.com/watch?v=example3', 3, 75),
-    ('l0000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000001', 'Building Your First Website', 'Hands-on project: combine HTML, CSS, and JavaScript to build a complete responsive website.', 'https://www.youtube.com/watch?v=example4', 4, 90);
+    ('20000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'Introduction to HTML', 'Learn the basics of HTML including tags, elements, and document structure. Understand semantic HTML and accessibility best practices.', 'https://www.youtube.com/watch?v=example1', 1, 45),
+    ('20000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 'CSS Fundamentals', 'Master CSS selectors, properties, and the box model. Learn about flexbox, grid, and responsive design techniques.', 'https://www.youtube.com/watch?v=example2', 2, 60),
+    ('20000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000001', 'JavaScript Basics', 'Introduction to JavaScript programming: variables, data types, functions, and DOM manipulation.', 'https://www.youtube.com/watch?v=example3', 3, 75),
+    ('20000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000001', 'Building Your First Website', 'Hands-on project: combine HTML, CSS, and JavaScript to build a complete responsive website.', 'https://www.youtube.com/watch?v=example4', 4, 90);
 
 -- Advanced JavaScript Course Lessons
 INSERT INTO lessons (id, course_id, title, content, video_url, order_index, duration)
 VALUES 
-    ('l0000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000002', 'Closures and Scope', 'Deep understanding of JavaScript closures, lexical scope, and memory management.', 'https://www.youtube.com/watch?v=example5', 1, 50),
-    ('l0000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000002', 'Prototypes and Inheritance', 'Master prototypal inheritance, Object.create, and ES6 classes.', 'https://www.youtube.com/watch?v=example6', 2, 55),
-    ('l0000000-0000-0000-0000-000000000007', 'c0000000-0000-0000-0000-000000000002', 'Async Programming', 'Promises, async/await, event loop, and handling asynchronous operations effectively.', 'https://www.youtube.com/watch?v=example7', 3, 70);
+    ('20000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000002', 'Closures and Scope', 'Deep understanding of JavaScript closures, lexical scope, and memory management.', 'https://www.youtube.com/watch?v=example5', 1, 50),
+    ('20000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000002', 'Prototypes and Inheritance', 'Master prototypal inheritance, Object.create, and ES6 classes.', 'https://www.youtube.com/watch?v=example6', 2, 55),
+    ('20000000-0000-0000-0000-000000000007', 'c0000000-0000-0000-0000-000000000002', 'Async Programming', 'Promises, async/await, event loop, and handling asynchronous operations effectively.', 'https://www.youtube.com/watch?v=example7', 3, 70);
 
 -- Data Science Course Lessons
 INSERT INTO lessons (id, course_id, title, content, video_url, order_index, duration)
 VALUES 
-    ('l0000000-0000-0000-0000-000000000008', 'c0000000-0000-0000-0000-000000000003', 'Python for Data Analysis', 'Introduction to NumPy, Pandas, and data manipulation techniques.', 'https://www.youtube.com/watch?v=example8', 1, 60),
-    ('l0000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000003', 'Data Visualization', 'Creating compelling visualizations with Matplotlib and Seaborn.', 'https://www.youtube.com/watch?v=example9', 2, 55),
-    ('l0000000-0000-0000-0000-000000000010', 'c0000000-0000-0000-0000-000000000003', 'Machine Learning Basics', 'Introduction to supervised and unsupervised learning with scikit-learn.', 'https://www.youtube.com/watch?v=example10', 3, 80);
+    ('20000000-0000-0000-0000-000000000008', 'c0000000-0000-0000-0000-000000000003', 'Python for Data Analysis', 'Introduction to NumPy, Pandas, and data manipulation techniques.', 'https://www.youtube.com/watch?v=example8', 1, 60),
+    ('20000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000003', 'Data Visualization', 'Creating compelling visualizations with Matplotlib and Seaborn.', 'https://www.youtube.com/watch?v=example9', 2, 55),
+    ('20000000-0000-0000-0000-000000000010', 'c0000000-0000-0000-0000-000000000003', 'Machine Learning Basics', 'Introduction to supervised and unsupervised learning with scikit-learn.', 'https://www.youtube.com/watch?v=example10', 3, 80);
 
 -- UI/UX Design Course Lessons
 INSERT INTO lessons (id, course_id, title, content, video_url, order_index, duration)
 VALUES 
-    ('l0000000-0000-0000-0000-000000000011', 'c0000000-0000-0000-0000-000000000004', 'Design Principles', 'Learn fundamental design principles: contrast, alignment, repetition, and proximity.', 'https://www.youtube.com/watch?v=example11', 1, 40),
-    ('l0000000-0000-0000-0000-000000000012', 'c0000000-0000-0000-0000-000000000004', 'User Research Methods', 'Conducting user interviews, surveys, and usability testing.', 'https://www.youtube.com/watch?v=example12', 2, 50),
-    ('l0000000-0000-0000-0000-000000000013', 'c0000000-0000-0000-0000-000000000004', 'Wireframing and Prototyping', 'Create wireframes and interactive prototypes using Figma.', 'https://www.youtube.com/watch?v=example13', 3, 65);
+    ('20000000-0000-0000-0000-000000000011', 'c0000000-0000-0000-0000-000000000004', 'Design Principles', 'Learn fundamental design principles: contrast, alignment, repetition, and proximity.', 'https://www.youtube.com/watch?v=example11', 1, 40),
+    ('20000000-0000-0000-0000-000000000012', 'c0000000-0000-0000-0000-000000000004', 'User Research Methods', 'Conducting user interviews, surveys, and usability testing.', 'https://www.youtube.com/watch?v=example12', 2, 50),
+    ('20000000-0000-0000-0000-000000000013', 'c0000000-0000-0000-0000-000000000004', 'Wireframing and Prototyping', 'Create wireframes and interactive prototypes using Figma.', 'https://www.youtube.com/watch?v=example13', 3, 65);
 
 -- Database Course Lessons
 INSERT INTO lessons (id, course_id, title, content, video_url, order_index, duration)
 VALUES 
-    ('l0000000-0000-0000-0000-000000000014', 'c0000000-0000-0000-0000-000000000005', 'Relational Database Concepts', 'Understanding tables, relationships, normalization, and ER diagrams.', 'https://www.youtube.com/watch?v=example14', 1, 55),
-    ('l0000000-0000-0000-0000-000000000015', 'c0000000-0000-0000-0000-000000000005', 'SQL Fundamentals', 'Master SELECT, INSERT, UPDATE, DELETE, and JOIN operations.', 'https://www.youtube.com/watch?v=example15', 2, 70),
-    ('l0000000-0000-0000-0000-000000000016', 'c0000000-0000-0000-0000-000000000005', 'Query Optimization', 'Indexing strategies, query plans, and performance tuning techniques.', 'https://www.youtube.com/watch?v=example16', 3, 60);
+    ('20000000-0000-0000-0000-000000000014', 'c0000000-0000-0000-0000-000000000005', 'Relational Database Concepts', 'Understanding tables, relationships, normalization, and ER diagrams.', 'https://www.youtube.com/watch?v=example14', 1, 55),
+    ('20000000-0000-0000-0000-000000000015', 'c0000000-0000-0000-0000-000000000005', 'SQL Fundamentals', 'Master SELECT, INSERT, UPDATE, DELETE, and JOIN operations.', 'https://www.youtube.com/watch?v=example15', 2, 70),
+    ('20000000-0000-0000-0000-000000000016', 'c0000000-0000-0000-0000-000000000005', 'Query Optimization', 'Indexing strategies, query plans, and performance tuning techniques.', 'https://www.youtube.com/watch?v=example16', 3, 60);
 
 -- ================== ENROLLMENTS ==================
 
 INSERT INTO enrollments (id, student_id, course_id, progress, enrolled_at, completed_at)
 VALUES 
-    ('e0000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 75, NOW() - INTERVAL '30 days', NULL),
-    ('e0000000-0000-0000-0000-000000000002', 's0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 100, NOW() - INTERVAL '60 days', NOW() - INTERVAL '5 days'),
-    ('e0000000-0000-0000-0000-000000000003', 's0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 50, NOW() - INTERVAL '20 days', NULL),
-    ('e0000000-0000-0000-0000-000000000004', 's0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000002', 25, NOW() - INTERVAL '10 days', NULL),
-    ('e0000000-0000-0000-0000-000000000005', 's0000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000003', 60, NOW() - INTERVAL '45 days', NULL),
-    ('e0000000-0000-0000-0000-000000000006', 's0000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000004', 100, NOW() - INTERVAL '90 days', NOW() - INTERVAL '30 days'),
-    ('e0000000-0000-0000-0000-000000000007', 's0000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000001', 100, NOW() - INTERVAL '120 days', NOW() - INTERVAL '60 days'),
-    ('e0000000-0000-0000-0000-000000000008', 's0000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000005', 40, NOW() - INTERVAL '15 days', NULL),
-    ('e0000000-0000-0000-0000-000000000009', 's0000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000002', 80, NOW() - INTERVAL '25 days', NULL),
-    ('e0000000-0000-0000-0000-000000000010', 's0000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000004', 30, NOW() - INTERVAL '8 days', NULL),
-    ('e0000000-0000-0000-0000-000000000011', 's0000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000003', 15, NOW() - INTERVAL '5 days', NULL),
-    ('e0000000-0000-0000-0000-000000000012', 's0000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000005', 0, NOW() - INTERVAL '1 day', NULL);
+    ('e0000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 75, NOW() - INTERVAL '30 days', NULL),
+    ('e0000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 100, NOW() - INTERVAL '60 days', NOW() - INTERVAL '5 days'),
+    ('e0000000-0000-0000-0000-000000000003', '50000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 50, NOW() - INTERVAL '20 days', NULL),
+    ('e0000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000002', 25, NOW() - INTERVAL '10 days', NULL),
+    ('e0000000-0000-0000-0000-000000000005', '50000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000003', 60, NOW() - INTERVAL '45 days', NULL),
+    ('e0000000-0000-0000-0000-000000000006', '50000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000004', 100, NOW() - INTERVAL '90 days', NOW() - INTERVAL '30 days'),
+    ('e0000000-0000-0000-0000-000000000007', '50000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000001', 100, NOW() - INTERVAL '120 days', NOW() - INTERVAL '60 days'),
+    ('e0000000-0000-0000-0000-000000000008', '50000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000005', 40, NOW() - INTERVAL '15 days', NULL),
+    ('e0000000-0000-0000-0000-000000000009', '50000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000002', 80, NOW() - INTERVAL '25 days', NULL),
+    ('e0000000-0000-0000-0000-000000000010', '50000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000004', 30, NOW() - INTERVAL '8 days', NULL),
+    ('e0000000-0000-0000-0000-000000000011', '50000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000003', 15, NOW() - INTERVAL '5 days', NULL),
+    ('e0000000-0000-0000-0000-000000000012', '50000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000005', 0, NOW() - INTERVAL '1 day', NULL);
 
 -- ================== LESSON PROGRESS ==================
 
 INSERT INTO lesson_progress (id, student_id, lesson_id, is_completed, completed_at)
 VALUES 
-    ('lp000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000001', 'l0000000-0000-0000-0000-000000000001', true, NOW() - INTERVAL '25 days'),
-    ('lp000000-0000-0000-0000-000000000002', 's0000000-0000-0000-0000-000000000001', 'l0000000-0000-0000-0000-000000000002', true, NOW() - INTERVAL '20 days'),
-    ('lp000000-0000-0000-0000-000000000003', 's0000000-0000-0000-0000-000000000001', 'l0000000-0000-0000-0000-000000000003', true, NOW() - INTERVAL '15 days'),
-    ('lp000000-0000-0000-0000-000000000004', 's0000000-0000-0000-0000-000000000002', 'l0000000-0000-0000-0000-000000000001', true, NOW() - INTERVAL '18 days'),
-    ('lp000000-0000-0000-0000-000000000005', 's0000000-0000-0000-0000-000000000002', 'l0000000-0000-0000-0000-000000000002', true, NOW() - INTERVAL '12 days'),
-    ('lp000000-0000-0000-0000-000000000006', 's0000000-0000-0000-0000-000000000004', 'l0000000-0000-0000-0000-000000000001', true, NOW() - INTERVAL '100 days'),
-    ('lp000000-0000-0000-0000-000000000007', 's0000000-0000-0000-0000-000000000004', 'l0000000-0000-0000-0000-000000000002', true, NOW() - INTERVAL '90 days'),
-    ('lp000000-0000-0000-0000-000000000008', 's0000000-0000-0000-0000-000000000004', 'l0000000-0000-0000-0000-000000000003', true, NOW() - INTERVAL '80 days'),
-    ('lp000000-0000-0000-0000-000000000009', 's0000000-0000-0000-0000-000000000004', 'l0000000-0000-0000-0000-000000000004', true, NOW() - INTERVAL '70 days');
+    ('2f000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', true, NOW() - INTERVAL '25 days'),
+    ('2f000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000002', true, NOW() - INTERVAL '20 days'),
+    ('2f000000-0000-0000-0000-000000000003', '50000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000003', true, NOW() - INTERVAL '15 days'),
+    ('2f000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000001', true, NOW() - INTERVAL '18 days'),
+    ('2f000000-0000-0000-0000-000000000005', '50000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000002', true, NOW() - INTERVAL '12 days'),
+    ('2f000000-0000-0000-0000-000000000006', '50000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000001', true, NOW() - INTERVAL '100 days'),
+    ('2f000000-0000-0000-0000-000000000007', '50000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000002', true, NOW() - INTERVAL '90 days'),
+    ('2f000000-0000-0000-0000-000000000008', '50000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000003', true, NOW() - INTERVAL '80 days'),
+    ('2f000000-0000-0000-0000-000000000009', '50000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000004', true, NOW() - INTERVAL '70 days');
 
 -- ================== ASSIGNMENTS ==================
 
 INSERT INTO assignments (id, course_id, title, description, due_date, max_score)
 VALUES 
-    ('as000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'Build a Personal Portfolio', 'Create a responsive personal portfolio website using HTML, CSS, and JavaScript. Include at least 3 pages.', NOW() + INTERVAL '14 days', 100),
-    ('as000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 'CSS Grid Layout Challenge', 'Recreate a complex magazine-style layout using CSS Grid. Must be responsive.', NOW() + INTERVAL '7 days', 50),
-    ('as000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000002', 'Async JavaScript Project', 'Build an application that fetches data from an API and displays it dynamically.', NOW() + INTERVAL '21 days', 100),
-    ('as000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000003', 'Data Analysis Report', 'Analyze the provided dataset and create visualizations with Python. Submit a Jupyter notebook.', NOW() + INTERVAL '10 days', 100),
-    ('as000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000004', 'UI/UX Case Study', 'Complete a UI/UX case study for a mobile app redesign. Include wireframes and prototype.', NOW() + INTERVAL '28 days', 100),
-    ('as000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000005', 'Database Design Project', 'Design a normalized database schema for an e-commerce platform. Include ER diagrams.', NOW() + INTERVAL '14 days', 100);
+    ('a5000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'Build a Personal Portfolio', 'Create a responsive personal portfolio website using HTML, CSS, and JavaScript. Include at least 3 pages.', NOW() + INTERVAL '14 days', 100),
+    ('a5000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 'CSS Grid Layout Challenge', 'Recreate a complex magazine-style layout using CSS Grid. Must be responsive.', NOW() + INTERVAL '7 days', 50),
+    ('a5000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000002', 'Async JavaScript Project', 'Build an application that fetches data from an API and displays it dynamically.', NOW() + INTERVAL '21 days', 100),
+    ('a5000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000003', 'Data Analysis Report', 'Analyze the provided dataset and create visualizations with Python. Submit a Jupyter notebook.', NOW() + INTERVAL '10 days', 100),
+    ('a5000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000004', 'UI/UX Case Study', 'Complete a UI/UX case study for a mobile app redesign. Include wireframes and prototype.', NOW() + INTERVAL '28 days', 100),
+    ('a5000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000005', 'Database Design Project', 'Design a normalized database schema for an e-commerce platform. Include ER diagrams.', NOW() + INTERVAL '14 days', 100);
 
 -- ================== SUBMISSIONS ==================
 
 INSERT INTO submissions (id, assignment_id, student_id, file_url, content, score, feedback, submitted_at, graded_at)
 VALUES 
-    ('su000000-0000-0000-0000-000000000001', 'as000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000001', 'https://github.com/alice/portfolio', 'My portfolio website featuring my web development projects.', 85, 'Great work! Nice responsive design. Could improve accessibility.', NOW() - INTERVAL '2 days', NOW() - INTERVAL '1 day'),
-    ('su000000-0000-0000-0000-000000000002', 'as000000-0000-0000-0000-000000000002', 's0000000-0000-0000-0000-000000000001', 'https://github.com/alice/css-grid', 'CSS Grid layout implementation.', NULL, NULL, NOW() - INTERVAL '1 day', NULL),
-    ('su000000-0000-0000-0000-000000000003', 'as000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000002', 'https://github.com/bob/portfolio', 'Personal portfolio with dark theme.', 92, 'Excellent! Very creative design and clean code.', NOW() - INTERVAL '5 days', NOW() - INTERVAL '3 days'),
-    ('su000000-0000-0000-0000-000000000004', 'as000000-0000-0000-0000-000000000004', 's0000000-0000-0000-0000-000000000003', 'https://colab.research.google.com/carol/analysis', 'Complete data analysis with visualizations.', 78, 'Good analysis. Visualizations need improvement.', NOW() - INTERVAL '3 days', NOW() - INTERVAL '1 day'),
-    ('su000000-0000-0000-0000-000000000005', 'as000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000004', 'https://github.com/david/portfolio', 'Interactive portfolio with animations.', 100, 'Outstanding work! Perfect implementation.', NOW() - INTERVAL '60 days', NOW() - INTERVAL '58 days');
+    ('5b000000-0000-0000-0000-000000000001', 'a5000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', 'https://github.com/alice/portfolio', 'My portfolio website featuring my web development projects.', 85, 'Great work! Nice responsive design. Could improve accessibility.', NOW() - INTERVAL '2 days', NOW() - INTERVAL '1 day'),
+    ('5b000000-0000-0000-0000-000000000002', 'a5000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000001', 'https://github.com/alice/css-grid', 'CSS Grid layout implementation.', NULL, NULL, NOW() - INTERVAL '1 day', NULL),
+    ('5b000000-0000-0000-0000-000000000003', 'a5000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000002', 'https://github.com/bob/portfolio', 'Personal portfolio with dark theme.', 92, 'Excellent! Very creative design and clean code.', NOW() - INTERVAL '5 days', NOW() - INTERVAL '3 days'),
+    ('5b000000-0000-0000-0000-000000000004', 'a5000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000003', 'https://colab.research.google.com/carol/analysis', 'Complete data analysis with visualizations.', 78, 'Good analysis. Visualizations need improvement.', NOW() - INTERVAL '3 days', NOW() - INTERVAL '1 day'),
+    ('5b000000-0000-0000-0000-000000000005', 'a5000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000004', 'https://github.com/david/portfolio', 'Interactive portfolio with animations.', 100, 'Outstanding work! Perfect implementation.', NOW() - INTERVAL '60 days', NOW() - INTERVAL '58 days');
 
 -- ================== QUIZZES ==================
 
 INSERT INTO quizzes (id, course_id, title, time_limit)
 VALUES 
-    ('q0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'HTML & CSS Fundamentals Quiz', 20),
-    ('q0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 'JavaScript Basics Quiz', 30),
-    ('q0000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000002', 'Advanced JavaScript Concepts', 45),
-    ('q0000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000003', 'Python Data Analysis Quiz', 30),
-    ('q0000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000005', 'SQL Fundamentals Test', 40);
+    ('0a000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'HTML & CSS Fundamentals Quiz', 20),
+    ('0a000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 'JavaScript Basics Quiz', 30),
+    ('0a000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000002', 'Advanced JavaScript Concepts', 45),
+    ('0a000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000003', 'Python Data Analysis Quiz', 30),
+    ('0a000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000005', 'SQL Fundamentals Test', 40);
 
 -- ================== QUESTIONS ==================
 
 -- HTML & CSS Quiz Questions
 INSERT INTO questions (id, quiz_id, question_text, question_type, options, correct_answer, points)
 VALUES 
-    ('qn000000-0000-0000-0000-000000000001', 'q0000000-0000-0000-0000-000000000001', 'What does HTML stand for?', 'multiple_choice', '["Hyper Text Markup Language", "High Tech Modern Language", "Hyper Transfer Markup Language", "Home Tool Markup Language"]', 'Hyper Text Markup Language', 1),
-    ('qn000000-0000-0000-0000-000000000002', 'q0000000-0000-0000-0000-000000000001', 'Which CSS property is used to change text color?', 'multiple_choice', '["font-color", "text-color", "color", "foreground-color"]', 'color', 1),
-    ('qn000000-0000-0000-0000-000000000003', 'q0000000-0000-0000-0000-000000000001', 'The <header> tag is a semantic HTML5 element.', 'true_false', '["True", "False"]', 'True', 1),
-    ('qn000000-0000-0000-0000-000000000004', 'q0000000-0000-0000-0000-000000000001', 'What is the correct CSS syntax for making all <p> elements bold?', 'multiple_choice', '["p {font-weight: bold;}", "<p style=font-weight:bold>", "p {text-weight: bold;}", "p.bold {weight: bold;}"]', 'p {font-weight: bold;}', 1),
-    ('qn000000-0000-0000-0000-000000000005', 'q0000000-0000-0000-0000-000000000001', 'Flexbox is a one-dimensional layout method.', 'true_false', '["True", "False"]', 'True', 1);
+    ('0b000000-0000-0000-0000-000000000001', '0a000000-0000-0000-0000-000000000001', 'What does HTML stand for?', 'multiple_choice', '["Hyper Text Markup Language", "High Tech Modern Language", "Hyper Transfer Markup Language", "Home Tool Markup Language"]', 'Hyper Text Markup Language', 1),
+    ('0b000000-0000-0000-0000-000000000002', '0a000000-0000-0000-0000-000000000001', 'Which CSS property is used to change text color?', 'multiple_choice', '["font-color", "text-color", "color", "foreground-color"]', 'color', 1),
+    ('0b000000-0000-0000-0000-000000000003', '0a000000-0000-0000-0000-000000000001', 'The <header> tag is a semantic HTML5 element.', 'true_false', '["True", "False"]', 'True', 1),
+    ('0b000000-0000-0000-0000-000000000004', '0a000000-0000-0000-0000-000000000001', 'What is the correct CSS syntax for making all <p> elements bold?', 'multiple_choice', '["p {font-weight: bold;}", "<p style=font-weight:bold>", "p {text-weight: bold;}", "p.bold {weight: bold;}"]', 'p {font-weight: bold;}', 1),
+    ('0b000000-0000-0000-0000-000000000005', '0a000000-0000-0000-0000-000000000001', 'Flexbox is a one-dimensional layout method.', 'true_false', '["True", "False"]', 'True', 1);
 
 -- JavaScript Basics Quiz Questions
 INSERT INTO questions (id, quiz_id, question_text, question_type, options, correct_answer, points)
 VALUES 
-    ('qn000000-0000-0000-0000-000000000006', 'q0000000-0000-0000-0000-000000000002', 'Which keyword is used to declare a variable in JavaScript?', 'multiple_choice', '["var", "let", "const", "All of the above"]', 'All of the above', 1),
-    ('qn000000-0000-0000-0000-000000000007', 'q0000000-0000-0000-0000-000000000002', 'JavaScript is a statically typed language.', 'true_false', '["True", "False"]', 'False', 1),
-    ('qn000000-0000-0000-0000-000000000008', 'q0000000-0000-0000-0000-000000000002', 'What is the output of typeof null?', 'multiple_choice', '["null", "undefined", "object", "boolean"]', 'object', 2),
-    ('qn000000-0000-0000-0000-000000000009', 'q0000000-0000-0000-0000-000000000002', 'Which method adds an element to the end of an array?', 'multiple_choice', '["push()", "pop()", "shift()", "unshift()"]', 'push()', 1),
-    ('qn000000-0000-0000-0000-000000000010', 'q0000000-0000-0000-0000-000000000002', 'Arrow functions can be used as constructors.', 'true_false', '["True", "False"]', 'False', 2);
+    ('0b000000-0000-0000-0000-000000000006', '0a000000-0000-0000-0000-000000000002', 'Which keyword is used to declare a variable in JavaScript?', 'multiple_choice', '["var", "let", "const", "All of the above"]', 'All of the above', 1),
+    ('0b000000-0000-0000-0000-000000000007', '0a000000-0000-0000-0000-000000000002', 'JavaScript is a statically typed language.', 'true_false', '["True", "False"]', 'False', 1),
+    ('0b000000-0000-0000-0000-000000000008', '0a000000-0000-0000-0000-000000000002', 'What is the output of typeof null?', 'multiple_choice', '["null", "undefined", "object", "boolean"]', 'object', 2),
+    ('0b000000-0000-0000-0000-000000000009', '0a000000-0000-0000-0000-000000000002', 'Which method adds an element to the end of an array?', 'multiple_choice', '["push()", "pop()", "shift()", "unshift()"]', 'push()', 1),
+    ('0b000000-0000-0000-0000-000000000010', '0a000000-0000-0000-0000-000000000002', 'Arrow functions can be used as constructors.', 'true_false', '["True", "False"]', 'False', 2);
 
 -- Advanced JavaScript Quiz Questions
 INSERT INTO questions (id, quiz_id, question_text, question_type, options, correct_answer, points)
 VALUES 
-    ('qn000000-0000-0000-0000-000000000011', 'q0000000-0000-0000-0000-000000000003', 'What is a closure in JavaScript?', 'short_answer', NULL, 'A function that has access to variables from its outer scope even after the outer function has returned', 3),
-    ('qn000000-0000-0000-0000-000000000012', 'q0000000-0000-0000-0000-000000000003', 'Which of these is NOT a phase of the event loop?', 'multiple_choice', '["Timers", "I/O Callbacks", "Render", "Idle"]', 'Render', 2),
-    ('qn000000-0000-0000-0000-000000000013', 'q0000000-0000-0000-0000-000000000003', 'Promise.all() returns a rejected promise if any promise in the array rejects.', 'true_false', '["True", "False"]', 'True', 2),
-    ('qn000000-0000-0000-0000-000000000014', 'q0000000-0000-0000-0000-000000000003', 'What does the spread operator do?', 'multiple_choice', '["Expands an iterable into individual elements", "Creates a deep copy of an object", "Merges two arrays destructively", "None of the above"]', 'Expands an iterable into individual elements', 2);
+    ('0b000000-0000-0000-0000-000000000011', '0a000000-0000-0000-0000-000000000003', 'What is a closure in JavaScript?', 'short_answer', NULL, 'A function that has access to variables from its outer scope even after the outer function has returned', 3),
+    ('0b000000-0000-0000-0000-000000000012', '0a000000-0000-0000-0000-000000000003', 'Which of these is NOT a phase of the event loop?', 'multiple_choice', '["Timers", "I/O Callbacks", "Render", "Idle"]', 'Render', 2),
+    ('0b000000-0000-0000-0000-000000000013', '0a000000-0000-0000-0000-000000000003', 'Promise.all() returns a rejected promise if any promise in the array rejects.', 'true_false', '["True", "False"]', 'True', 2),
+    ('0b000000-0000-0000-0000-000000000014', '0a000000-0000-0000-0000-000000000003', 'What does the spread operator do?', 'multiple_choice', '["Expands an iterable into individual elements", "Creates a deep copy of an object", "Merges two arrays destructively", "None of the above"]', 'Expands an iterable into individual elements', 2);
 
 -- Python Quiz Questions
 INSERT INTO questions (id, quiz_id, question_text, question_type, options, correct_answer, points)
 VALUES 
-    ('qn000000-0000-0000-0000-000000000015', 'q0000000-0000-0000-0000-000000000004', 'Which library is primarily used for data manipulation in Python?', 'multiple_choice', '["NumPy", "Pandas", "Matplotlib", "SciPy"]', 'Pandas', 1),
-    ('qn000000-0000-0000-0000-000000000016', 'q0000000-0000-0000-0000-000000000004', 'What is a DataFrame in Pandas?', 'short_answer', NULL, 'A two-dimensional labeled data structure with columns of potentially different types', 2),
-    ('qn000000-0000-0000-0000-000000000017', 'q0000000-0000-0000-0000-000000000004', 'NumPy arrays are mutable.', 'true_false', '["True", "False"]', 'True', 1),
-    ('qn000000-0000-0000-0000-000000000018', 'q0000000-0000-0000-0000-000000000004', 'Which method is used to read a CSV file in Pandas?', 'multiple_choice', '["read_csv()", "load_csv()", "import_csv()", "open_csv()"]', 'read_csv()', 1);
+    ('0b000000-0000-0000-0000-000000000015', '0a000000-0000-0000-0000-000000000004', 'Which library is primarily used for data manipulation in Python?', 'multiple_choice', '["NumPy", "Pandas", "Matplotlib", "SciPy"]', 'Pandas', 1),
+    ('0b000000-0000-0000-0000-000000000016', '0a000000-0000-0000-0000-000000000004', 'What is a DataFrame in Pandas?', 'short_answer', NULL, 'A two-dimensional labeled data structure with columns of potentially different types', 2),
+    ('0b000000-0000-0000-0000-000000000017', '0a000000-0000-0000-0000-000000000004', 'NumPy arrays are mutable.', 'true_false', '["True", "False"]', 'True', 1),
+    ('0b000000-0000-0000-0000-000000000018', '0a000000-0000-0000-0000-000000000004', 'Which method is used to read a CSV file in Pandas?', 'multiple_choice', '["read_csv()", "load_csv()", "import_csv()", "open_csv()"]', 'read_csv()', 1);
 
 -- SQL Quiz Questions
 INSERT INTO questions (id, quiz_id, question_text, question_type, options, correct_answer, points)
 VALUES 
-    ('qn000000-0000-0000-0000-000000000019', 'q0000000-0000-0000-0000-000000000005', 'Which SQL clause is used to filter records?', 'multiple_choice', '["WHERE", "FILTER", "HAVING", "SELECT"]', 'WHERE', 1),
-    ('qn000000-0000-0000-0000-000000000020', 'q0000000-0000-0000-0000-000000000005', 'What is the difference between INNER JOIN and LEFT JOIN?', 'short_answer', NULL, 'INNER JOIN returns only matching rows from both tables, while LEFT JOIN returns all rows from the left table and matching rows from the right table', 3),
-    ('qn000000-0000-0000-0000-000000000021', 'q0000000-0000-0000-0000-000000000005', 'NULL values can be compared using the = operator.', 'true_false', '["True", "False"]', 'False', 2),
-    ('qn000000-0000-0000-0000-000000000022', 'q0000000-0000-0000-0000-000000000005', 'Which keyword is used to remove duplicate rows from a result set?', 'multiple_choice', '["UNIQUE", "DISTINCT", "DIFFERENT", "SINGLE"]', 'DISTINCT', 1);
+    ('0b000000-0000-0000-0000-000000000019', '0a000000-0000-0000-0000-000000000005', 'Which SQL clause is used to filter records?', 'multiple_choice', '["WHERE", "FILTER", "HAVING", "SELECT"]', 'WHERE', 1),
+    ('0b000000-0000-0000-0000-000000000020', '0a000000-0000-0000-0000-000000000005', 'What is the difference between INNER JOIN and LEFT JOIN?', 'short_answer', NULL, 'INNER JOIN returns only matching rows from both tables, while LEFT JOIN returns all rows from the left table and matching rows from the right table', 3),
+    ('0b000000-0000-0000-0000-000000000021', '0a000000-0000-0000-0000-000000000005', 'NULL values can be compared using the = operator.', 'true_false', '["True", "False"]', 'False', 2),
+    ('0b000000-0000-0000-0000-000000000022', '0a000000-0000-0000-0000-000000000005', 'Which keyword is used to remove duplicate rows from a result set?', 'multiple_choice', '["UNIQUE", "DISTINCT", "DIFFERENT", "SINGLE"]', 'DISTINCT', 1);
 
 -- ================== QUIZ ATTEMPTS ==================
 
 INSERT INTO quiz_attempts (id, quiz_id, student_id, answers, score, started_at, completed_at)
 VALUES 
-    ('qa000000-0000-0000-0000-000000000001', 'q0000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000001', '{"qn000000-0000-0000-0000-000000000001": "Hyper Text Markup Language", "qn000000-0000-0000-0000-000000000002": "color", "qn000000-0000-0000-0000-000000000003": "True", "qn000000-0000-0000-0000-000000000004": "p {font-weight: bold;}", "qn000000-0000-0000-0000-000000000005": "True"}', 5, NOW() - INTERVAL '20 days', NOW() - INTERVAL '20 days' + INTERVAL '15 minutes'),
-    ('qa000000-0000-0000-0000-000000000002', 'q0000000-0000-0000-0000-000000000002', 's0000000-0000-0000-0000-000000000001', '{"qn000000-0000-0000-0000-000000000006": "All of the above", "qn000000-0000-0000-0000-000000000007": "False", "qn000000-0000-0000-0000-000000000008": "undefined", "qn000000-0000-0000-0000-000000000009": "push()", "qn000000-0000-0000-0000-000000000010": "False"}', 5, NOW() - INTERVAL '15 days', NOW() - INTERVAL '15 days' + INTERVAL '25 minutes'),
-    ('qa000000-0000-0000-0000-000000000003', 'q0000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000002', '{"qn000000-0000-0000-0000-000000000001": "Hyper Text Markup Language", "qn000000-0000-0000-0000-000000000002": "font-color", "qn000000-0000-0000-0000-000000000003": "True", "qn000000-0000-0000-0000-000000000004": "p {font-weight: bold;}", "qn000000-0000-0000-0000-000000000005": "False"}', 3, NOW() - INTERVAL '18 days', NOW() - INTERVAL '18 days' + INTERVAL '12 minutes'),
-    ('qa000000-0000-0000-0000-000000000004', 'q0000000-0000-0000-0000-000000000004', 's0000000-0000-0000-0000-000000000003', '{"qn000000-0000-0000-0000-000000000015": "Pandas", "qn000000-0000-0000-0000-000000000016": "A table-like structure", "qn000000-0000-0000-0000-000000000017": "True", "qn000000-0000-0000-0000-000000000018": "read_csv()"}', 4, NOW() - INTERVAL '30 days', NOW() - INTERVAL '30 days' + INTERVAL '20 minutes'),
-    ('qa000000-0000-0000-0000-000000000005', 'q0000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000004', '{"qn000000-0000-0000-0000-000000000001": "Hyper Text Markup Language", "qn000000-0000-0000-0000-000000000002": "color", "qn000000-0000-0000-0000-000000000003": "True", "qn000000-0000-0000-0000-000000000004": "p {font-weight: bold;}", "qn000000-0000-0000-0000-000000000005": "True"}', 5, NOW() - INTERVAL '90 days', NOW() - INTERVAL '90 days' + INTERVAL '10 minutes');
+    ('0c000000-0000-0000-0000-000000000001', '0a000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', '{"0b000000-0000-0000-0000-000000000001": "Hyper Text Markup Language", "0b000000-0000-0000-0000-000000000002": "color", "0b000000-0000-0000-0000-000000000003": "True", "0b000000-0000-0000-0000-000000000004": "p {font-weight: bold;}", "0b000000-0000-0000-0000-000000000005": "True"}', 5, NOW() - INTERVAL '20 days', NOW() - INTERVAL '20 days' + INTERVAL '15 minutes'),
+    ('0c000000-0000-0000-0000-000000000002', '0a000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000001', '{"0b000000-0000-0000-0000-000000000006": "All of the above", "0b000000-0000-0000-0000-000000000007": "False", "0b000000-0000-0000-0000-000000000008": "undefined", "0b000000-0000-0000-0000-000000000009": "push()", "0b000000-0000-0000-0000-000000000010": "False"}', 5, NOW() - INTERVAL '15 days', NOW() - INTERVAL '15 days' + INTERVAL '25 minutes'),
+    ('0c000000-0000-0000-0000-000000000003', '0a000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000002', '{"0b000000-0000-0000-0000-000000000001": "Hyper Text Markup Language", "0b000000-0000-0000-0000-000000000002": "font-color", "0b000000-0000-0000-0000-000000000003": "True", "0b000000-0000-0000-0000-000000000004": "p {font-weight: bold;}", "0b000000-0000-0000-0000-000000000005": "False"}', 3, NOW() - INTERVAL '18 days', NOW() - INTERVAL '18 days' + INTERVAL '12 minutes'),
+    ('0c000000-0000-0000-0000-000000000004', '0a000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000003', '{"0b000000-0000-0000-0000-000000000015": "Pandas", "0b000000-0000-0000-0000-000000000016": "A table-like structure", "0b000000-0000-0000-0000-000000000017": "True", "0b000000-0000-0000-0000-000000000018": "read_csv()"}', 4, NOW() - INTERVAL '30 days', NOW() - INTERVAL '30 days' + INTERVAL '20 minutes'),
+    ('0c000000-0000-0000-0000-000000000005', '0a000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000004', '{"0b000000-0000-0000-0000-000000000001": "Hyper Text Markup Language", "0b000000-0000-0000-0000-000000000002": "color", "0b000000-0000-0000-0000-000000000003": "True", "0b000000-0000-0000-0000-000000000004": "p {font-weight: bold;}", "0b000000-0000-0000-0000-000000000005": "True"}', 5, NOW() - INTERVAL '90 days', NOW() - INTERVAL '90 days' + INTERVAL '10 minutes');
 
 -- ================== NOTIFICATIONS ==================
 
 INSERT INTO notifications (id, user_id, title, message, type, is_read, created_at)
 VALUES 
-    ('n0000000-0000-0000-0000-000000000001', 's0000000-0000-0000-0000-000000000001', 'Welcome to LMS!', 'Welcome to our Learning Management System. Start exploring courses and begin your learning journey!', 'info', true, NOW() - INTERVAL '30 days'),
-    ('n0000000-0000-0000-0000-000000000002', 's0000000-0000-0000-0000-000000000001', 'Course Completed!', 'Congratulations! You have completed "Data Science with Python". Keep up the great work!', 'success', true, NOW() - INTERVAL '5 days'),
-    ('n0000000-0000-0000-0000-000000000003', 's0000000-0000-0000-0000-000000000001', 'Assignment Graded', 'Your submission for "Build a Personal Portfolio" has been graded. Score: 85/100', 'info', false, NOW() - INTERVAL '1 day'),
-    ('n0000000-0000-0000-0000-000000000004', 's0000000-0000-0000-0000-000000000001', 'Assignment Due Soon', 'Reminder: "CSS Grid Layout Challenge" is due in 7 days.', 'warning', false, NOW() - INTERVAL '12 hours'),
-    ('n0000000-0000-0000-0000-000000000005', 's0000000-0000-0000-0000-000000000002', 'Welcome to LMS!', 'Welcome! Browse our catalog to find courses that match your interests.', 'info', true, NOW() - INTERVAL '20 days'),
-    ('n0000000-0000-0000-0000-000000000006', 's0000000-0000-0000-0000-000000000002', 'New Course Available', 'A new course "Cloud Computing with AWS" is coming soon. Stay tuned!', 'info', false, NOW() - INTERVAL '2 days'),
-    ('n0000000-0000-0000-0000-000000000007', 's0000000-0000-0000-0000-000000000003', 'Assignment Graded', 'Your "Data Analysis Report" has been graded. Score: 78/100', 'info', false, NOW() - INTERVAL '1 day'),
-    ('n0000000-0000-0000-0000-000000000008', 'i0000000-0000-0000-0000-000000000001', 'New Enrollment', 'A new student has enrolled in your course "Introduction to Web Development".', 'info', true, NOW() - INTERVAL '5 days'),
-    ('n0000000-0000-0000-0000-000000000009', 'i0000000-0000-0000-0000-000000000001', 'Submission Received', 'New assignment submission received for "Build a Personal Portfolio".', 'info', false, NOW() - INTERVAL '2 days'),
-    ('n0000000-0000-0000-0000-000000000010', 'a0000000-0000-0000-0000-000000000001', 'System Update', 'LMS system will undergo maintenance on next Sunday at 2:00 AM.', 'warning', false, NOW() - INTERVAL '3 days');
+    ('b0000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', 'Welcome to LMS!', 'Welcome to our Learning Management System. Start exploring courses and begin your learning journey!', 'info', true, NOW() - INTERVAL '30 days'),
+    ('b0000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000001', 'Course Completed!', 'Congratulations! You have completed "Data Science with Python". Keep up the great work!', 'success', true, NOW() - INTERVAL '5 days'),
+    ('b0000000-0000-0000-0000-000000000003', '50000000-0000-0000-0000-000000000001', 'Assignment Graded', 'Your submission for "Build a Personal Portfolio" has been graded. Score: 85/100', 'info', false, NOW() - INTERVAL '1 day'),
+    ('b0000000-0000-0000-0000-000000000004', '50000000-0000-0000-0000-000000000001', 'Assignment Due Soon', 'Reminder: "CSS Grid Layout Challenge" is due in 7 days.', 'warning', false, NOW() - INTERVAL '12 hours'),
+    ('b0000000-0000-0000-0000-000000000005', '50000000-0000-0000-0000-000000000002', 'Welcome to LMS!', 'Welcome! Browse our catalog to find courses that match your interests.', 'info', true, NOW() - INTERVAL '20 days'),
+    ('b0000000-0000-0000-0000-000000000006', '50000000-0000-0000-0000-000000000002', 'New Course Available', 'A new course "Cloud Computing with AWS" is coming soon. Stay tuned!', 'info', false, NOW() - INTERVAL '2 days'),
+    ('b0000000-0000-0000-0000-000000000007', '50000000-0000-0000-0000-000000000003', 'Assignment Graded', 'Your "Data Analysis Report" has been graded. Score: 78/100', 'info', false, NOW() - INTERVAL '1 day'),
+    ('b0000000-0000-0000-0000-000000000008', '10000000-0000-0000-0000-000000000001', 'New Enrollment', 'A new student has enrolled in your course "Introduction to Web Development".', 'info', true, NOW() - INTERVAL '5 days'),
+    ('b0000000-0000-0000-0000-000000000009', '10000000-0000-0000-0000-000000000001', 'Submission Received', 'New assignment submission received for "Build a Personal Portfolio".', 'info', false, NOW() - INTERVAL '2 days'),
+    ('b0000000-0000-0000-0000-000000000010', 'a0000000-0000-0000-0000-000000000001', 'System Update', 'LMS system will undergo maintenance on next Sunday at 2:00 AM.', 'warning', false, NOW() - INTERVAL '3 days');
 
 -- ============================================
 -- VERIFICATION: Check inserted data
