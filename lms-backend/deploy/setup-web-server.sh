@@ -5,25 +5,43 @@
 # ============================================
 # Run as root or with sudo
 
+set -euo pipefail
+
 echo "================================================"
 echo "  LMS Web Server Setup - Ubuntu Server"
 echo "================================================"
 
+cd /
+
+APP_USER=${SUDO_USER:-$USER}
+APP_HOME=$(getent passwd "$APP_USER" | cut -d: -f6)
+if [ -z "$APP_HOME" ]; then
+    APP_HOME="/home/$APP_USER"
+fi
+STATIC_IP=192.168.56.101
+INTERFACE=${INTERFACE:-enp0s8}
+DB_SERVER_IP=192.168.56.102
+DB_PASSWORD=admin123
+REPO_URL=${REPO_URL:-https://github.com/VerdiatGHub/IAA202.git}
+WEB_SERVER_IP=192.168.56.101
+REPO_DIR="${APP_HOME}/IAA202"
+
 # Update system
 echo "[1/5] Updating system packages..."
 apt update && apt upgrade -y
+apt install -y curl wget gnupg2 ca-certificates software-properties-common
 
 # Configure Static IP (Host-Only Adapter - enp0s8)
-echo "Configuring Static IP (192.168.56.101)..."
+echo "Configuring Static IP (${STATIC_IP})..."
 cat > /etc/netplan/99-lms-static.yaml <<EOF
 network:
   version: 2
   renderer: networkd
   ethernets:
-    enp0s8:
+    ${INTERFACE}:
       dhcp4: no
       addresses:
-        - 192.168.56.101/24
+        - ${STATIC_IP}/24
 EOF
 chmod 600 /etc/netplan/99-lms-static.yaml
 netplan apply
@@ -45,14 +63,16 @@ apt install -y git
 
 # Create app directory
 echo "[5/7] Setting up application directory..."
-mkdir -p /var/www/lms
-chown -R $USER:$USER /var/www/lms
+install -d /var/www/lms/backend /var/www/lms/frontend /var/www/lms/frontend/dist
+chown -R "$APP_USER":"$APP_USER" /var/www/lms
 
-# Get database server IP
-DB_SERVER_IP="192.168.56.102"
-DB_PASSWORD="admin123"
-# read -p "Enter the Database Server VM IP address: " DB_SERVER_IP
-# read -p "Enter the database password: " DB_PASSWORD
+JWT_SECRET_VALUE=""
+if [ -f /var/www/lms/backend/.env ]; then
+    JWT_SECRET_VALUE=$(grep -E "^JWT_SECRET=" /var/www/lms/backend/.env | head -n 1 | cut -d= -f2-)
+fi
+if [ -z "$JWT_SECRET_VALUE" ]; then
+    JWT_SECRET_VALUE=$(openssl rand -base64 32)
+fi
 
 # Create backend .env file
 echo "[6/7] Creating backend configuration..."
@@ -65,18 +85,12 @@ DB_USER=lms_user
 DB_PASSWORD=${DB_PASSWORD}
 
 # JWT Configuration
-JWT_SECRET=$(openssl rand -base64 32)
+JWT_SECRET=${JWT_SECRET_VALUE}
 JWT_EXPIRES_IN=7d
 
 # Server Configuration
 PORT=5000
 NODE_ENV=production
-
-# Get the local IP (Prioritize 192.168.x.x for Host-Only, fallback to first IP)
-WEB_SERVER_IP=$(hostname -I | grep -oE '192\.168\.[0-9]+\.[0-9]+' | head -n 1)
-if [ -z "$WEB_SERVER_IP" ]; then
-    WEB_SERVER_IP=$(hostname -I | awk '{print $1}')
-fi
 
 # Frontend URL (for CORS)
 FRONTEND_URL=http://${WEB_SERVER_IP}
@@ -115,39 +129,49 @@ ln -sf /etc/nginx/sites-available/lms /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
 
 # Test and reload Nginx
-nginx -t && systemctl reload nginx
+nginx -t
+systemctl enable --now nginx
+systemctl reload nginx
 
 # Install PM2 for process management
 npm install -g pm2
 
 # Configure firewall
-ufw allow 'Nginx HTTP'
+ufw allow OpenSSH
 ufw allow 80
-ufw allow 5000
+ufw allow 443
+ufw --force enable
 
 # Clone Repository
 echo "[8/8] Cloning & Deploying Application..."
-rm -rf ~/IAA202
-git clone https://github.com/VerdiatGHub/IAA202.git ~/IAA202
+if [ -d "${REPO_DIR}/.git" ]; then
+    git -C "$REPO_DIR" pull --ff-only
+else
+    git clone "$REPO_URL" "$REPO_DIR"
+fi
 
 # Deploy Backend
 echo "--- Deploying Backend ---"
-cp -r ~/IAA202/lms-backend/* /var/www/lms/backend/
-cd /var/www/lms/backend
-npm install
-pm2 start server.js --name lms-api
-pm2 save
-pm2 startup | bash
+cp -r "$REPO_DIR/lms-backend/"* /var/www/lms/backend/
+chown -R "$APP_USER":"$APP_USER" /var/www/lms/backend
+sudo -u "$APP_USER" -H bash -c "cd /var/www/lms/backend && npm install"
+sudo -u "$APP_USER" -H bash -c "cd /var/www/lms/backend && pm2 start server.js --name lms-api"
+sudo -u "$APP_USER" -H pm2 save
+pm2 startup systemd -u "$APP_USER" --hp "$APP_HOME" | bash
 
 # Deploy Frontend
 echo "--- Deploying Frontend ---"
 mkdir -p /var/www/lms/frontend/dist
-cp -r ~/IAA202/lms-frontend/* /var/www/lms/frontend/
-cd /var/www/lms/frontend
-echo "VITE_API_URL=http://${WEB_SERVER_IP}/api" > .env
-npm install
-npm run build
-cp -r dist/* /var/www/lms/frontend/dist/
+cp -r "$REPO_DIR/lms-frontend/"* /var/www/lms/frontend/
+chown -R "$APP_USER":"$APP_USER" /var/www/lms/frontend
+sudo -u "$APP_USER" -H bash -c "cd /var/www/lms/frontend && echo \"VITE_API_URL=http://${WEB_SERVER_IP}/api\" > .env"
+sudo -u "$APP_USER" -H bash -c "cd /var/www/lms/frontend && npm install"
+sudo -u "$APP_USER" -H bash -c "cd /var/www/lms/frontend && npm run build"
+cp -r /var/www/lms/frontend/dist/* /var/www/lms/frontend/dist/
+
+systemctl is-active --quiet nginx
+sudo -u "$APP_USER" -H pm2 list >/dev/null
+curl -fsS http://localhost/ >/dev/null
 
 echo ""
 echo "================================================"
