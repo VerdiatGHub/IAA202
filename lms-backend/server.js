@@ -10,6 +10,7 @@ const enrollmentRoutes = require('./routes/enrollments');
 const notificationRoutes = require('./routes/notifications');
 const moduleRoutes = require('./routes/modules');
 const lessonRoutes = require('./routes/lessons');
+const contentItemRoutes = require('./routes/contentItems');
 
 // Import database
 const { pool } = require('./config/db');
@@ -61,6 +62,7 @@ app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api', moduleRoutes);
 app.use('/api', lessonRoutes);
+app.use('/api', contentItemRoutes);
 
 // 404 handler
 app.use((req, res) => {
