@@ -9,7 +9,6 @@ import {
     BarChart3,
     Users,
     GraduationCap,
-    PlusCircle,
     BookCheck,
     ChevronLeft,
     ChevronRight,

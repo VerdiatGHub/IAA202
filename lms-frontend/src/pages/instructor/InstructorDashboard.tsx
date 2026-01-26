@@ -16,6 +16,7 @@ import {
     AlertCircle,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/common/Card';
+import { Button } from '../../components/common/Button';
 import './InstructorDashboard.css';
 
 // Mock data
