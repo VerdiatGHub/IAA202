@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     BookOpen,
     Clock,
@@ -12,86 +12,11 @@ import {
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
+import Loading from '../../components/common/Loading';
+import { enrollmentService, type EnrollmentApiData } from '../../services/enrollmentService';
+import { courseService } from '../../services/courseService';
+import type { Course } from '../../types';
 import './StudentDashboard.css';
-
-// Mock data - would come from Supabase in production
-const mockEnrolledCourses = [
-    {
-        id: '1',
-        title: 'Web Development Fundamentals',
-        instructor: 'Dr. Sarah Johnson',
-        progress: 65,
-        thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400',
-        nextLesson: 'CSS Flexbox & Grid',
-        totalLessons: 24,
-        completedLessons: 16,
-    },
-    {
-        id: '2',
-        title: 'Python for Data Science',
-        instructor: 'Prof. Michael Chen',
-        progress: 42,
-        thumbnail: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400',
-        nextLesson: 'Pandas DataFrames',
-        totalLessons: 30,
-        completedLessons: 13,
-    },
-    {
-        id: '3',
-        title: 'UI/UX Design Principles',
-        instructor: 'Emily Rodriguez',
-        progress: 88,
-        thumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400',
-        nextLesson: 'Design Systems',
-        totalLessons: 18,
-        completedLessons: 16,
-    },
-];
-
-const mockUpcomingDeadlines = [
-    {
-        id: '1',
-        title: 'JavaScript Quiz',
-        course: 'Web Development Fundamentals',
-        dueDate: '2026-01-17',
-        type: 'quiz',
-    },
-    {
-        id: '2',
-        title: 'Data Analysis Project',
-        course: 'Python for Data Science',
-        dueDate: '2026-01-20',
-        type: 'assignment',
-    },
-    {
-        id: '3',
-        title: 'Portfolio Submission',
-        course: 'UI/UX Design Principles',
-        dueDate: '2026-01-22',
-        type: 'assignment',
-    },
-];
-
-const mockRecommendedCourses = [
-    {
-        id: '4',
-        title: 'React Advanced Patterns',
-        instructor: 'Alex Turner',
-        rating: 4.9,
-        students: 2340,
-        thumbnail: 'https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=400',
-        level: 'Advanced',
-    },
-    {
-        id: '5',
-        title: 'Machine Learning Basics',
-        instructor: 'Dr. Lisa Wang',
-        rating: 4.8,
-        students: 5120,
-        thumbnail: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400',
-        level: 'Intermediate',
-    },
-];
 
 interface StudentDashboardProps {
     userName?: string;
@@ -100,45 +25,82 @@ interface StudentDashboardProps {
 export const StudentDashboard: React.FC<StudentDashboardProps> = ({
     userName = 'Student',
 }) => {
-    const stats = [
+    const [enrollments, setEnrollments] = useState<EnrollmentApiData[]>([]);
+    const [recommendedCourses, setRecommendedCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [stats, setStats] = useState({
+        enrolledCourses: 0,
+        studyHours: 0,
+        certificates: 0,
+        avgProgress: 0,
+    });
+
+    // Fetch data on mount
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                // Fetch enrollments
+                const enrollmentsData = await enrollmentService.getMyEnrollments();
+                setEnrollments(enrollmentsData);
+
+                // Fetch enrollment stats
+                const statsData = await enrollmentService.getEnrollmentStats();
+                setStats({
+                    enrolledCourses: statsData.enrolledCourses || enrollmentsData.length,
+                    studyHours: 0, // TODO: Calculate from actual data
+                    certificates: statsData.completedCourses || 0,
+                    avgProgress: Math.round(statsData.averageProgress || 0),
+                });
+
+                // Fetch recommended courses (published courses not enrolled in)
+                const allCourses = await courseService.getPublishedCourses();
+                const enrolledCourseIds = new Set(enrollmentsData.map(e => e.courseId));
+                const recommended = allCourses
+                    .filter(course => !enrolledCourseIds.has(course.id))
+                    .slice(0, 2);
+                setRecommendedCourses(recommended);
+            } catch (err) {
+                console.error('Error fetching dashboard data:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const statsCards = [
         {
             label: 'Enrolled Courses',
-            value: '6',
+            value: stats.enrolledCourses.toString(),
             icon: <BookOpen size={24} />,
             color: 'primary',
         },
         {
             label: 'Study Hours',
-            value: '48',
+            value: stats.studyHours.toString(),
             icon: <Clock size={24} />,
             color: 'success',
         },
         {
             label: 'Certificates',
-            value: '3',
+            value: stats.certificates.toString(),
             icon: <Trophy size={24} />,
             color: 'warning',
         },
         {
             label: 'Avg. Progress',
-            value: '65%',
+            value: `${stats.avgProgress}%`,
             icon: <TrendingUp size={24} />,
             color: 'info',
         },
     ];
 
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    };
-
-    const getDaysUntil = (dateString: string) => {
-        const today = new Date();
-        const dueDate = new Date(dateString);
-        const diffTime = dueDate.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays;
-    };
+    if (loading) {
+        return <Loading message="Loading dashboard..." />;
+    }
 
     return (
         <div className="student-dashboard">
@@ -162,7 +124,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
             {/* Stats Grid */}
             <section className="stats-section">
                 <div className="stats-grid">
-                    {stats.map((stat, index) => (
+                    {statsCards.map((stat, index) => (
                         <Card key={stat.label} className={`stat-card stat-${stat.color} animate-slideUp`} style={{ animationDelay: `${index * 0.1}s` }}>
                             <div className="stat-icon">{stat.icon}</div>
                             <div className="stat-info">
@@ -185,47 +147,62 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                         </Link>
                     </div>
                     <div className="courses-list">
-                        {mockEnrolledCourses.map((course, index) => (
-                            <Card
-                                key={course.id}
-                                className="course-card animate-slideUp"
-                                style={{ animationDelay: `${index * 0.1}s` }}
-                                padding="none"
-                            >
-                                <div className="course-thumbnail">
-                                    <img src={course.thumbnail} alt={course.title} />
-                                    <div className="course-overlay">
-                                        <Button variant="primary" size="sm" icon={<Play size={14} />}>
-                                            Resume
-                                        </Button>
-                                    </div>
-                                </div>
-                                <div className="course-info">
-                                    <h3 className="course-title">{course.title}</h3>
-                                    <p className="course-instructor">{course.instructor}</p>
-                                    <div className="course-progress">
-                                        <div className="progress-bar">
-                                            <div
-                                                className="progress-bar-fill"
-                                                style={{ width: `${course.progress}%` }}
-                                            />
-                                        </div>
-                                        <span className="progress-text">{course.progress}% complete</span>
-                                    </div>
-                                    <div className="course-meta">
-                                        <span className="next-lesson">
-                                            Next: {course.nextLesson}
-                                        </span>
-                                    </div>
-                                </div>
+                        {enrollments.length === 0 ? (
+                            <Card className="empty-state">
+                                <BookOpen size={48} />
+                                <h3>No enrolled courses yet</h3>
+                                <p>Browse our course catalog to get started</p>
+                                <Link to="/student/catalog">
+                                    <Button variant="primary">Browse Courses</Button>
+                                </Link>
                             </Card>
-                        ))}
+                        ) : (
+                            enrollments.slice(0, 3).map((enrollment, index) => (
+                                <Link to={`/student/courses/${enrollment.courseId}`} key={enrollment.id}>
+                                    <Card
+                                        className="course-card animate-slideUp"
+                                        style={{ animationDelay: `${index * 0.1}s` }}
+                                        padding="none"
+                                    >
+                                        <div className="course-thumbnail">
+                                            <img 
+                                                src={enrollment.course.thumbnailUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400'} 
+                                                alt={enrollment.course.title} 
+                                            />
+                                            <div className="course-overlay">
+                                                <Button variant="primary" size="sm" icon={<Play size={14} />}>
+                                                    Resume
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        <div className="course-info">
+                                            <h3 className="course-title">{enrollment.course.title}</h3>
+                                            <p className="course-instructor">{enrollment.course.instructorName || 'Instructor'}</p>
+                                            <div className="course-progress">
+                                                <div className="progress-bar">
+                                                    <div
+                                                        className="progress-bar-fill"
+                                                        style={{ width: `${enrollment.progress}%` }}
+                                                    />
+                                                </div>
+                                                <span className="progress-text">{enrollment.progress}% complete</span>
+                                            </div>
+                                            <div className="course-meta">
+                                                <span className="next-lesson">
+                                                    {enrollment.course.lessonCount || 0} lessons
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </Link>
+                            ))
+                        )}
                     </div>
                 </section>
 
                 {/* Sidebar */}
                 <aside className="dashboard-sidebar">
-                    {/* Upcoming Deadlines */}
+                    {/* Upcoming Deadlines - Placeholder for now */}
                     <Card className="deadlines-card animate-slideUp">
                         <CardHeader>
                             <CardTitle>
@@ -234,39 +211,13 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ul className="deadlines-list">
-                                {mockUpcomingDeadlines.map((deadline) => {
-                                    const daysUntil = getDaysUntil(deadline.dueDate);
-                                    return (
-                                        <li key={deadline.id} className="deadline-item">
-                                            <div className="deadline-info">
-                                                <span className={`deadline-type ${deadline.type}`}>
-                                                    {deadline.type}
-                                                </span>
-                                                <h4 className="deadline-title">{deadline.title}</h4>
-                                                <p className="deadline-course">{deadline.course}</p>
-                                            </div>
-                                            <div className={`deadline-date ${daysUntil <= 2 ? 'urgent' : ''}`}>
-                                                <span className="date">{formatDate(deadline.dueDate)}</span>
-                                                <span className="days">
-                                                    {daysUntil === 0
-                                                        ? 'Today'
-                                                        : daysUntil === 1
-                                                            ? 'Tomorrow'
-                                                            : `${daysUntil} days`}
-                                                </span>
-                                            </div>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                            <Button variant="ghost" fullWidth size="sm">
-                                View All Deadlines
-                            </Button>
+                            <div className="empty-state-small">
+                                <p>No upcoming deadlines</p>
+                            </div>
                         </CardContent>
                     </Card>
 
-                    {/* AI Recommendations */}
+                    {/* Recommended Courses */}
                     <Card className="recommendations-card animate-slideUp" style={{ animationDelay: '0.2s' }}>
                         <CardHeader>
                             <CardTitle>
@@ -275,31 +226,47 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="recommendations-list">
-                                {mockRecommendedCourses.map((course) => (
-                                    <div key={course.id} className="recommendation-item">
-                                        <img
-                                            src={course.thumbnail}
-                                            alt={course.title}
-                                            className="recommendation-thumb"
-                                        />
-                                        <div className="recommendation-info">
-                                            <h4 className="recommendation-title">{course.title}</h4>
-                                            <p className="recommendation-instructor">{course.instructor}</p>
-                                            <div className="recommendation-meta">
-                                                <span className="rating">
-                                                    <Star size={12} fill="currentColor" />
-                                                    {course.rating}
-                                                </span>
-                                                <span className="students">{course.students.toLocaleString()} students</span>
-                                            </div>
-                                        </div>
+                            {recommendedCourses.length === 0 ? (
+                                <div className="empty-state-small">
+                                    <p>No recommendations available</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="recommendations-list">
+                                        {recommendedCourses.map((course) => (
+                                            <Link to={`/student/courses/${course.id}`} key={course.id}>
+                                                <div className="recommendation-item">
+                                                    <img
+                                                        src={course.thumbnailUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400'}
+                                                        alt={course.title}
+                                                        className="recommendation-thumb"
+                                                    />
+                                                    <div className="recommendation-info">
+                                                        <h4 className="recommendation-title">{course.title}</h4>
+                                                        <p className="recommendation-instructor">
+                                                            {course.instructor?.fullName || 'Instructor'}
+                                                        </p>
+                                                        <div className="recommendation-meta">
+                                                            <span className="rating">
+                                                                <Star size={12} fill="currentColor" />
+                                                                4.8
+                                                            </span>
+                                                            <span className="students">
+                                                                {(course.enrollmentCount || 0).toLocaleString()} students
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                            <Button variant="outline" fullWidth size="sm">
-                                Browse More Courses
-                            </Button>
+                                    <Link to="/student/catalog">
+                                        <Button variant="outline" fullWidth size="sm">
+                                            Browse More Courses
+                                        </Button>
+                                    </Link>
+                                </>
+                            )}
                         </CardContent>
                     </Card>
                 </aside>
