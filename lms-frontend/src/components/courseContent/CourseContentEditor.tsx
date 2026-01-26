@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { ModuleList } from './ModuleList';
 import { ModuleEditorModal } from './ModuleEditorModal';
 import { LessonEditorModal } from './LessonEditorModal';
-import { StudentContentView } from './StudentContentView';
 import { useCourseContent } from '../../contexts/useCourseContent';
 import type { Module, Lesson } from '../../types';
 import { AlertCircle } from 'lucide-react';
 import './CourseContentEditor.css';
 
 interface CourseContentEditorProps {
-  courseId: string; // courseId is needed for StudentContentView
+  courseId: string;
 }
 
-export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ courseId }) => {
+export const CourseContentEditor: React.FC<CourseContentEditorProps> = () => {
   const {
     refreshContent,
     deleteModule,
@@ -21,9 +20,6 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
     error,
     clearError,
   } = useCourseContent();
-
-  // Preview mode state
-  const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // Modal states
   const [moduleModalOpen, setModuleModalOpen] = useState(false);
@@ -113,11 +109,6 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
     return selectedModuleId || undefined;
   };
 
-  // Toggle preview mode
-  const handleTogglePreview = () => {
-    setIsPreviewMode(!isPreviewMode);
-  };
-
   return (
     <div className="course-content-editor">
       {/* Error Display */}
@@ -135,27 +126,6 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
         </div>
       )}
 
-      {/* Preview Mode Toggle Button */}
-      <div className="editor-toolbar">
-        <button
-          className={`preview-toggle-btn ${isPreviewMode ? 'active' : ''}`}
-          onClick={handleTogglePreview}
-          type="button"
-        >
-          {isPreviewMode ? (
-            <>
-              <span className="icon">✏️</span>
-              <span>Edit Mode</span>
-            </>
-          ) : (
-            <>
-              <span className="icon">👁️</span>
-              <span>Preview Mode</span>
-            </>
-          )}
-        </button>
-      </div>
-
       {/* Loading Indicator */}
       {loading && (
         <div className="loading-indicator">
@@ -164,49 +134,42 @@ export const CourseContentEditor: React.FC<CourseContentEditorProps> = ({ course
         </div>
       )}
 
-      {/* Show StudentContentView in preview mode, otherwise show ModuleList (Requirement 11.2) */}
-      {isPreviewMode ? (
-        <StudentContentView courseId={courseId} />
-      ) : (
-        <>
-          <ModuleList
-            onAddModule={handleAddModule}
-            onEditModule={handleEditModule}
-            onDeleteModule={handleDeleteModule}
-            onAddLesson={handleAddLesson}
-            onEditLesson={handleEditLesson}
-            onDeleteLesson={handleDeleteLesson}
-            enableDragAndDrop={!isPreviewMode}
-          />
+      <ModuleList
+        onAddModule={handleAddModule}
+        onEditModule={handleEditModule}
+        onDeleteModule={handleDeleteModule}
+        onAddLesson={handleAddLesson}
+        onEditLesson={handleEditLesson}
+        onDeleteLesson={handleDeleteLesson}
+        enableDragAndDrop={true}
+      />
 
-          {/* Module Editor Modal */}
-          {moduleModalOpen && (
-            <ModuleEditorModal
-              isOpen={moduleModalOpen}
-              onClose={() => {
-                setModuleModalOpen(false);
-                setEditingModule(null);
-              }}
-              onSuccess={handleModuleSuccess}
-              module={editingModule || undefined}
-            />
-          )}
+      {/* Module Editor Modal */}
+      {moduleModalOpen && (
+        <ModuleEditorModal
+          isOpen={moduleModalOpen}
+          onClose={() => {
+            setModuleModalOpen(false);
+            setEditingModule(null);
+          }}
+          onSuccess={handleModuleSuccess}
+          module={editingModule || undefined}
+        />
+      )}
 
-          {/* Lesson Editor Modal */}
-          {lessonModalOpen && getModuleIdForLesson() && (
-            <LessonEditorModal
-              isOpen={lessonModalOpen}
-              onClose={() => {
-                setLessonModalOpen(false);
-                setEditingLesson(null);
-                setSelectedModuleId(null);
-              }}
-              onSuccess={handleLessonSuccess}
-              lesson={editingLesson || undefined}
-              moduleId={getModuleIdForLesson()!}
-            />
-          )}
-        </>
+      {/* Lesson Editor Modal */}
+      {lessonModalOpen && getModuleIdForLesson() && (
+        <LessonEditorModal
+          isOpen={lessonModalOpen}
+          onClose={() => {
+            setLessonModalOpen(false);
+            setEditingLesson(null);
+            setSelectedModuleId(null);
+          }}
+          onSuccess={handleLessonSuccess}
+          lesson={editingLesson || undefined}
+          moduleId={getModuleIdForLesson()!}
+        />
       )}
     </div>
   );
