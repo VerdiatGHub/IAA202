@@ -26,24 +26,28 @@ export interface GradeSubmissionData {
     feedback?: string;
 }
 
+interface SubmissionsResponse {
+    submissions: Submission[];
+}
+
 export const submissionService = {
     async getSubmissionsByAssignment(assignmentId: string): Promise<Submission[]> {
-        const response = await api.get(`/submissions?assignmentId=${assignmentId}`);
+        const response = await api.get<SubmissionsResponse>(`/submissions?assignmentId=${assignmentId}`);
         return response.data.submissions;
     },
 
     async getSubmission(id: string): Promise<Submission> {
-        const response = await api.get(`/submissions/${id}`);
+        const response = await api.get<Submission>(`/submissions/${id}`);
         return response.data;
     },
 
     async gradeSubmission(id: string, data: GradeSubmissionData): Promise<Submission> {
-        const response = await api.put(`/submissions/${id}/grade`, data);
+        const response = await api.put<Submission>(`/submissions/${id}/grade`, data);
         return response.data;
     },
 
     async submitAssignment(assignmentId: string, fileUrl?: string, content?: string): Promise<Submission> {
-        const response = await api.post('/submissions', {
+        const response = await api.post<Submission>('/submissions', {
             assignmentId,
             fileUrl,
             content,
