@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
     BookOpen,
     Users,
     Star,
     DollarSign,
-    Plus,
     Eye,
     Edit,
     MoreVertical,
@@ -136,13 +134,8 @@ export const InstructorCourses: React.FC = () => {
             <div className="courses-header">
                 <div className="header-content">
                     <h1 className="page-title">My Courses</h1>
-                    <p className="page-subtitle">Manage and track all your courses</p>
+                    <p className="page-subtitle">View and manage your assigned courses</p>
                 </div>
-                <Link to="/instructor/courses/new">
-                    <Button variant="primary" icon={<Plus size={18} />}>
-                        Create New Course
-                    </Button>
-                </Link>
             </div>
 
             {/* Stats Overview */}

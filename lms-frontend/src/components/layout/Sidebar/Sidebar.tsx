@@ -43,7 +43,6 @@ const navItems: NavItem[] = [
     // Instructor Navigation
     { icon: <Home size={20} />, label: 'Dashboard', href: '/instructor', roles: ['instructor'] },
     { icon: <BookOpen size={20} />, label: 'My Courses', href: '/instructor/courses', roles: ['instructor'] },
-    { icon: <PlusCircle size={20} />, label: 'Create Course', href: '/instructor/courses/new', roles: ['instructor'] },
     { icon: <BookCheck size={20} />, label: 'Grading', href: '/instructor/grading', roles: ['instructor'] },
     { icon: <Users size={20} />, label: 'Students', href: '/instructor/students', roles: ['instructor'] },
     { icon: <BarChart3 size={20} />, label: 'Analytics', href: '/instructor/analytics', roles: ['instructor'] },

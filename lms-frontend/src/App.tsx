@@ -96,7 +96,6 @@ const AppRoutes: React.FC = () => {
         {/* Instructor Routes */}
         <Route path="/instructor" element={<InstructorDashboard userName={user?.fullName} />} />
         <Route path="/instructor/courses" element={<InstructorCourses />} />
-        <Route path="/instructor/courses/new" element={<div className="page-placeholder">Create Course - Coming Soon</div>} />
         <Route path="/instructor/grading" element={<div className="page-placeholder">Grading - Coming Soon</div>} />
         <Route path="/instructor/students" element={<div className="page-placeholder">Students - Coming Soon</div>} />
         <Route path="/instructor/analytics" element={<div className="page-placeholder">Analytics - Coming Soon</div>} />

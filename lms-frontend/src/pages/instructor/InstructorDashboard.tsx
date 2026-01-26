@@ -5,7 +5,6 @@ import {
     Users,
     DollarSign,
     TrendingUp,
-    Plus,
     Eye,
     Edit,
     MoreVertical,
@@ -17,7 +16,6 @@ import {
     AlertCircle,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
 import './InstructorDashboard.css';
 
 // Mock data
@@ -102,11 +100,6 @@ export const InstructorDashboard: React.FC<InstructorDashboardProps> = ({
                     <p className="welcome-subtitle">
                         Here's what's happening with your courses today
                     </p>
-                </div>
-                <div className="welcome-actions">
-                    <Button variant="primary" icon={<Plus size={18} />}>
-                        Create New Course
-                    </Button>
                 </div>
             </section>
 
