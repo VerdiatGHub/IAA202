@@ -280,15 +280,19 @@
 }
 
 .course-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    display: flex;
+    justify-content: center;
     margin-bottom: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .stat-item {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .stat-item .stat-label {
@@ -298,8 +302,8 @@
 }
 
 .stat-item .stat-value {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 700;
     color: var(--text-primary);
 }
 
@@ -307,6 +311,14 @@
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
+}
+
+.course-actions a {
+    flex: 1;
+}
+
+.course-actions button {
+    width: 100%;
 }
 
 .course-actions .more-btn {
