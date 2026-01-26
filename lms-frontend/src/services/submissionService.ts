@@ -33,16 +33,22 @@ interface SubmissionsResponse {
 export const submissionService = {
     async getSubmissionsByAssignment(assignmentId: string): Promise<Submission[]> {
         const response = await api.get<SubmissionsResponse>(`/submissions?assignmentId=${assignmentId}`);
-        return response.data.submissions;
+        return response.data?.submissions || [];
     },
 
     async getSubmission(id: string): Promise<Submission> {
         const response = await api.get<Submission>(`/submissions/${id}`);
+        if (!response.data) {
+            throw new Error('Submission not found');
+        }
         return response.data;
     },
 
     async gradeSubmission(id: string, data: GradeSubmissionData): Promise<Submission> {
         const response = await api.put<Submission>(`/submissions/${id}/grade`, data);
+        if (!response.data) {
+            throw new Error('Failed to grade submission');
+        }
         return response.data;
     },
 
@@ -52,6 +58,9 @@ export const submissionService = {
             fileUrl,
             content,
         });
+        if (!response.data) {
+            throw new Error('Failed to submit assignment');
+        }
         return response.data;
     },
 };
