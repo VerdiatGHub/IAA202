@@ -14,17 +14,19 @@
       ]
     },
     "playwright": {
-      "command": "uvx",
+      "command": "npx",
       "args": [
-        "mcp-playwright"
+        "-y",
+        "@playwright/mcp"
       ],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
+      "env": {},
       "disabled": false,
       "autoApprove": [
-        "create_browser_session"
-      ]
+        "*",
+        "browser_navigate",
+        "browser_navigate"
+      ],
+      "disabledTools": []
     }
   }
 }

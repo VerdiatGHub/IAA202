@@ -17,7 +17,7 @@ import { LoginPage } from './pages/auth';
 import { StudentDashboard, CourseCatalog, CourseView } from './pages/student';
 
 // Instructor Pages
-import { InstructorDashboard } from './pages/instructor';
+import { InstructorDashboard, InstructorCourses } from './pages/instructor';
 
 // Admin Pages
 import { AdminDashboard, AdminUsers, AdminCourses } from './pages/admin';
@@ -95,7 +95,7 @@ const AppRoutes: React.FC = () => {
 
         {/* Instructor Routes */}
         <Route path="/instructor" element={<InstructorDashboard userName={user?.fullName} />} />
-        <Route path="/instructor/courses" element={<div className="page-placeholder">My Courses - Coming Soon</div>} />
+        <Route path="/instructor/courses" element={<InstructorCourses />} />
         <Route path="/instructor/courses/new" element={<div className="page-placeholder">Create Course - Coming Soon</div>} />
         <Route path="/instructor/grading" element={<div className="page-placeholder">Grading - Coming Soon</div>} />
         <Route path="/instructor/students" element={<div className="page-placeholder">Students - Coming Soon</div>} />
