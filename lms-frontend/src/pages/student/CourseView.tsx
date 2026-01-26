@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Card } from '../../components/common/Card';
+import { Loading } from '../../components/common/Loading';
 import { CourseContentProvider } from '../../contexts/CourseContentContext';
 import { StudentContentView } from '../../components/courseContent/StudentContentView';
 import './CourseView.css';
@@ -168,22 +169,44 @@ const mockCourseDetail: CourseDetail = {
 export const CourseView: React.FC = () => {
     const { courseId } = useParams<{ courseId: string }>();
     const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'reviews'>('curriculum');
-    const [expandedModules, setExpandedModules] = useState<string[]>(['m1', 'm2', 'm3']);
-    const [useRealContent, setUseRealContent] = useState<boolean>(true);
+    const [expandedModules, setExpandedModules] = useState<string[]>([]);
+    const [course, setCourse] = useState<CourseDetail | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // In real app, fetch course by courseId
-    const course = mockCourseDetail;
-    
-    // Check if courseId is valid for real content
+    // Always use real content from API
+    const useRealContent = true;
+
+    // Fetch course details
     useEffect(() => {
-        // If courseId is available and not a mock ID, use real content
-        if (courseId && courseId !== '1') {
-            setUseRealContent(true);
-        } else {
-            // For demo/mock course, use mock data
-            setUseRealContent(false);
-        }
+        const fetchCourse = async () => {
+            if (!courseId) return;
+            
+            try {
+                setLoading(true);
+                setError(null);
+                // For now, use mock data as placeholder
+                // TODO: Implement real API call when course details endpoint is ready
+                setCourse(mockCourseDetail);
+            } catch (err) {
+                console.error('Error fetching course:', err);
+                setError('Failed to load course');
+                setCourse(mockCourseDetail); // Fallback to mock
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourse();
     }, [courseId]);
+
+    if (loading) {
+        return <div className="course-view"><Loading message="Loading course..." /></div>;
+    }
+
+    if (error || !course) {
+        return <div className="course-view"><p>Error loading course</p></div>;
+    }
 
     const toggleModule = (moduleId: string) => {
         setExpandedModules((prev) =>

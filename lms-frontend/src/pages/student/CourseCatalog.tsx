@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Search,
@@ -15,145 +15,19 @@ import {
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
+import { Loading } from '../../components/common/Loading';
+import { courseService } from '../../services/courseService';
+import type { Course } from '../../types';
 import './CourseCatalog.css';
-
-// Mock course data
-const mockCourses = [
-    {
-        id: '1',
-        title: 'Web Development Fundamentals',
-        description: 'Learn HTML, CSS, and JavaScript from scratch. Build real-world projects and master modern web development.',
-        instructor: 'Dr. Sarah Johnson',
-        thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400',
-        rating: 4.8,
-        reviewCount: 1234,
-        students: 15420,
-        duration: '40 hours',
-        lessons: 48,
-        level: 'Beginner',
-        category: 'Development',
-        price: 0,
-        isBestseller: true,
-    },
-    {
-        id: '2',
-        title: 'Python for Data Science',
-        description: 'Master Python programming and data analysis with pandas, numpy, and matplotlib.',
-        instructor: 'Prof. Michael Chen',
-        thumbnail: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400',
-        rating: 4.9,
-        reviewCount: 2156,
-        students: 23100,
-        duration: '52 hours',
-        lessons: 65,
-        level: 'Intermediate',
-        category: 'Data Science',
-        price: 0,
-        isBestseller: true,
-    },
-    {
-        id: '3',
-        title: 'UI/UX Design Principles',
-        description: 'Create stunning user interfaces and seamless user experiences with modern design methodologies.',
-        instructor: 'Emily Rodriguez',
-        thumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400',
-        rating: 4.7,
-        reviewCount: 876,
-        students: 8900,
-        duration: '28 hours',
-        lessons: 32,
-        level: 'Beginner',
-        category: 'Design',
-        price: 0,
-        isBestseller: false,
-    },
-    {
-        id: '4',
-        title: 'React Advanced Patterns',
-        description: 'Deep dive into React hooks, context, performance optimization, and advanced component patterns.',
-        instructor: 'Alex Turner',
-        thumbnail: 'https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=400',
-        rating: 4.9,
-        reviewCount: 543,
-        students: 4500,
-        duration: '35 hours',
-        lessons: 42,
-        level: 'Advanced',
-        category: 'Development',
-        price: 0,
-        isBestseller: false,
-    },
-    {
-        id: '5',
-        title: 'Machine Learning Basics',
-        description: 'Introduction to machine learning algorithms, from linear regression to neural networks.',
-        instructor: 'Dr. Lisa Wang',
-        thumbnail: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400',
-        rating: 4.8,
-        reviewCount: 1890,
-        students: 19200,
-        duration: '60 hours',
-        lessons: 78,
-        level: 'Intermediate',
-        category: 'Data Science',
-        price: 0,
-        isBestseller: true,
-    },
-    {
-        id: '6',
-        title: 'Digital Marketing Mastery',
-        description: 'Learn SEO, social media marketing, and digital advertising strategies.',
-        instructor: 'James Wilson',
-        thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400',
-        rating: 4.6,
-        reviewCount: 654,
-        students: 7800,
-        duration: '24 hours',
-        lessons: 28,
-        level: 'Beginner',
-        category: 'Marketing',
-        price: 0,
-        isBestseller: false,
-    },
-    {
-        id: '7',
-        title: 'Cloud Computing with AWS',
-        description: 'Master Amazon Web Services and deploy scalable cloud applications.',
-        instructor: 'David Kim',
-        thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400',
-        rating: 4.7,
-        reviewCount: 1234,
-        students: 12000,
-        duration: '45 hours',
-        lessons: 55,
-        level: 'Intermediate',
-        category: 'Development',
-        price: 0,
-        isBestseller: false,
-    },
-    {
-        id: '8',
-        title: 'Mobile App Development',
-        description: 'Build cross-platform mobile apps with React Native and Flutter.',
-        instructor: 'Sophie Martin',
-        thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400',
-        rating: 4.8,
-        reviewCount: 987,
-        students: 9500,
-        duration: '50 hours',
-        lessons: 60,
-        level: 'Intermediate',
-        category: 'Development',
-        price: 0,
-        isBestseller: true,
-    },
-];
 
 const categories = ['All', 'Development', 'Data Science', 'Design', 'Marketing', 'Business'];
 const levels = ['All Levels', 'Beginner', 'Intermediate', 'Advanced'];
 const sortOptions = ['Most Popular', 'Highest Rated', 'Newest', 'Title A-Z'];
 
 export const CourseCatalog: React.FC = () => {
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [selectedLevel, setSelectedLevel] = useState('All Levels');
@@ -161,8 +35,27 @@ export const CourseCatalog: React.FC = () => {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [showFilters, setShowFilters] = useState(false);
 
+    // Fetch courses on mount
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const data = await courseService.getPublishedCourses();
+                setCourses(data);
+            } catch (err) {
+                console.error('Error fetching courses:', err);
+                setError('Failed to load courses');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourses();
+    }, []);
+
     const filteredCourses = useMemo(() => {
-        let result = [...mockCourses];
+        let result = [...courses];
 
         // Search filter
         if (searchQuery) {
@@ -170,8 +63,8 @@ export const CourseCatalog: React.FC = () => {
             result = result.filter(
                 (course) =>
                     course.title.toLowerCase().includes(query) ||
-                    course.description.toLowerCase().includes(query) ||
-                    course.instructor.toLowerCase().includes(query)
+                    (course.description && course.description.toLowerCase().includes(query)) ||
+                    (course.instructor && course.instructor.fullName && course.instructor.fullName.toLowerCase().includes(query))
             );
         }
 
@@ -188,13 +81,14 @@ export const CourseCatalog: React.FC = () => {
         // Sort
         switch (sortBy) {
             case 'Most Popular':
-                result.sort((a, b) => b.students - a.students);
+                result.sort((a, b) => (b.enrollmentCount || 0) - (a.enrollmentCount || 0));
                 break;
             case 'Highest Rated':
-                result.sort((a, b) => b.rating - a.rating);
+                // For now, sort by enrollment count as we don't have ratings yet
+                result.sort((a, b) => (b.enrollmentCount || 0) - (a.enrollmentCount || 0));
                 break;
             case 'Newest':
-                result.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+                result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
                 break;
             case 'Title A-Z':
                 result.sort((a, b) => a.title.localeCompare(b.title));
@@ -202,7 +96,11 @@ export const CourseCatalog: React.FC = () => {
         }
 
         return result;
-    }, [searchQuery, selectedCategory, selectedLevel, sortBy]);
+    }, [courses, searchQuery, selectedCategory, selectedLevel, sortBy]);
+
+    if (loading) {
+        return <Loading message="Loading courses..." />;
+    }
 
     return (
         <div className="course-catalog">
@@ -211,7 +109,7 @@ export const CourseCatalog: React.FC = () => {
                 <div className="header-content">
                     <h1 className="catalog-title">Explore Courses</h1>
                     <p className="catalog-subtitle">
-                        Discover {mockCourses.length}+ courses to boost your skills and career
+                        Discover {courses.length}+ courses to boost your skills and career
                     </p>
                 </div>
 
@@ -337,9 +235,12 @@ export const CourseCatalog: React.FC = () => {
                                 padding="none"
                             >
                                 <div className="course-thumbnail">
-                                    <img src={course.thumbnail} alt={course.title} />
-                                    {course.isBestseller && (
-                                        <span className="bestseller-badge">Bestseller</span>
+                                    <img 
+                                        src={course.thumbnailUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400'} 
+                                        alt={course.title} 
+                                    />
+                                    {(course.enrollmentCount || 0) > 5 && (
+                                        <span className="bestseller-badge">Popular</span>
                                     )}
                                     <div className="thumbnail-overlay">
                                         <Button variant="primary" size="sm" icon={<Play size={14} />}>
@@ -350,45 +251,45 @@ export const CourseCatalog: React.FC = () => {
 
                                 <div className="course-content">
                                     <div className="course-category">
-                                        <span className="category-tag">{course.category}</span>
-                                        <span className="level-tag">{course.level}</span>
+                                        <span className="category-tag">{course.category || 'General'}</span>
+                                        <span className="level-tag">{course.level || 'Beginner'}</span>
                                     </div>
 
                                     <h3 className="course-title">{course.title}</h3>
 
-                                    {viewMode === 'list' && (
+                                    {viewMode === 'list' && course.description && (
                                         <p className="course-description">{course.description}</p>
                                     )}
 
-                                    <p className="course-instructor">{course.instructor}</p>
+                                    <p className="course-instructor">
+                                        {course.instructor?.fullName || 'Instructor'}
+                                    </p>
 
                                     <div className="course-stats">
                                         <div className="rating">
                                             <Star size={14} fill="currentColor" />
-                                            <span className="rating-value">{course.rating}</span>
-                                            <span className="rating-count">({course.reviewCount.toLocaleString()})</span>
+                                            <span className="rating-value">4.8</span>
+                                            <span className="rating-count">(0)</span>
                                         </div>
                                     </div>
 
                                     <div className="course-meta">
                                         <span className="meta-item">
                                             <Clock size={14} />
-                                            {course.duration}
+                                            {course.duration || 'Self-paced'}
                                         </span>
                                         <span className="meta-item">
                                             <BookOpen size={14} />
-                                            {course.lessons} lessons
+                                            {course.lessonCount || 0} lessons
                                         </span>
                                         <span className="meta-item">
                                             <Users size={14} />
-                                            {course.students.toLocaleString()}
+                                            {(course.enrollmentCount || 0).toLocaleString()}
                                         </span>
                                     </div>
 
                                     <div className="course-footer">
-                                        <span className="course-price">
-                                            {course.price === 0 ? 'Free' : `$${course.price}`}
-                                        </span>
+                                        <span className="course-price">Free</span>
                                         <Button variant="primary" size="sm">
                                             Enroll Now
                                         </Button>
