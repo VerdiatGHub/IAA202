@@ -153,22 +153,6 @@ function validateContentItemData(data: CreateContentItemDto): void {
       // Assignment validation - inline creation, no ID needed
       break;
 
-    case 'resource':
-      if (!resourceType) {
-        throw new Error('Resource type is required for resource content');
-      }
-      if (resourceType === 'link') {
-        if (!resourceUrl || resourceUrl.trim() === '') {
-          throw new Error('Resource URL is required for link resources');
-        }
-        validateUrl(resourceUrl, 'Resource URL');
-      } else if (resourceType === 'file') {
-        if (!data.filePath || data.filePath.trim() === '') {
-          throw new Error('File path is required for file resources');
-        }
-      }
-      break;
-
     default:
       throw new Error(`Invalid content type: ${contentType}`);
   }

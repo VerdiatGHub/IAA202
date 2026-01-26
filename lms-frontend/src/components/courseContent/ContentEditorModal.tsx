@@ -181,23 +181,6 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
         // Assignment inline creation - no validation needed here
         // Will be handled by assignment builder in future
         break;
-
-      case 'resource':
-        if (formData.resourceType === 'link') {
-          if (!formData.resourceUrl.trim()) {
-            errors.resourceUrl = 'Resource URL is required';
-          } else {
-            const urlPattern = /^https?:\/\/.+/i;
-            if (!urlPattern.test(formData.resourceUrl.trim())) {
-              errors.resourceUrl = 'Resource URL must be a valid URL starting with http:// or https://';
-            }
-          }
-        } else {
-          if (!formData.filePath.trim()) {
-            errors.filePath = 'File path is required';
-          }
-        }
-        break;
     }
 
     setFormErrors(errors);
@@ -249,14 +232,6 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
             dueDate: formData.assignmentDueDate || null,
             maxPoints: formData.assignmentMaxPoints ? parseInt(formData.assignmentMaxPoints, 10) : null
           };
-          break;
-        case 'resource':
-          contentData.resourceType = formData.resourceType;
-          if (formData.resourceType === 'link') {
-            contentData.resourceUrl = formData.resourceUrl.trim();
-          } else {
-            contentData.filePath = formData.filePath.trim();
-          }
           break;
       }
 
@@ -339,8 +314,7 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
       { type: 'video', label: 'Video', icon: <Video size={20} /> },
       { type: 'text', label: 'Text', icon: <FileText size={20} /> },
       { type: 'quiz', label: 'Quiz', icon: <ClipboardList size={20} /> },
-      { type: 'assignment', label: 'Assignment', icon: <FileCheck size={20} /> },
-      { type: 'resource', label: 'Resource', icon: <Paperclip size={20} /> }
+      { type: 'assignment', label: 'Assignment', icon: <FileCheck size={20} /> }
     ];
 
     return (
@@ -569,8 +543,6 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
         return renderQuizForm();
       case 'assignment':
         return renderAssignmentForm();
-      case 'resource':
-        return renderResourceForm();
       default:
         return null;
     }
@@ -593,8 +565,6 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
         return <ClipboardList size={18} />;
       case 'assignment':
         return <FileCheck size={18} />;
-      case 'resource':
-        return <Paperclip size={18} />;
       default:
         return <FileText size={18} />;
     }
