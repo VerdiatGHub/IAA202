@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Card } from '../../components/common/Card';
-import { Loading } from '../../components/common/Loading';
+import Loading from '../../components/common/Loading';
 import { CourseContentProvider } from '../../contexts/CourseContentContext';
 import { StudentContentView } from '../../components/courseContent/StudentContentView';
 import './CourseView.css';

@@ -15,7 +15,7 @@ import {
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
-import { Loading } from '../../components/common/Loading';
+import Loading from '../../components/common/Loading';
 import { courseService } from '../../services/courseService';
 import type { Course } from '../../types';
 import './CourseCatalog.css';
@@ -27,7 +27,6 @@ const sortOptions = ['Most Popular', 'Highest Rated', 'Newest', 'Title A-Z'];
 export const CourseCatalog: React.FC = () => {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [selectedLevel, setSelectedLevel] = useState('All Levels');
@@ -40,12 +39,10 @@ export const CourseCatalog: React.FC = () => {
         const fetchCourses = async () => {
             try {
                 setLoading(true);
-                setError(null);
                 const data = await courseService.getPublishedCourses();
                 setCourses(data);
             } catch (err) {
                 console.error('Error fetching courses:', err);
-                setError('Failed to load courses');
             } finally {
                 setLoading(false);
             }
