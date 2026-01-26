@@ -12,7 +12,6 @@ export const LoginPage: React.FC = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        rememberMe: false,
     });
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
@@ -111,16 +110,7 @@ export const LoginPage: React.FC = () => {
                         />
 
                         <div className="auth-options">
-                            <label className="checkbox-label">
-                                <input
-                                    type="checkbox"
-                                    name="rememberMe"
-                                    checked={formData.rememberMe}
-                                    onChange={handleChange}
-                                />
-                                <span className="checkbox-custom"></span>
-                                Remember me
-                            </label>
+                            <div></div>
                             <Link to="/forgot-password" className="auth-link">
                                 Forgot Password?
                             </Link>
