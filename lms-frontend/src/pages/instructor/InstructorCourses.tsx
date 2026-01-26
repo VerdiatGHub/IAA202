@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
     BookOpen,
     Users,
-    Star,
     DollarSign,
     Eye,
     MoreVertical,
@@ -16,117 +15,88 @@ import {
 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
+import Loading from '../../components/common/Loading';
+import { courseService } from '../../services/courseService';
+import { useAuth } from '../../contexts/useAuth';
+import toast from 'react-hot-toast';
 import './InstructorCourses.css';
 
-// Mock data - same as dashboard
-const mockCourses = [
-    {
-        id: '1',
-        title: 'Web Development Fundamentals',
-        thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400',
-        students: 1542,
-        rating: 4.8,
-        revenue: 4680,
-        status: 'published',
-        lastUpdated: '2 days ago',
-        category: 'Web Development',
-        level: 'Beginner',
-        lessons: 24,
-        duration: '12 hours',
-    },
-    {
-        id: '2',
-        title: 'Advanced React Patterns',
-        thumbnail: 'https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=400',
-        students: 876,
-        rating: 4.9,
-        revenue: 3240,
-        status: 'published',
-        lastUpdated: '1 week ago',
-        category: 'Frontend',
-        level: 'Advanced',
-        lessons: 18,
-        duration: '8 hours',
-    },
-    {
-        id: '3',
-        title: 'Node.js Backend Development',
-        thumbnail: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400',
-        students: 429,
-        rating: 4.7,
-        revenue: 2130,
-        status: 'draft',
-        lastUpdated: '3 days ago',
-        category: 'Backend',
-        level: 'Intermediate',
-        lessons: 20,
-        duration: '10 hours',
-    },
-    {
-        id: '4',
-        title: 'Python for Data Science',
-        thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400',
-        students: 1203,
-        rating: 4.6,
-        revenue: 3890,
-        status: 'published',
-        lastUpdated: '5 days ago',
-        category: 'Data Science',
-        level: 'Intermediate',
-        lessons: 30,
-        duration: '15 hours',
-    },
-    {
-        id: '5',
-        title: 'Mobile App Development with React Native',
-        thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400',
-        students: 654,
-        rating: 4.8,
-        revenue: 2450,
-        status: 'published',
-        lastUpdated: '1 week ago',
-        category: 'Mobile',
-        level: 'Intermediate',
-        lessons: 22,
-        duration: '11 hours',
-    },
-    {
-        id: '6',
-        title: 'DevOps Essentials',
-        thumbnail: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=400',
-        students: 321,
-        rating: 4.5,
-        revenue: 1560,
-        status: 'draft',
-        lastUpdated: '2 weeks ago',
-        category: 'DevOps',
-        level: 'Advanced',
-        lessons: 16,
-        duration: '9 hours',
-    },
-];
+interface Course {
+    id: string;
+    title: string;
+    thumbnailUrl?: string;
+    enrollmentCount?: number;
+    category?: string;
+    level?: string;
+    duration?: string;
+    isPublished: boolean;
+    updatedAt?: string;
+}
 
 type ViewMode = 'grid' | 'list';
 type FilterStatus = 'all' | 'published' | 'draft';
 
 export const InstructorCourses: React.FC = () => {
+    const { user } = useAuth();
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
     const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const filteredCourses = mockCourses.filter((course) => {
-        const matchesStatus = filterStatus === 'all' || course.status === filterStatus;
+    useEffect(() => {
+        loadCourses();
+    }, [user]);
+
+    const loadCourses = async () => {
+        try {
+            setLoading(true);
+            // Get courses for current instructor
+            const coursesData = await courseService.getCourses({
+                instructorId: user?.id
+            });
+            setCourses(coursesData);
+        } catch (error) {
+            console.error('Error loading courses:', error);
+            toast.error('Failed to load courses');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const filteredCourses = courses.filter((course) => {
+        const matchesStatus = filterStatus === 'all' || 
+            (filterStatus === 'published' && course.isPublished) ||
+            (filterStatus === 'draft' && !course.isPublished);
         const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesStatus && matchesSearch;
     });
 
     const stats = {
-        total: mockCourses.length,
-        published: mockCourses.filter((c) => c.status === 'published').length,
-        draft: mockCourses.filter((c) => c.status === 'draft').length,
-        totalStudents: mockCourses.reduce((sum, c) => sum + c.students, 0),
-        totalRevenue: mockCourses.reduce((sum, c) => sum + c.revenue, 0),
+        total: courses.length,
+        published: courses.filter((c) => c.isPublished).length,
+        draft: courses.filter((c) => !c.isPublished).length,
+        totalStudents: courses.reduce((sum, c) => sum + (c.enrollmentCount || 0), 0),
+        totalRevenue: 0, // Revenue calculation would need additional data
     };
+
+    const getRelativeTime = (dateString?: string) => {
+        if (!dateString) return 'Recently';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return '1 day ago';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+        return `${Math.floor(diffDays / 30)} months ago`;
+    };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <div className="instructor-courses">
@@ -163,7 +133,7 @@ export const InstructorCourses: React.FC = () => {
                         <DollarSign size={20} />
                     </div>
                     <div className="stat-info">
-                        <span className="stat-value">${stats.totalRevenue.toLocaleString()}</span>
+                        <span className="stat-value">N/A</span>
                         <span className="stat-label">Total Revenue</span>
                     </div>
                 </Card>
@@ -236,38 +206,30 @@ export const InstructorCourses: React.FC = () => {
                             {viewMode === 'grid' ? (
                                 <>
                                     <div className="course-thumbnail">
-                                        <img src={course.thumbnail} alt={course.title} />
-                                        <span className={`status-badge ${course.status}`}>
-                                            {course.status}
+                                        <img src={course.thumbnailUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400'} alt={course.title} />
+                                        <span className={`status-badge ${course.isPublished ? 'published' : 'draft'}`}>
+                                            {course.isPublished ? 'published' : 'draft'}
                                         </span>
                                     </div>
                                     <div className="course-content">
                                         <h3 className="course-title">{course.title}</h3>
-                                        <p className="course-category">{course.category} • {course.level}</p>
+                                        <p className="course-category">{course.category || 'General'} • {course.level || 'All Levels'}</p>
                                         
                                         <div className="course-meta">
                                             <span className="meta-item">
                                                 <Users size={14} />
-                                                {course.students.toLocaleString()}
-                                            </span>
-                                            <span className="meta-item">
-                                                <Star size={14} fill="currentColor" />
-                                                {course.rating}
+                                                {course.enrollmentCount?.toLocaleString() || 0}
                                             </span>
                                             <span className="meta-item">
                                                 <Clock size={14} />
-                                                {course.duration}
+                                                {course.duration || 'N/A'}
                                             </span>
                                         </div>
 
                                         <div className="course-stats">
                                             <div className="stat-item">
-                                                <span className="stat-label">Revenue</span>
-                                                <span className="stat-value">${course.revenue.toLocaleString()}</span>
-                                            </div>
-                                            <div className="stat-item">
-                                                <span className="stat-label">Lessons</span>
-                                                <span className="stat-value">{course.lessons}</span>
+                                                <span className="stat-label">Students</span>
+                                                <span className="stat-value">{course.enrollmentCount || 0}</span>
                                             </div>
                                         </div>
 
@@ -283,39 +245,31 @@ export const InstructorCourses: React.FC = () => {
                                         </div>
 
                                         <div className="course-footer">
-                                            <span className="updated-time">Updated {course.lastUpdated}</span>
+                                            <span className="updated-time">Updated {getRelativeTime(course.updatedAt)}</span>
                                         </div>
                                     </div>
                                 </>
                             ) : (
                                 <div className="course-list-item">
-                                    <img src={course.thumbnail} alt={course.title} className="list-thumbnail" />
+                                    <img src={course.thumbnailUrl || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400'} alt={course.title} className="list-thumbnail" />
                                     <div className="list-content">
                                         <div className="list-header">
                                             <div>
                                                 <h3 className="course-title">{course.title}</h3>
-                                                <p className="course-category">{course.category} • {course.level}</p>
+                                                <p className="course-category">{course.category || 'General'} • {course.level || 'All Levels'}</p>
                                             </div>
-                                            <span className={`status-badge ${course.status}`}>
-                                                {course.status}
+                                            <span className={`status-badge ${course.isPublished ? 'published' : 'draft'}`}>
+                                                {course.isPublished ? 'published' : 'draft'}
                                             </span>
                                         </div>
                                         <div className="list-meta">
                                             <span className="meta-item">
                                                 <Users size={14} />
-                                                {course.students.toLocaleString()} students
-                                            </span>
-                                            <span className="meta-item">
-                                                <Star size={14} fill="currentColor" />
-                                                {course.rating} rating
-                                            </span>
-                                            <span className="meta-item">
-                                                <DollarSign size={14} />
-                                                ${course.revenue.toLocaleString()}
+                                                {course.enrollmentCount?.toLocaleString() || 0} students
                                             </span>
                                             <span className="meta-item">
                                                 <Clock size={14} />
-                                                {course.lessons} lessons • {course.duration}
+                                                {course.duration || 'N/A'}
                                             </span>
                                         </div>
                                     </div>
