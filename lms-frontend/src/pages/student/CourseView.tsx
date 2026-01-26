@@ -185,8 +185,10 @@ export const CourseView: React.FC = () => {
             try {
                 setLoading(true);
                 setError(null);
-                // For now, use mock data as placeholder
-                // TODO: Implement real API call when course details endpoint is ready
+                
+                // Use mock data for now as the course details structure matches
+                // In a real implementation, you would fetch from courseService.getCourseById(courseId)
+                // and map the response to the CourseDetail interface
                 setCourse(mockCourseDetail);
             } catch (err) {
                 console.error('Error fetching course:', err);
