@@ -124,11 +124,24 @@ export interface CreateContentItemDto {
   // Text fields
   textContent?: string;
   
-  // Quiz fields
-  quizId?: string;
+  // Quiz fields - inline creation
+  quizData?: {
+    title: string;
+    timeLimit?: number;
+    questions: Array<{
+      questionText: string;
+      options: string[];
+      correctAnswer: number;
+      points: number;
+    }>;
+  };
   
-  // Assignment fields
-  assignmentId?: string;
+  // Assignment fields - inline creation
+  assignmentData?: {
+    description: string;
+    dueDate?: string;
+    maxPoints?: number;
+  };
   
   // Resource fields
   resourceType?: 'file' | 'link';

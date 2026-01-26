@@ -143,15 +143,14 @@ function validateContentItemData(data: CreateContentItemDto): void {
       break;
 
     case 'quiz':
-      if (!data.quizId || data.quizId.trim() === '') {
-        throw new Error('Quiz ID is required for quiz content');
+      // Quiz validation handled by quiz builder - no ID needed
+      if (data.quizData && data.quizData.questions && data.quizData.questions.length === 0) {
+        throw new Error('At least one question is required for quiz content');
       }
       break;
 
     case 'assignment':
-      if (!data.assignmentId || data.assignmentId.trim() === '') {
-        throw new Error('Assignment ID is required for assignment content');
-      }
+      // Assignment validation - inline creation, no ID needed
       break;
 
     case 'resource':
