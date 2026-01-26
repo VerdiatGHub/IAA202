@@ -248,20 +248,23 @@ export const InstructorCourseView: React.FC = () => {
                                                 <Clock size={14} />
                                                 Submitted: {new Date(submission.submittedAt).toLocaleString()}
                                             </span>
-                                            <span className={`status-badge ${submission.score !== null && submission.score !== undefined ? 'graded' : 'pending'}`}>
-                                                {submission.score !== null && submission.score !== undefined ? (
-                                                    <>
-                                                        <CheckCircle size={14} />
-                                                        Graded
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <AlertCircle size={14} />
-                                                        Pending
-                                                    </>
-                                                )}
-                                            </span>
                                         </div>
+                                    </div>
+
+                                    <div className="submission-status-row">
+                                        <span className={`status-badge ${submission.score !== null && submission.score !== undefined ? 'graded' : 'pending'}`}>
+                                            {submission.score !== null && submission.score !== undefined ? (
+                                                <>
+                                                    <CheckCircle size={14} />
+                                                    Graded
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <AlertCircle size={14} />
+                                                    Pending
+                                                </>
+                                            )}
+                                        </span>
                                     </div>
 
                                     <div className="submission-actions">
