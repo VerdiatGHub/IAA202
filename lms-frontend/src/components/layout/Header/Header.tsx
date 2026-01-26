@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {
     Bell,
     Search,
-    Moon,
-    Sun,
     LogOut,
     User,
     Settings,
@@ -43,9 +41,6 @@ export const Header: React.FC<HeaderProps> = ({
     onToggleMobileMenu,
 }) => {
     const navigate = useNavigate();
-    const [isDarkMode, setIsDarkMode] = useState(
-        document.documentElement.getAttribute('data-theme') === 'dark'
-    );
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -85,13 +80,6 @@ export const Header: React.FC<HeaderProps> = ({
         }
     };
 
-    const toggleTheme = () => {
-        const newTheme = isDarkMode ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        setIsDarkMode(!isDarkMode);
-        localStorage.setItem('theme', newTheme);
-    };
-
     const handleProfileClick = (path: string) => {
         navigate(path);
         setShowProfileMenu(false);
@@ -119,11 +107,6 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             <div className="header-right">
-                {/* Theme Toggle */}
-                <button className="header-icon-btn" onClick={toggleTheme} title="Toggle theme">
-                    {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                </button>
-
                 {/* Notifications */}
                 <div className="header-dropdown">
                     <button
