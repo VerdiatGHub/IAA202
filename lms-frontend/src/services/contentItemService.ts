@@ -117,7 +117,7 @@ export async function reorderContentItems(
  * Validate content item data based on content type
  */
 function validateContentItemData(data: CreateContentItemDto): void {
-  const { contentType, title, videoUrl, textContent, resourceUrl, resourceType } = data;
+  const { contentType, title, videoUrl, textContent } = data;
 
   // Validate title
   if (!title || title.trim() === '') {

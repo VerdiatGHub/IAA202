@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
-import { Video, FileText, ClipboardList, FileCheck, Paperclip, Link as LinkIcon } from 'lucide-react';
+import { Video, FileText, ClipboardList, FileCheck } from 'lucide-react';
 import { useCourseContent } from '../../contexts/useCourseContent';
 import { QuizBuilder } from './QuizBuilder';
 import type { ContentItem, ContentType } from '../../types';
@@ -467,69 +467,6 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
           min="1"
         />
       </div>
-    </>
-  );
-
-  const renderResourceForm = () => (
-    <>
-      <div className="form-group">
-        <label className="input-label">Resource Type</label>
-        <div className="resource-type-selector">
-          <label className="radio-label">
-            <input
-              type="radio"
-              name="resourceType"
-              value="link"
-              checked={formData.resourceType === 'link'}
-              onChange={handleChange}
-              className="radio-input"
-            />
-            <span className="radio-text">External Link</span>
-          </label>
-          <label className="radio-label">
-            <input
-              type="radio"
-              name="resourceType"
-              value="file"
-              checked={formData.resourceType === 'file'}
-              onChange={handleChange}
-              className="radio-input"
-            />
-            <span className="radio-text">File</span>
-          </label>
-        </div>
-      </div>
-
-      {formData.resourceType === 'link' ? (
-        <div className="form-group">
-          <Input
-            label="Resource URL"
-            name="resourceUrl"
-            value={formData.resourceUrl}
-            onChange={handleChange}
-            placeholder="https://example.com/resource.pdf"
-            error={formErrors.resourceUrl}
-            icon={<LinkIcon size={18} />}
-            required
-          />
-        </div>
-      ) : (
-        <div className="form-group">
-          <Input
-            label="File Path"
-            name="filePath"
-            value={formData.filePath}
-            onChange={handleChange}
-            placeholder="/uploads/resources/document.pdf"
-            error={formErrors.filePath}
-            icon={<Paperclip size={18} />}
-            required
-          />
-          <span className="input-hint">
-            Enter the path to the uploaded file
-          </span>
-        </div>
-      )}
     </>
   );
 
