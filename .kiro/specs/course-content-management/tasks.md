@@ -170,7 +170,7 @@ This implementation plan breaks down the course content management system into i
 - [x] 8. Checkpoint - Verify Backend API
   - All backend endpoints, services, and tests implemented
 
-- [-] 9. Create Frontend API Services
+- [x] 9. Create Frontend API Services
   - [x] 9.1 Implement module service
     - Create getModules, createModule, updateModule, deleteModule functions
     - Implement reorderModules function
@@ -313,7 +313,7 @@ This implementation plan breaks down the course content management system into i
     - Handle loading and error states
     - _Requirements: 10.2_
 
-- [ ] 16. Implement Preview Mode
+- [x] 16. Implement Preview Mode
   - [x] 16.1 Add preview mode toggle
     - Add "Preview" button to CourseContentEditor
     - Implement preview mode state
@@ -328,7 +328,7 @@ This implementation plan breaks down the course content management system into i
     - Sort by order_index
     - _Requirements: 11.2, 11.3, 11.4, 15.1, 15.2, 15.3, 15.4, 15.5_
 
-- [ ] 17. Implement Student View for Course Content
+- [x] 17. Implement Student View for Course Content
   - [x] 17.1 Create student course content page
     - Display modules and lessons for enrolled students
     - Show content items within lessons
@@ -337,7 +337,7 @@ This implementation plan breaks down the course content management system into i
     - Sort all content by order_index
     - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5_
 
-- [ ] 18. Implement Error Handling and User Feedback
+- [x] 18. Implement Error Handling and User Feedback
   - [x] 18.1 Add error handling to all API calls
     - Display toast notifications for errors
     - Show inline error messages for validation
@@ -355,7 +355,7 @@ This implementation plan breaks down the course content management system into i
     - Show loading spinners during operations
     - _Requirements: 13.5_
 
-- [ ] 19. Data Migration for Existing Courses
+- [x] 19. Data Migration for Existing Courses
   - [x] 19.1 Create migration script
     - Create default "General" module for each course
     - Migrate existing lessons to default module
@@ -368,7 +368,7 @@ This implementation plan breaks down the course content management system into i
     - Test rollback capability
     - _Requirements: 1.1, 2.1_
 
-- [ ] 20. Final Integration Testing
+- [x] 20. Final Integration Testing
   - [x] 20.1 Write end-to-end integration tests
     - Test complete flow: create module → add lesson → add content
     - Test reordering across all levels
@@ -383,7 +383,7 @@ This implementation plan breaks down the course content management system into i
     - Test browser compatibility
     - _Requirements: All requirements_
 
-- [-] 21. Final Checkpoint - Complete System Verification
+- [x] 21. Final Checkpoint - Complete System Verification
   - Verify all requirements are met
   - Ensure all tests pass
   - Confirm frontend and backend integration works correctly
