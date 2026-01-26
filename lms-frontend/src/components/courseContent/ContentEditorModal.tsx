@@ -4,6 +4,7 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { Video, FileText, ClipboardList, FileCheck, Paperclip, Link as LinkIcon } from 'lucide-react';
 import { useCourseContent } from '../../contexts/useCourseContent';
+import { QuizBuilder } from './QuizBuilder';
 import type { ContentItem, ContentType } from '../../types';
 // import toast from 'react-hot-toast'; // TODO: Add toast notifications
 import './ContentEditorModal.css';
@@ -47,7 +48,15 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
     // Text fields
     textContent: '',
     // Quiz fields
-    quizId: '',
+    quizTitle: '',
+    quizTimeLimit: '',
+    quizQuestions: [] as Array<{
+      id: string;
+      questionText: string;
+      options: string[];
+      correctAnswer: number;
+      points: number;
+    }>,
     // Assignment fields
     assignmentId: '',
     // Resource fields
@@ -71,7 +80,9 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
           videoUrl: contentItem.videoUrl || '',
           duration: contentItem.duration ? String(contentItem.duration) : '',
           textContent: contentItem.textContent || '',
-          quizId: contentItem.quizId || '',
+          quizTitle: '',
+          quizTimeLimit: '',
+          quizQuestions: [],
           assignmentId: contentItem.assignmentId || '',
           resourceType: contentItem.resourceType || 'link',
           resourceUrl: contentItem.resourceUrl || '',
@@ -86,7 +97,9 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
           videoUrl: '',
           duration: '',
           textContent: '',
-          quizId: '',
+          quizTitle: '',
+          quizTimeLimit: '',
+          quizQuestions: [],
           assignmentId: '',
           resourceType: 'link',
           resourceUrl: '',
@@ -143,8 +156,18 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
         break;
 
       case 'quiz':
-        if (!formData.quizId.trim()) {
-          errors.quizId = 'Quiz ID is required';
+        if (formData.quizQuestions.length === 0) {
+          errors.quiz = 'At least one question is required';
+        } else {
+          // Validate each question
+          formData.quizQuestions.forEach((q, index) => {
+            if (!q.questionText.trim()) {
+              errors[`question-${index}`] = `Question ${index + 1} text is required`;
+            }
+            if (q.options.some(opt => !opt.trim())) {
+              errors[`question-${index}-options`] = `All options for question ${index + 1} must be filled`;
+            }
+          });
         }
         break;
 
@@ -204,7 +227,16 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
           contentData.textContent = formData.textContent.trim();
           break;
         case 'quiz':
-          contentData.quizId = formData.quizId.trim();
+          contentData.quizData = {
+            title: formData.title.trim(),
+            timeLimit: formData.quizTimeLimit ? parseInt(formData.quizTimeLimit, 10) : null,
+            questions: formData.quizQuestions.map(q => ({
+              questionText: q.questionText.trim(),
+              options: q.options.map(opt => opt.trim()),
+              correctAnswer: q.correctAnswer,
+              points: q.points
+            }))
+          };
           break;
         case 'assignment':
           contentData.assignmentId = formData.assignmentId.trim();
@@ -244,7 +276,9 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
       videoUrl: '',
       duration: '',
       textContent: '',
-      quizId: '',
+      quizTitle: '',
+      quizTimeLimit: '',
+      quizQuestions: [],
       assignmentId: '',
       resourceType: 'link',
       resourceUrl: '',
@@ -376,21 +410,32 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
   );
 
   const renderQuizForm = () => (
-    <div className="form-group">
-      <Input
-        label="Quiz ID"
-        name="quizId"
-        value={formData.quizId}
-        onChange={handleChange}
-        placeholder="Enter the quiz ID to link"
-        error={formErrors.quizId}
-        icon={<ClipboardList size={18} />}
-        required
+    <>
+      <div className="form-group">
+        <Input
+          label="Time Limit (Optional)"
+          name="quizTimeLimit"
+          type="number"
+          value={formData.quizTimeLimit}
+          onChange={handleChange}
+          placeholder="Time limit in minutes"
+          icon={<ClipboardList size={18} />}
+          min="1"
+        />
+        <span className="input-hint">
+          Leave empty for no time limit
+        </span>
+      </div>
+      
+      <QuizBuilder
+        questions={formData.quizQuestions}
+        onChange={(questions) => setFormData(prev => ({ ...prev, quizQuestions: questions }))}
       />
-      <span className="input-hint">
-        Link to an existing quiz by providing its ID
-      </span>
-    </div>
+      
+      {formErrors.quiz && (
+        <div className="form-error-message">{formErrors.quiz}</div>
+      )}
+    </>
   );
 
   const renderAssignmentForm = () => (

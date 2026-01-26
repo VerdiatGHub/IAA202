@@ -174,7 +174,7 @@ async function create(lessonId, data) {
         videoUrl,
         duration,
         textContent,
-        quizId,
+        quizData,
         assignmentId,
         resourceType,
         resourceUrl,
@@ -193,56 +193,101 @@ async function create(lessonId, data) {
     // Get next order index within the lesson scope
     const orderIndex = await getNextOrderIndex(lessonId);
 
-    // Insert content item
-    const result = await query(`
-        INSERT INTO content_items (
-            lesson_id, content_type, title, description, is_required, order_index,
-            video_url, duration, text_content, quiz_id, assignment_id,
-            resource_type, resource_url, file_path
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-        RETURNING 
-            id, lesson_id, content_type, title, description, order_index, is_required,
-            video_url, duration, text_content, quiz_id, assignment_id,
-            resource_type, resource_url, file_path,
-            created_at, updated_at
-    `, [
-        lessonId,
-        contentType,
-        title.trim(),
-        description || null,
-        isRequired !== undefined ? isRequired : true,
-        orderIndex,
-        videoUrl || null,
-        duration || null,
-        textContent || null,
-        quizId || null,
-        assignmentId || null,
-        resourceType || null,
-        resourceUrl || null,
-        filePath || null
-    ]);
+    // Start transaction for quiz creation
+    const client = await getClient();
+    try {
+        await client.query('BEGIN');
 
-    const item = result.rows[0];
-    return {
-        id: item.id,
-        lessonId: item.lesson_id,
-        contentType: item.content_type,
-        title: item.title,
-        description: item.description,
-        orderIndex: item.order_index,
-        isRequired: item.is_required,
-        videoUrl: item.video_url,
-        duration: item.duration,
-        textContent: item.text_content,
-        quizId: item.quiz_id,
-        assignmentId: item.assignment_id,
-        resourceType: item.resource_type,
-        resourceUrl: item.resource_url,
-        filePath: item.file_path,
-        createdAt: item.created_at,
-        updatedAt: item.updated_at
-    };
+        let quizId = null;
+
+        // If content type is quiz and quizData is provided, create the quiz
+        if (contentType === 'quiz' && quizData) {
+            // Create quiz
+            const quizResult = await client.query(`
+                INSERT INTO quizzes (course_id, title, time_limit)
+                SELECT l.course_id, $1, $2
+                FROM lessons l
+                WHERE l.id = $3
+                RETURNING id
+            `, [quizData.title, quizData.timeLimit || null, lessonId]);
+
+            quizId = quizResult.rows[0].id;
+
+            // Create questions
+            if (quizData.questions && quizData.questions.length > 0) {
+                for (const question of quizData.questions) {
+                    await client.query(`
+                        INSERT INTO questions (quiz_id, question_text, question_type, options, correct_answer, points)
+                        VALUES ($1, $2, 'multiple_choice', $3, $4, $5)
+                    `, [
+                        quizId,
+                        question.questionText,
+                        JSON.stringify(question.options),
+                        question.options[question.correctAnswer],
+                        question.points
+                    ]);
+                }
+            }
+        }
+
+        // Insert content item
+        const result = await client.query(`
+            INSERT INTO content_items (
+                lesson_id, content_type, title, description, is_required, order_index,
+                video_url, duration, text_content, quiz_id, assignment_id,
+                resource_type, resource_url, file_path
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+            RETURNING 
+                id, lesson_id, content_type, title, description, order_index, is_required,
+                video_url, duration, text_content, quiz_id, assignment_id,
+                resource_type, resource_url, file_path,
+                created_at, updated_at
+        `, [
+            lessonId,
+            contentType,
+            title.trim(),
+            description || null,
+            isRequired !== undefined ? isRequired : true,
+            orderIndex,
+            videoUrl || null,
+            duration || null,
+            textContent || null,
+            quizId,
+            assignmentId || null,
+            resourceType || null,
+            resourceUrl || null,
+            filePath || null
+        ]);
+
+        await client.query('COMMIT');
+
+        const item = result.rows[0];
+        return {
+            id: item.id,
+            lessonId: item.lesson_id,
+            contentType: item.content_type,
+            title: item.title,
+            description: item.description,
+            orderIndex: item.order_index,
+            isRequired: item.is_required,
+            videoUrl: item.video_url,
+            duration: item.duration,
+            textContent: item.text_content,
+            quizId: item.quiz_id,
+            assignmentId: item.assignment_id,
+            resourceType: item.resource_type,
+            resourceUrl: item.resource_url,
+            filePath: item.file_path,
+            createdAt: item.created_at,
+            updatedAt: item.updated_at
+        };
+    } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+    } finally {
+        client.release();
+    }
 }
 
 /**
