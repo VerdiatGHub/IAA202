@@ -15,7 +15,7 @@ import {
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
-import Loading from '../../components/common/Loading';
+import { LoadingPage } from '../../components/common/Loading';
 import { courseService } from '../../services/courseService';
 import type { Course } from '../../types';
 import './CourseCatalog.css';
@@ -96,7 +96,7 @@ export const CourseCatalog: React.FC = () => {
     }, [courses, searchQuery, selectedCategory, selectedLevel, sortBy]);
 
     if (loading) {
-        return <Loading message="Loading courses..." />;
+        return <LoadingPage message="Loading courses..." />;
     }
 
     return (

@@ -12,10 +12,11 @@ import {
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
-import Loading from '../../components/common/Loading';
+import { LoadingPage } from '../../components/common/Loading';
 import { enrollmentService, type EnrollmentApiData } from '../../services/enrollmentService';
 import { courseService } from '../../services/courseService';
-import type { Course } from '../../types';
+import { assignmentService } from '../../services/assignmentService';
+import type { Course, Assignment } from '../../types';
 import './StudentDashboard.css';
 
 interface StudentDashboardProps {
@@ -27,6 +28,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 }) => {
     const [enrollments, setEnrollments] = useState<EnrollmentApiData[]>([]);
     const [recommendedCourses, setRecommendedCourses] = useState<Course[]>([]);
+    const [upcomingAssignments, setUpcomingAssignments] = useState<Assignment[]>([]);
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({
         enrolledCourses: 0,
@@ -47,12 +49,39 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
                 // Fetch enrollment stats
                 const statsData = await enrollmentService.getEnrollmentStats();
+                
+                // Calculate study hours based on progress (rough estimate)
+                const totalStudyHours = enrollmentsData.reduce((acc, enrollment) => {
+                    // Assume each course has ~40 hours, calculate based on progress
+                    const estimatedHours = Math.round((enrollment.progress / 100) * 40);
+                    return acc + estimatedHours;
+                }, 0);
+
                 setStats({
                     enrolledCourses: statsData.enrolledCourses || enrollmentsData.length,
-                    studyHours: 0, // TODO: Calculate from actual data
+                    studyHours: totalStudyHours,
                     certificates: statsData.completedCourses || 0,
                     avgProgress: Math.round(statsData.averageProgress || 0),
                 });
+
+                // Fetch upcoming assignments from enrolled courses
+                const allAssignments: Assignment[] = [];
+                for (const enrollment of enrollmentsData) {
+                    try {
+                        const assignments = await assignmentService.getAssignmentsByCourse(enrollment.courseId);
+                        allAssignments.push(...assignments);
+                    } catch (err) {
+                        console.error(`Error fetching assignments for course ${enrollment.courseId}:`, err);
+                    }
+                }
+                
+                // Sort by due date and get upcoming ones
+                const now = new Date();
+                const upcoming = allAssignments
+                    .filter(a => a.dueDate && new Date(a.dueDate) > now)
+                    .sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime())
+                    .slice(0, 3);
+                setUpcomingAssignments(upcoming);
 
                 // Fetch recommended courses (published courses not enrolled in)
                 const allCourses = await courseService.getPublishedCourses();
@@ -98,8 +127,21 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
         },
     ];
 
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    };
+
+    const getDaysUntil = (dateString: string) => {
+        const today = new Date();
+        const dueDate = new Date(dateString);
+        const diffTime = dueDate.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    };
+
     if (loading) {
-        return <Loading message="Loading dashboard..." />;
+        return <LoadingPage message="Loading dashboard..." />;
     }
 
     return (
@@ -202,7 +244,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
                 {/* Sidebar */}
                 <aside className="dashboard-sidebar">
-                    {/* Upcoming Deadlines - Placeholder for now */}
+                    {/* Upcoming Deadlines */}
                     <Card className="deadlines-card animate-slideUp">
                         <CardHeader>
                             <CardTitle>
@@ -211,9 +253,45 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="empty-state-small">
-                                <p>No upcoming deadlines</p>
-                            </div>
+                            {upcomingAssignments.length === 0 ? (
+                                <div className="empty-state-small">
+                                    <p>No upcoming deadlines</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <ul className="deadlines-list">
+                                        {upcomingAssignments.map((assignment) => {
+                                            const daysUntil = assignment.dueDate ? getDaysUntil(assignment.dueDate) : 0;
+                                            return (
+                                                <li key={assignment.id} className="deadline-item">
+                                                    <div className="deadline-info">
+                                                        <span className="deadline-type assignment">
+                                                            assignment
+                                                        </span>
+                                                        <h4 className="deadline-title">{assignment.title}</h4>
+                                                        <p className="deadline-course">Course Assignment</p>
+                                                    </div>
+                                                    <div className={`deadline-date ${daysUntil <= 2 ? 'urgent' : ''}`}>
+                                                        <span className="date">
+                                                            {assignment.dueDate ? formatDate(assignment.dueDate) : 'No date'}
+                                                        </span>
+                                                        <span className="days">
+                                                            {daysUntil === 0
+                                                                ? 'Today'
+                                                                : daysUntil === 1
+                                                                    ? 'Tomorrow'
+                                                                    : `${daysUntil} days`}
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                    <Button variant="ghost" fullWidth size="sm">
+                                        View All Deadlines
+                                    </Button>
+                                </>
+                            )}
                         </CardContent>
                     </Card>
 

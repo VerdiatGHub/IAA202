@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Card } from '../../components/common/Card';
-import Loading from '../../components/common/Loading';
+import { LoadingPage } from '../../components/common/Loading';
 import { CourseContentProvider } from '../../contexts/CourseContentContext';
 import { StudentContentView } from '../../components/courseContent/StudentContentView';
 import './CourseView.css';
@@ -201,7 +201,7 @@ export const CourseView: React.FC = () => {
     }, [courseId]);
 
     if (loading) {
-        return <div className="course-view"><Loading message="Loading course..." /></div>;
+        return <div className="course-view"><LoadingPage message="Loading course..." /></div>;
     }
 
     if (error || !course) {
