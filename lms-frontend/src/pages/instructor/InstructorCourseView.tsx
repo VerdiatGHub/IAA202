@@ -54,15 +54,20 @@ export const InstructorCourseView: React.FC = () => {
     const loadCourseData = async () => {
         try {
             setLoading(true);
+            console.log('Loading course data for courseId:', courseId);
             const [courseData, assignmentsData] = await Promise.all([
                 courseService.getCourseById(courseId!),
                 assignmentService.getAssignmentsByCourse(courseId!)
             ]);
+            console.log('Course data loaded:', courseData);
+            console.log('Assignments data loaded:', assignmentsData);
             setCourse(courseData);
             setAssignments(assignmentsData);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error loading course data:', error);
-            toast.error('Failed to load course data');
+            console.error('Error message:', error.message);
+            console.error('Error response:', error.response);
+            toast.error(error.message || 'Failed to load course data');
         } finally {
             setLoading(false);
         }
