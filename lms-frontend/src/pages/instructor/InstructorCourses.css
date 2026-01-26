@@ -280,8 +280,9 @@
 }
 
 .course-stats {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
     margin-bottom: 1rem;
     padding: 1rem 0;
     border-top: 1px solid var(--border-color);
@@ -305,6 +306,10 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
+}
+
+.stat-item .stat-value.pending-count {
+    color: var(--warning);
 }
 
 .course-actions {

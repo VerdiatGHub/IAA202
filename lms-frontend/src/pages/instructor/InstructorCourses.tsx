@@ -25,6 +25,7 @@ interface Course {
     title: string;
     thumbnailUrl?: string;
     enrollmentCount?: number;
+    pendingSubmissions?: number;
     category?: string;
     level?: string;
     duration?: string;
@@ -229,6 +230,10 @@ export const InstructorCourses: React.FC = () => {
                                             <div className="stat-item">
                                                 <span className="stat-label">Students</span>
                                                 <span className="stat-value">{course.enrollmentCount || 0}</span>
+                                            </div>
+                                            <div className="stat-item">
+                                                <span className="stat-label">Pending</span>
+                                                <span className="stat-value pending-count">{course.pendingSubmissions || 0}</span>
                                             </div>
                                         </div>
 

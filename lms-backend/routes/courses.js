@@ -17,7 +17,10 @@ router.get('/', authenticateToken, async (req, res) => {
                 (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id) as enrollment_count,
                 (SELECT COUNT(*) FROM lessons l 
                  JOIN modules m ON l.module_id = m.id 
-                 WHERE m.course_id = c.id) as lesson_count
+                 WHERE m.course_id = c.id) as lesson_count,
+                (SELECT COUNT(*) FROM submissions s 
+                 JOIN assignments a ON s.assignment_id = a.id 
+                 WHERE a.course_id = c.id AND s.score IS NULL) as pending_submissions
             FROM courses c
             LEFT JOIN users u ON c.instructor_id = u.id
         `;
@@ -83,6 +86,7 @@ router.get('/', authenticateToken, async (req, res) => {
                 duration: course.duration,
                 enrollmentCount: parseInt(course.enrollment_count),
                 lessonCount: parseInt(course.lesson_count),
+                pendingSubmissions: parseInt(course.pending_submissions || 0),
                 createdAt: course.created_at,
                 updatedAt: course.updated_at
             }))
