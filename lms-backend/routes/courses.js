@@ -15,7 +15,9 @@ router.get('/', authenticateToken, async (req, res) => {
                 c.is_published, c.is_public, c.category, c.level, c.duration, c.created_at, c.updated_at,
                 u.full_name as instructor_name,
                 (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id) as enrollment_count,
-                (SELECT COUNT(*) FROM lessons l WHERE l.course_id = c.id) as lesson_count
+                (SELECT COUNT(*) FROM lessons l 
+                 JOIN modules m ON l.module_id = m.id 
+                 WHERE m.course_id = c.id) as lesson_count
             FROM courses c
             LEFT JOIN users u ON c.instructor_id = u.id
         `;
@@ -122,7 +124,9 @@ router.get('/:id', authenticateToken, async (req, res) => {
                 c.is_published, c.is_public, c.category, c.level, c.duration, c.created_at, c.updated_at,
                 u.full_name as instructor_name, u.email as instructor_email,
                 (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id) as enrollment_count,
-                (SELECT COUNT(*) FROM lessons l WHERE l.course_id = c.id) as lesson_count
+                (SELECT COUNT(*) FROM lessons l 
+                 JOIN modules m ON l.module_id = m.id 
+                 WHERE m.course_id = c.id) as lesson_count
             FROM courses c
             LEFT JOIN users u ON c.instructor_id = u.id
             WHERE c.id = $1
@@ -141,12 +145,14 @@ router.get('/:id', authenticateToken, async (req, res) => {
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        // Get lessons
+        // Get lessons with their modules
         const lessons = await query(`
-            SELECT id, title, content, video_url, order_index, duration, created_at
-            FROM lessons
-            WHERE course_id = $1
-            ORDER BY order_index
+            SELECT l.id, l.title, l.content, l.video_url, l.order_index, l.duration, l.created_at,
+                   m.id as module_id, m.title as module_title
+            FROM lessons l
+            JOIN modules m ON l.module_id = m.id
+            WHERE m.course_id = $1
+            ORDER BY m.order_index, l.order_index
         `, [id]);
 
         res.json({
@@ -174,6 +180,8 @@ router.get('/:id', authenticateToken, async (req, res) => {
                 videoUrl: l.video_url,
                 orderIndex: l.order_index,
                 duration: l.duration,
+                moduleId: l.module_id,
+                moduleTitle: l.module_title,
                 createdAt: l.created_at
             })),
             createdAt: course.created_at,
