@@ -76,7 +76,6 @@ export const InstructorCourses: React.FC = () => {
         total: courses.length,
         published: courses.filter((c) => c.isPublished).length,
         draft: courses.filter((c) => !c.isPublished).length,
-        totalStudents: courses.reduce((sum, c) => sum + (c.enrollmentCount || 0), 0),
         totalRevenue: 0, // Revenue calculation would need additional data
     };
 
@@ -117,15 +116,6 @@ export const InstructorCourses: React.FC = () => {
                     <div className="stat-info">
                         <span className="stat-value">{stats.total}</span>
                         <span className="stat-label">Total Courses</span>
-                    </div>
-                </Card>
-                <Card className="stat-card">
-                    <div className="stat-icon success">
-                        <Users size={20} />
-                    </div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.totalStudents.toLocaleString()}</span>
-                        <span className="stat-label">Total Students</span>
                     </div>
                 </Card>
                 <Card className="stat-card">
@@ -228,11 +218,7 @@ export const InstructorCourses: React.FC = () => {
 
                                         <div className="course-stats">
                                             <div className="stat-item">
-                                                <span className="stat-label">Students</span>
-                                                <span className="stat-value">{course.enrollmentCount || 0}</span>
-                                            </div>
-                                            <div className="stat-item">
-                                                <span className="stat-label">Pending</span>
+                                                <span className="stat-label">Pending Submissions</span>
                                                 <span className="stat-value pending-count">{course.pendingSubmissions || 0}</span>
                                             </div>
                                         </div>
