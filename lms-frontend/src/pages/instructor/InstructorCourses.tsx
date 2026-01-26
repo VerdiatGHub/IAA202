@@ -5,7 +5,6 @@ import {
     Star,
     DollarSign,
     Eye,
-    Edit,
     MoreVertical,
     Search,
     Filter,
@@ -272,11 +271,8 @@ export const InstructorCourses: React.FC = () => {
                                         </div>
 
                                         <div className="course-actions">
-                                            <Button variant="outline" size="sm" icon={<Eye size={16} />}>
+                                            <Button variant="primary" size="sm" icon={<Eye size={16} />}>
                                                 View
-                                            </Button>
-                                            <Button variant="primary" size="sm" icon={<Edit size={16} />}>
-                                                Edit
                                             </Button>
                                             <button className="more-btn">
                                                 <MoreVertical size={16} />
@@ -321,11 +317,8 @@ export const InstructorCourses: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="list-actions">
-                                        <Button variant="ghost" size="sm" icon={<Eye size={16} />}>
+                                        <Button variant="primary" size="sm" icon={<Eye size={16} />}>
                                             View
-                                        </Button>
-                                        <Button variant="primary" size="sm" icon={<Edit size={16} />}>
-                                            Edit
                                         </Button>
                                         <button className="more-btn">
                                             <MoreVertical size={16} />

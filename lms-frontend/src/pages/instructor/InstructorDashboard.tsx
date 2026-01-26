@@ -6,7 +6,6 @@ import {
     DollarSign,
     TrendingUp,
     Eye,
-    Edit,
     MoreVertical,
     Star,
     Clock,
@@ -177,9 +176,6 @@ export const InstructorDashboard: React.FC<InstructorDashboardProps> = ({
                                 <div className="col-actions">
                                     <button className="action-btn" title="View">
                                         <Eye size={16} />
-                                    </button>
-                                    <button className="action-btn" title="Edit">
-                                        <Edit size={16} />
                                     </button>
                                     <button className="action-btn" title="More">
                                         <MoreVertical size={16} />
