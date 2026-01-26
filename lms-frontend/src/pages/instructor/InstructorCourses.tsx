@@ -5,7 +5,6 @@ import {
     Users,
     DollarSign,
     Eye,
-    MoreVertical,
     Search,
     Filter,
     Grid,
@@ -239,9 +238,6 @@ export const InstructorCourses: React.FC = () => {
                                                     View
                                                 </Button>
                                             </Link>
-                                            <button className="more-btn">
-                                                <MoreVertical size={16} />
-                                            </button>
                                         </div>
 
                                         <div className="course-footer">
@@ -279,9 +275,6 @@ export const InstructorCourses: React.FC = () => {
                                                 View
                                             </Button>
                                         </Link>
-                                        <button className="more-btn">
-                                            <MoreVertical size={16} />
-                                        </button>
                                     </div>
                                 </div>
                             )}
