@@ -5,3 +5,5 @@ export * from './enrollmentService';
 export * from './moduleService';
 export * from './lessonService';
 export * from './contentItemService';
+export * from './assignmentService';
+export * from './submissionService';

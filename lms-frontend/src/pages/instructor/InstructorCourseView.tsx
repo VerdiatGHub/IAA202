@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
     ArrowLeft,
@@ -12,115 +12,128 @@ import {
 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
+import Loading from '../../components/common/Loading';
+import { courseService } from '../../services/courseService';
+import { assignmentService, type Assignment } from '../../services/assignmentService';
+import { submissionService, type Submission } from '../../services/submissionService';
+import toast from 'react-hot-toast';
 import './InstructorCourseView.css';
 
-// Mock data for course and submissions
-const mockCourse = {
-    id: '1',
-    title: 'Web Development Fundamentals',
-    category: 'Web Development',
-    level: 'Beginner',
-    students: 1542,
-};
-
-const mockAssignments = [
-    {
-        id: 'a1',
-        title: 'Build a Simple Calculator',
-        dueDate: '2026-02-15',
-        maxPoints: 100,
-        totalSubmissions: 45,
-        graded: 30,
-        pending: 15,
-    },
-    {
-        id: 'a2',
-        title: 'Create a Responsive Landing Page',
-        dueDate: '2026-02-20',
-        maxPoints: 150,
-        totalSubmissions: 38,
-        graded: 25,
-        pending: 13,
-    },
-    {
-        id: 'a3',
-        title: 'JavaScript Functions Exercise',
-        dueDate: '2026-02-25',
-        maxPoints: 80,
-        totalSubmissions: 42,
-        graded: 42,
-        pending: 0,
-    },
-];
-
-const mockSubmissions = [
-    {
-        id: 's1',
-        assignmentId: 'a1',
-        studentName: 'John Doe',
-        studentEmail: 'john.doe@example.com',
-        submittedAt: '2026-02-14 10:30 AM',
-        status: 'pending',
-        fileUrl: '/submissions/john-calculator.zip',
-        grade: null,
-        feedback: null,
-    },
-    {
-        id: 's2',
-        assignmentId: 'a1',
-        studentName: 'Jane Smith',
-        studentEmail: 'jane.smith@example.com',
-        submittedAt: '2026-02-13 2:15 PM',
-        status: 'graded',
-        fileUrl: '/submissions/jane-calculator.zip',
-        grade: 95,
-        feedback: 'Excellent work! Clean code and good implementation.',
-    },
-    {
-        id: 's3',
-        assignmentId: 'a1',
-        studentName: 'Mike Johnson',
-        studentEmail: 'mike.j@example.com',
-        submittedAt: '2026-02-15 11:45 AM',
-        status: 'pending',
-        fileUrl: '/submissions/mike-calculator.zip',
-        grade: null,
-        feedback: null,
-    },
-    {
-        id: 's4',
-        assignmentId: 'a2',
-        studentName: 'Sarah Williams',
-        studentEmail: 'sarah.w@example.com',
-        submittedAt: '2026-02-19 3:20 PM',
-        status: 'graded',
-        fileUrl: '/submissions/sarah-landing.zip',
-        grade: 140,
-        feedback: 'Great responsive design! Minor improvements needed in mobile view.',
-    },
-];
+interface Course {
+    id: string;
+    title: string;
+    category?: string;
+    level?: string;
+    enrollmentCount?: number;
+}
 
 export const InstructorCourseView: React.FC = () => {
     const { courseId } = useParams<{ courseId: string }>();
+    const [course, setCourse] = useState<Course | null>(null);
+    const [assignments, setAssignments] = useState<Assignment[]>([]);
+    const [submissions, setSubmissions] = useState<Submission[]>([]);
     const [selectedAssignment, setSelectedAssignment] = useState<string | null>(null);
     const [gradingSubmission, setGradingSubmission] = useState<string | null>(null);
     const [gradeValue, setGradeValue] = useState<string>('');
     const [feedbackValue, setFeedbackValue] = useState<string>('');
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
-    const filteredSubmissions = selectedAssignment
-        ? mockSubmissions.filter((s) => s.assignmentId === selectedAssignment)
-        : [];
+    useEffect(() => {
+        if (courseId) {
+            loadCourseData();
+        }
+    }, [courseId]);
 
-    const selectedAssignmentData = mockAssignments.find((a) => a.id === selectedAssignment);
+    useEffect(() => {
+        if (selectedAssignment) {
+            loadSubmissions();
+        }
+    }, [selectedAssignment]);
 
-    const handleGradeSubmit = (submissionId: string) => {
-        console.log('Grading submission:', submissionId, gradeValue, feedbackValue);
-        console.log('Course ID:', courseId); // Will be used for API calls
-        // TODO: API call to submit grade
-        setGradingSubmission(null);
-        setGradeValue('');
-        setFeedbackValue('');
+    const loadCourseData = async () => {
+        try {
+            setLoading(true);
+            const [courseData, assignmentsData] = await Promise.all([
+                courseService.getCourseById(courseId!),
+                assignmentService.getAssignmentsByCourse(courseId!)
+            ]);
+            setCourse(courseData);
+            setAssignments(assignmentsData);
+        } catch (error) {
+            console.error('Error loading course data:', error);
+            toast.error('Failed to load course data');
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const loadSubmissions = async () => {
+        try {
+            const submissionsData = await submissionService.getSubmissionsByAssignment(selectedAssignment!);
+            setSubmissions(submissionsData);
+        } catch (error) {
+            console.error('Error loading submissions:', error);
+            toast.error('Failed to load submissions');
+        }
+    };
+
+    const handleGradeSubmit = async (submissionId: string) => {
+        if (!gradeValue) {
+            toast.error('Please enter a grade');
+            return;
+        }
+
+        const selectedAssignmentData = assignments.find((a) => a.id === selectedAssignment);
+        const grade = parseInt(gradeValue);
+
+        if (isNaN(grade) || grade < 0 || grade > (selectedAssignmentData?.maxScore || 100)) {
+            toast.error(`Grade must be between 0 and ${selectedAssignmentData?.maxScore || 100}`);
+            return;
+        }
+
+        try {
+            setSubmitting(true);
+            await submissionService.gradeSubmission(submissionId, {
+                score: grade,
+                feedback: feedbackValue || undefined
+            });
+            
+            toast.success('Grade submitted successfully');
+            setGradingSubmission(null);
+            setGradeValue('');
+            setFeedbackValue('');
+            
+            // Reload submissions and assignments to update counts
+            await Promise.all([loadSubmissions(), loadCourseData()]);
+        } catch (error) {
+            console.error('Error grading submission:', error);
+            toast.error('Failed to submit grade');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const filteredSubmissions = submissions;
+    const selectedAssignmentData = assignments.find((a) => a.id === selectedAssignment);
+
+    if (loading) {
+        return <Loading />;
+    }
+
+    if (!course) {
+        return (
+            <div className="instructor-course-view">
+                <div className="empty-state">
+                    <FileText size={48} />
+                    <h3>Course not found</h3>
+                    <Link to="/instructor/courses">
+                        <Button variant="primary">Back to My Courses</Button>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="instructor-course-view">
@@ -131,15 +144,15 @@ export const InstructorCourseView: React.FC = () => {
                     Back to My Courses
                 </Link>
                 <div className="course-info">
-                    <h1 className="course-title">{mockCourse.title}</h1>
+                    <h1 className="course-title">{course.title}</h1>
                     <div className="course-meta">
-                        <span>{mockCourse.category}</span>
+                        <span>{course.category}</span>
                         <span>•</span>
-                        <span>{mockCourse.level}</span>
+                        <span>{course.level}</span>
                         <span>•</span>
                         <span>
                             <Users size={14} />
-                            {mockCourse.students} students
+                            {course.enrollmentCount || 0} students
                         </span>
                     </div>
                 </div>
@@ -148,8 +161,14 @@ export const InstructorCourseView: React.FC = () => {
             {/* Assignments List */}
             <div className="assignments-section">
                 <h2 className="section-title">Assignments</h2>
-                <div className="assignments-grid">
-                    {mockAssignments.map((assignment) => (
+                {assignments.length === 0 ? (
+                    <Card className="empty-state">
+                        <FileText size={48} />
+                        <p>No assignments yet</p>
+                    </Card>
+                ) : (
+                    <div className="assignments-grid">
+                        {assignments.map((assignment) => (
                         <Card
                             key={assignment.id}
                             className={`assignment-card ${selectedAssignment === assignment.id ? 'selected' : ''}`}
@@ -169,22 +188,23 @@ export const InstructorCourseView: React.FC = () => {
                                 </div>
                                 <div className="stat">
                                     <span className="stat-label">Max Points</span>
-                                    <span className="stat-value">{assignment.maxPoints}</span>
+                                    <span className="stat-value">{assignment.maxScore}</span>
                                 </div>
                             </div>
                             <div className="submission-stats">
                                 <div className="stat-item graded">
                                     <CheckCircle size={16} />
-                                    <span>{assignment.graded} Graded</span>
+                                    <span>{assignment.gradedCount} Graded</span>
                                 </div>
                                 <div className="stat-item pending">
                                     <AlertCircle size={16} />
-                                    <span>{assignment.pending} Pending</span>
+                                    <span>{assignment.pendingCount} Pending</span>
                                 </div>
                             </div>
                         </Card>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Submissions List */}
@@ -211,20 +231,20 @@ export const InstructorCourseView: React.FC = () => {
                                     <div className="submission-info">
                                         <div className="student-info">
                                             <div className="student-avatar">
-                                                {submission.studentName.charAt(0)}
+                                                {submission.student.fullName.charAt(0)}
                                             </div>
                                             <div className="student-details">
-                                                <h4>{submission.studentName}</h4>
-                                                <p>{submission.studentEmail}</p>
+                                                <h4>{submission.student.fullName}</h4>
+                                                <p>{submission.student.email}</p>
                                             </div>
                                         </div>
                                         <div className="submission-meta">
                                             <span className="submitted-time">
                                                 <Clock size={14} />
-                                                Submitted: {submission.submittedAt}
+                                                Submitted: {new Date(submission.submittedAt).toLocaleString()}
                                             </span>
-                                            <span className={`status-badge ${submission.status}`}>
-                                                {submission.status === 'graded' ? (
+                                            <span className={`status-badge ${submission.score !== null && submission.score !== undefined ? 'graded' : 'pending'}`}>
+                                                {submission.score !== null && submission.score !== undefined ? (
                                                     <>
                                                         <CheckCircle size={14} />
                                                         Graded
@@ -240,18 +260,26 @@ export const InstructorCourseView: React.FC = () => {
                                     </div>
 
                                     <div className="submission-actions">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            icon={<Download size={16} />}
-                                        >
-                                            Download
-                                        </Button>
-                                        {submission.status === 'pending' ? (
+                                        {submission.fileUrl && (
+                                            <a href={submission.fileUrl} target="_blank" rel="noopener noreferrer">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    icon={<Download size={16} />}
+                                                >
+                                                    Download
+                                                </Button>
+                                            </a>
+                                        )}
+                                        {submission.score === null || submission.score === undefined ? (
                                             <Button
                                                 variant="primary"
                                                 size="sm"
-                                                onClick={() => setGradingSubmission(submission.id)}
+                                                onClick={() => {
+                                                    setGradingSubmission(submission.id);
+                                                    setGradeValue('');
+                                                    setFeedbackValue('');
+                                                }}
                                             >
                                                 Grade
                                             </Button>
@@ -259,9 +287,13 @@ export const InstructorCourseView: React.FC = () => {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                onClick={() => setGradingSubmission(submission.id)}
+                                                onClick={() => {
+                                                    setGradingSubmission(submission.id);
+                                                    setGradeValue(submission.score?.toString() || '');
+                                                    setFeedbackValue(submission.feedback || '');
+                                                }}
                                             >
-                                                View Grade
+                                                Edit Grade
                                             </Button>
                                         )}
                                     </div>
@@ -270,12 +302,12 @@ export const InstructorCourseView: React.FC = () => {
                                     {gradingSubmission === submission.id && (
                                         <div className="grading-form">
                                             <div className="form-group">
-                                                <label>Grade (out of {selectedAssignmentData?.maxPoints})</label>
+                                                <label>Grade (out of {selectedAssignmentData?.maxScore})</label>
                                                 <input
                                                     type="number"
                                                     min="0"
-                                                    max={selectedAssignmentData?.maxPoints}
-                                                    value={gradeValue || submission.grade || ''}
+                                                    max={selectedAssignmentData?.maxScore}
+                                                    value={gradeValue || submission.score || ''}
                                                     onChange={(e) => setGradeValue(e.target.value)}
                                                     placeholder="Enter grade"
                                                 />
@@ -298,6 +330,7 @@ export const InstructorCourseView: React.FC = () => {
                                                         setGradeValue('');
                                                         setFeedbackValue('');
                                                     }}
+                                                    disabled={submitting}
                                                 >
                                                     Cancel
                                                 </Button>
@@ -305,20 +338,21 @@ export const InstructorCourseView: React.FC = () => {
                                                     variant="primary"
                                                     size="sm"
                                                     onClick={() => handleGradeSubmit(submission.id)}
+                                                    disabled={submitting}
                                                 >
-                                                    Submit Grade
+                                                    {submitting ? 'Submitting...' : 'Submit Grade'}
                                                 </Button>
                                             </div>
                                         </div>
                                     )}
 
                                     {/* Display existing grade */}
-                                    {submission.status === 'graded' && gradingSubmission !== submission.id && (
+                                    {(submission.score !== null && submission.score !== undefined) && gradingSubmission !== submission.id && (
                                         <div className="grade-display">
                                             <div className="grade-info">
                                                 <span className="grade-label">Grade:</span>
                                                 <span className="grade-value">
-                                                    {submission.grade}/{selectedAssignmentData?.maxPoints}
+                                                    {submission.score}/{selectedAssignmentData?.maxScore}
                                                 </span>
                                             </div>
                                             {submission.feedback && (

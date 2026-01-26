@@ -11,6 +11,8 @@ const notificationRoutes = require('./routes/notifications');
 const moduleRoutes = require('./routes/modules');
 const lessonRoutes = require('./routes/lessons');
 const contentItemRoutes = require('./routes/contentItems');
+const assignmentRoutes = require('./routes/assignments');
+const submissionRoutes = require('./routes/submissions');
 
 // Import database
 const { pool } = require('./config/db');
@@ -60,6 +62,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/assignments', assignmentRoutes);
+app.use('/api/submissions', submissionRoutes);
 app.use('/api', moduleRoutes);
 app.use('/api', lessonRoutes);
 app.use('/api', contentItemRoutes);
