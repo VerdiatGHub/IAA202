@@ -174,9 +174,9 @@ export const InstructorDashboard: React.FC<InstructorDashboardProps> = ({
                                     </span>
                                 </div>
                                 <div className="col-actions">
-                                    <button className="action-btn" title="View">
+                                    <Link to={`/instructor/courses/${course.id}`} className="action-btn" title="View">
                                         <Eye size={16} />
-                                    </button>
+                                    </Link>
                                     <button className="action-btn" title="More">
                                         <MoreVertical size={16} />
                                     </button>

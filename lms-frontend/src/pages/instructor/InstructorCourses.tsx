@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
     BookOpen,
     Users,
@@ -271,9 +272,11 @@ export const InstructorCourses: React.FC = () => {
                                         </div>
 
                                         <div className="course-actions">
-                                            <Button variant="primary" size="sm" icon={<Eye size={16} />}>
-                                                View
-                                            </Button>
+                                            <Link to={`/instructor/courses/${course.id}`}>
+                                                <Button variant="primary" size="sm" icon={<Eye size={16} />}>
+                                                    View
+                                                </Button>
+                                            </Link>
                                             <button className="more-btn">
                                                 <MoreVertical size={16} />
                                             </button>
@@ -317,9 +320,11 @@ export const InstructorCourses: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="list-actions">
-                                        <Button variant="primary" size="sm" icon={<Eye size={16} />}>
-                                            View
-                                        </Button>
+                                        <Link to={`/instructor/courses/${course.id}`}>
+                                            <Button variant="primary" size="sm" icon={<Eye size={16} />}>
+                                                View
+                                            </Button>
+                                        </Link>
                                         <button className="more-btn">
                                             <MoreVertical size={16} />
                                         </button>
