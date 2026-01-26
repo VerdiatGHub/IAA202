@@ -175,7 +175,7 @@ async function create(lessonId, data) {
         duration,
         textContent,
         quizData,
-        assignmentId,
+        assignmentData,
         resourceType,
         resourceUrl,
         filePath
@@ -193,20 +193,22 @@ async function create(lessonId, data) {
     // Get next order index within the lesson scope
     const orderIndex = await getNextOrderIndex(lessonId);
 
-    // Start transaction for quiz creation
+    // Start transaction for quiz/assignment creation
     const client = await getClient();
     try {
         await client.query('BEGIN');
 
         let quizId = null;
+        let assignmentId = null;
 
         // If content type is quiz and quizData is provided, create the quiz
         if (contentType === 'quiz' && quizData) {
             // Create quiz
             const quizResult = await client.query(`
                 INSERT INTO quizzes (course_id, title, time_limit)
-                SELECT l.course_id, $1, $2
+                SELECT m.course_id, $1, $2
                 FROM lessons l
+                JOIN modules m ON l.module_id = m.id
                 WHERE l.id = $3
                 RETURNING id
             `, [quizData.title, quizData.timeLimit || null, lessonId]);
@@ -228,6 +230,26 @@ async function create(lessonId, data) {
                     ]);
                 }
             }
+        }
+
+        // If content type is assignment and assignmentData is provided, create the assignment
+        if (contentType === 'assignment' && assignmentData) {
+            const assignmentResult = await client.query(`
+                INSERT INTO assignments (course_id, title, description, due_date, max_score)
+                SELECT m.course_id, $1, $2, $3, $4
+                FROM lessons l
+                JOIN modules m ON l.module_id = m.id
+                WHERE l.id = $5
+                RETURNING id
+            `, [
+                title,
+                assignmentData.description || null,
+                assignmentData.dueDate || null,
+                assignmentData.maxPoints || 100,
+                lessonId
+            ]);
+
+            assignmentId = assignmentResult.rows[0].id;
         }
 
         // Insert content item
@@ -254,7 +276,7 @@ async function create(lessonId, data) {
             duration || null,
             textContent || null,
             quizId,
-            assignmentId || null,
+            assignmentId,
             resourceType || null,
             resourceUrl || null,
             filePath || null

@@ -58,7 +58,9 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
       points: number;
     }>,
     // Assignment fields
-    assignmentId: '',
+    assignmentDescription: '',
+    assignmentDueDate: '',
+    assignmentMaxPoints: '',
     // Resource fields
     resourceType: 'link' as 'file' | 'link',
     resourceUrl: '',
@@ -83,7 +85,9 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
           quizTitle: '',
           quizTimeLimit: '',
           quizQuestions: [],
-          assignmentId: contentItem.assignmentId || '',
+          assignmentDescription: '',
+          assignmentDueDate: '',
+          assignmentMaxPoints: '',
           resourceType: contentItem.resourceType || 'link',
           resourceUrl: contentItem.resourceUrl || '',
           filePath: contentItem.filePath || ''
@@ -100,7 +104,9 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
           quizTitle: '',
           quizTimeLimit: '',
           quizQuestions: [],
-          assignmentId: '',
+          assignmentDescription: '',
+          assignmentDueDate: '',
+          assignmentMaxPoints: '',
           resourceType: 'link',
           resourceUrl: '',
           filePath: ''
@@ -172,9 +178,8 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
         break;
 
       case 'assignment':
-        if (!formData.assignmentId.trim()) {
-          errors.assignmentId = 'Assignment ID is required';
-        }
+        // Assignment inline creation - no validation needed here
+        // Will be handled by assignment builder in future
         break;
 
       case 'resource':
@@ -239,7 +244,11 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
           };
           break;
         case 'assignment':
-          contentData.assignmentId = formData.assignmentId.trim();
+          contentData.assignmentData = {
+            description: formData.assignmentDescription?.trim() || '',
+            dueDate: formData.assignmentDueDate || null,
+            maxPoints: formData.assignmentMaxPoints ? parseInt(formData.assignmentMaxPoints, 10) : null
+          };
           break;
         case 'resource':
           contentData.resourceType = formData.resourceType;
@@ -279,7 +288,9 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
       quizTitle: '',
       quizTimeLimit: '',
       quizQuestions: [],
-      assignmentId: '',
+      assignmentDescription: '',
+      assignmentDueDate: '',
+      assignmentMaxPoints: '',
       resourceType: 'link',
       resourceUrl: '',
       filePath: ''
@@ -439,21 +450,50 @@ export const ContentEditorModal: React.FC<ContentEditorModalProps> = ({
   );
 
   const renderAssignmentForm = () => (
-    <div className="form-group">
-      <Input
-        label="Assignment ID"
-        name="assignmentId"
-        value={formData.assignmentId}
-        onChange={handleChange}
-        placeholder="Enter the assignment ID to link"
-        error={formErrors.assignmentId}
-        icon={<FileCheck size={18} />}
-        required
-      />
-      <span className="input-hint">
-        Link to an existing assignment by providing its ID
-      </span>
-    </div>
+    <>
+      <div className="form-group">
+        <label htmlFor="assignmentDescription" className="input-label">
+          <FileCheck size={18} />
+          Assignment Instructions
+        </label>
+        <textarea
+          id="assignmentDescription"
+          name="assignmentDescription"
+          value={formData.assignmentDescription || ''}
+          onChange={handleChange}
+          placeholder="Enter assignment instructions and requirements..."
+          rows={8}
+          className="form-textarea"
+        />
+        <span className="input-hint">
+          Provide detailed instructions for students
+        </span>
+      </div>
+      
+      <div className="form-group">
+        <Input
+          label="Due Date (Optional)"
+          name="assignmentDueDate"
+          type="date"
+          value={formData.assignmentDueDate || ''}
+          onChange={handleChange}
+          icon={<FileCheck size={18} />}
+        />
+      </div>
+      
+      <div className="form-group">
+        <Input
+          label="Max Points (Optional)"
+          name="assignmentMaxPoints"
+          type="number"
+          value={formData.assignmentMaxPoints || ''}
+          onChange={handleChange}
+          placeholder="100"
+          icon={<FileCheck size={18} />}
+          min="1"
+        />
+      </div>
+    </>
   );
 
   const renderResourceForm = () => (
