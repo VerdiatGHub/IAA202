@@ -102,7 +102,6 @@ const mockSubmissions = [
 
 export const InstructorCourseView: React.FC = () => {
     const { courseId } = useParams<{ courseId: string }>();
-    // courseId will be used for API calls in the future
     const [selectedAssignment, setSelectedAssignment] = useState<string | null>(null);
     const [gradingSubmission, setGradingSubmission] = useState<string | null>(null);
     const [gradeValue, setGradeValue] = useState<string>('');
@@ -116,6 +115,7 @@ export const InstructorCourseView: React.FC = () => {
 
     const handleGradeSubmit = (submissionId: string) => {
         console.log('Grading submission:', submissionId, gradeValue, feedbackValue);
+        console.log('Course ID:', courseId); // Will be used for API calls
         // TODO: API call to submit grade
         setGradingSubmission(null);
         setGradeValue('');
